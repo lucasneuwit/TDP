@@ -3,10 +3,12 @@
 public class OmdbProvider : IApiProvider
 {
     private readonly HttpClient client;
+    private readonly string url;
 
-    public OmdbProvider(HttpClient client)
+    public OmdbProvider(HttpClient client, IConfiguration configuration)
     {
         this.client = client;
+        this.url = configuration.GetValue<string>("ApiUrl");
     }
     
     public async Task<Movie> FindAsync(IRequest request)
