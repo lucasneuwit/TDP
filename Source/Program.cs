@@ -1,10 +1,16 @@
 using Microsoft.EntityFrameworkCore;
+using TDP.Models.Application;
+using TDP.Models.Application.Services;
 using TDP.Models.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
+var url = builder.Configuration.GetValue<string>("ApiUrl");
+builder.Services.AddHttpClient("OMDBApi",httpClient => { 
+    httpClient.BaseAddress = new Uri(url); });
+builder.Services.AddTransient<IApiProvider, OmdbProvider>();
 builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 //builder.Services.AddEntityFrameworkSqlServer().AddDbContext<TdpDbContext>(opts => opts.UseSqlServer(connectionString));
@@ -28,6 +34,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Api}/{action=FindByTitle}/{id?}");
 
 app.Run();
