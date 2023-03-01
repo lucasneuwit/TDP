@@ -10,11 +10,15 @@ namespace TDP.Controllers
         {
             _provider = provider;
         }
+        public async Task<IActionResult> Find()
+        {
+            IRequest aRequest = new Request("Harry Potter", "movie", null);
+            var res = await _provider.FindAsync(aRequest);
+            return Json(res);
+        }
         public async Task<IActionResult> FindByTitle(String title, String? type, String? releaseYear)
         {
-            IRequest aRequest = new Request();
-            aRequest.Title = title;
-
+            IRequest aRequest = new Request(title,type,releaseYear);
             var res = await _provider.FindAsync(aRequest);
             return Json(res);
         }

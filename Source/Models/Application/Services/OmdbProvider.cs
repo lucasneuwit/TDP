@@ -1,7 +1,9 @@
 ﻿namespace TDP.Models.Application.Services;
 
+using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using System.Text.Json;
+using System.Web.Http;
 
 public class OmdbProvider : IApiProvider
 {
@@ -15,7 +17,15 @@ public class OmdbProvider : IApiProvider
     public async Task<Movie> FindAsync(IRequest request)
     {
         var httpClient = _clientFactory.CreateClient("OMDBApi");
-        var apirequest = new HttpRequestMessage(HttpMethod.Get, $"?apikey=b51ba768&t={request.Title}");
+        var queryParams = new Dictionary<string, string>()
+        {
+            {"t",request.Title },
+            {"i",request.ImdbId },
+            {"y",request.ReleaseYear },
+            {"type",request.Type }
+        };
+        string url = QueryHelpers.AddQueryString(httpClient.BaseAddress.ToString(),queryParams);
+        var apirequest = new HttpRequestMessage(HttpMethod.Get, url);
         var response = await httpClient.SendAsync(apirequest);
         response.EnsureSuccessStatusCode();
         Console.WriteLine(await response.Content.ReadAsStringAsync());

@@ -34,6 +34,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Api}/{action=FindByTitle}/{id?}");
+    pattern: "{controller=Api}/{action=Find}");
 
 app.Run();
