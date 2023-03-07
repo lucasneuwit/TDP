@@ -7,9 +7,10 @@
         public string? Type { get; set; }
         public string? ReleaseYear { get; set; }
 
-        public Request(string title, string? type = null, string? releaseYear = null)
+        public Request(string? title=null, string? id=null, string? type = null, string? releaseYear = null)
         {
             Title = title;
+            ImdbId = id;
             Type = type;
             ReleaseYear = releaseYear;
         }

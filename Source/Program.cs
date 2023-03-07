@@ -34,6 +34,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Api}/{action=Find}");
+    pattern: "{controller=Api}/{action=Search}",
+    new { title= "Harry Potter", pageNumber=1});
 
 app.Run();

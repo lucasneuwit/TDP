@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using System.Text.Json;
 using System.Web.Http;
+using TDP.Models.Application.DataTransfer;
 
 public class OmdbProvider : IApiProvider
 {
@@ -35,8 +36,20 @@ public class OmdbProvider : IApiProvider
 
     public async Task<IEnumerable<Movie>> SearchAsync(IRequest request, int pageNumber)
     {
-        throw new NotImplementedException();
+        var httpClient = _clientFactory.CreateClient("OMDBApi");
+        var queryParams = new Dictionary<string, string>()
+        {
+            {"s",request.Title },
+            {"y",request.ReleaseYear },
+            {"type",request.Type },
+            {"page",pageNumber.ToString()}
+        };
+        string url = QueryHelpers.AddQueryString(httpClient.BaseAddress.ToString(), queryParams);
+        var apirequest = new HttpRequestMessage(HttpMethod.Get, url);
+        var response = await httpClient.SendAsync(apirequest);
+        response.EnsureSuccessStatusCode();
+        Console.WriteLine(await response.Content.ReadAsStringAsync());
+        MovieCollection aMovieCollection = JsonSerializer.Deserialize<MovieCollection>(await response.Content.ReadAsStringAsync());
+        return aMovieCollection.Movies;
     }
 }
-
-//byte[] jsonAsBytes = Encoding.UTF8.GetBytes(string.Join("&", postParams.Select(pp => pp.Key + "=" + pp.Value)));
