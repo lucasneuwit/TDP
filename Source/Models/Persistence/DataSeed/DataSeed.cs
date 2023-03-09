@@ -4,19 +4,25 @@ namespace TDP.Models.Persistence;
 
 public class DataSeed
 {
-    public static Movie FirstMovie { get; set; } = new Movie()
+    public DataSeed()
     {
-        Id = Guid.NewGuid(),
-        Title = "Avengers",
-        Plot = "Some not really important plot",
-        Runtime = 250,
-        Released = new DateOnly(2012, 1, 14),
-        Country = "United States",
-        ImdbRating = 9.3m,
-        PosterUrl = ""
-    };
+        Setup();
+    }
 
-    public static IEnumerable<Movie> MoviesToSeed { get; set; } = new List<Movie>()
+    private static Movie FirstMovie { get; set; } = null!;
+
+    private static void Setup()
+    {
+        FirstMovie = new Movie(Guid.NewGuid());
+        FirstMovie.SetTitle("Avengers");
+        FirstMovie.SetPlot("Some not really important plot");
+        FirstMovie.SetRuntime(250);
+        FirstMovie.SetReleased(new DateOnly(2012, 1, 14));
+        FirstMovie.SetCountry("United States");
+        FirstMovie.SetImdbRating(9.3m);
+    }
+
+    public static IEnumerable<Movie> MoviesToSeed { get; } = new List<Movie>()
     {
         FirstMovie
     };
