@@ -21,7 +21,8 @@ namespace TDP.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BirthDay = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    BirthDay = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsAdministrator = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,11 +41,11 @@ namespace TDP.Migrations
                     Released = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PosterUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IMDBRating = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ImdbRating = table.Column<decimal>(type: "decimal(4,2)", precision: 4, scale: 2, nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    EpisodeNumber = table.Column<int>(type: "int", nullable: true),
-                    SeasonNumber = table.Column<int>(type: "int", nullable: true),
+                    Number = table.Column<int>(type: "int", nullable: true),
+                    Season = table.Column<int>(type: "int", nullable: true),
                     SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Seasons = table.Column<int>(type: "int", nullable: true)
                 },
@@ -55,8 +56,7 @@ namespace TDP.Migrations
                         name: "FK_Movie_Movie_SeriesId",
                         column: x => x.SeriesId,
                         principalTable: "Movie",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Movie_User_UserId",
                         column: x => x.UserId,
@@ -70,7 +70,7 @@ namespace TDP.Migrations
                 {
                     MovieId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Role = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -107,6 +107,11 @@ namespace TDP.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Movie",
+                columns: new[] { "Id", "Country", "Discriminator", "ImdbRating", "Plot", "PosterUrl", "Released", "Runtime", "Title", "Type", "UserId" },
+                values: new object[] { new Guid("116bcae8-7aed-4e95-9937-63158b9f302e"), "United States", "Movie", 9.3m, "Some not really important plot", "", new DateTime(2012, 1, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 250L, "Avengers", "Movie", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Movie_SeriesId",
