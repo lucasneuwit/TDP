@@ -9,6 +9,7 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 builder.Services.AddDbContext<TdpDbContext>(opts => opts.UseSqlServer(connectionString));
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
