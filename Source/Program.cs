@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
-//builder.Services.AddEntityFrameworkSqlServer().AddDbContext<TdpDbContext>(opts => opts.UseSqlServer(connectionString));
+builder.Services.AddDbContext<TdpDbContext>(opts => opts.UseSqlServer(connectionString));
+
 
 var app = builder.Build();
 

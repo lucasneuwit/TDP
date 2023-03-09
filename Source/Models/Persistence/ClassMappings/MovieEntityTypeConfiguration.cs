@@ -20,9 +20,8 @@ public class MovieEntityTypeConfiguration : IEntityTypeConfiguration<Movie>
         builder.Property(entity => entity.Released);
         builder.Property(entity => entity.PosterUrl);
         builder.Property(entity => entity.Country);
-        builder.Property(entity => entity.ImdbRating);
+        builder.Property(entity => entity.ImdbRating).HasPrecision(4,2);
 
-        builder.HasMany(entity => entity.Ratings);
         builder.OwnsMany(entity => entity.Participants, child =>
         {
             child.HasKey(entity => new {entity.MovieId, entity.Name, entity.Role});

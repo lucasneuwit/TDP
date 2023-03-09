@@ -28,6 +28,7 @@ public class TdpDbContext : DbContext
 
     private void SeedData(ModelBuilder builder)
     {
-        builder.Entity<Movie>().HasData(DataSeed.MoviesToSeed);
+        var dataToSeed = new DataSeed();
+        builder.Entity<Movie>().HasData(dataToSeed.MoviesToSeed);
     }
 }
