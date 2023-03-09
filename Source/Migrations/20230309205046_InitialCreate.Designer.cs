@@ -12,7 +12,7 @@ using TDP.Models.Persistence;
 namespace TDP.Migrations
 {
     [DbContext(typeof(TdpDbContext))]
-    [Migration("20220320051846_InitialCreate")]
+    [Migration("20230309205046_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -38,8 +38,9 @@ namespace TDP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("IMDBRating")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<decimal>("ImdbRating")
+                        .HasPrecision(4, 2)
+                        .HasColumnType("decimal(4,2)");
 
                     b.Property<string>("Plot")
                         .IsRequired()
@@ -73,6 +74,20 @@ namespace TDP.Migrations
                     b.ToTable("Movie");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Movie");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("116bcae8-7aed-4e95-9937-63158b9f302e"),
+                            Country = "United States",
+                            ImdbRating = 9.3m,
+                            Plot = "Some not really important plot",
+                            PosterUrl = "",
+                            Released = new DateTime(2012, 1, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Runtime = 250L,
+                            Title = "Avengers",
+                            Type = "Movie"
+                        });
                 });
 
             modelBuilder.Entity("TDP.Models.Domain.User", b =>
@@ -86,6 +101,9 @@ namespace TDP.Migrations
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAdministrator")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -133,10 +151,10 @@ namespace TDP.Migrations
                 {
                     b.HasBaseType("TDP.Models.Domain.Movie");
 
-                    b.Property<int>("EpisodeNumber")
+                    b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<int>("SeasonNumber")
+                    b.Property<int>("Season")
                         .HasColumnType("int");
 
                     b.Property<Guid>("SeriesId")
@@ -171,15 +189,17 @@ namespace TDP.Migrations
                             b1.Property<string>("Name")
                                 .HasColumnType("nvarchar(450)");
 
-                            b1.Property<string>("Role")
-                                .HasColumnType("nvarchar(450)");
+                            b1.Property<int>("Role")
+                                .HasColumnType("int");
 
                             b1.HasKey("MovieId", "Name", "Role");
 
                             b1.ToTable("MovieParticipant");
 
-                            b1.WithOwner()
+                            b1.WithOwner("Movie")
                                 .HasForeignKey("MovieId");
+
+                            b1.Navigation("Movie");
                         });
 
                     b.Navigation("Participants");
@@ -187,17 +207,21 @@ namespace TDP.Migrations
 
             modelBuilder.Entity("TDP.Models.Domain.UserRating", b =>
                 {
-                    b.HasOne("TDP.Models.Domain.Movie", null)
+                    b.HasOne("TDP.Models.Domain.Movie", "Movie")
                         .WithMany("Ratings")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TDP.Models.Domain.User", null)
+                    b.HasOne("TDP.Models.Domain.User", "User")
                         .WithMany("RatedMovies")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TDP.Models.Domain.Episode", b =>
@@ -205,7 +229,7 @@ namespace TDP.Migrations
                     b.HasOne("TDP.Models.Domain.Series", "Series")
                         .WithMany("Episodes")
                         .HasForeignKey("SeriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Series");

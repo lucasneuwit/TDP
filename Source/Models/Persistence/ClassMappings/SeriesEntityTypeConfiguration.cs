@@ -9,6 +9,6 @@ public class SeriesEntityTypeConfiguration : IEntityTypeConfiguration<Series>
     public void Configure(EntityTypeBuilder<Series> builder)
     {
         builder.Property(entity => entity.Seasons);
-        builder.HasMany(entity => entity.Episodes).WithOne(entity => entity.Series);
+        builder.HasMany(entity => entity.Episodes).WithOne(entity => entity.Series).OnDelete(DeleteBehavior.NoAction);
     }
 }

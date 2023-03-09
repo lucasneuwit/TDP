@@ -9,9 +9,9 @@ public class UserRatingEntityTypeConfiguration : IEntityTypeConfiguration<UserRa
     public void Configure(EntityTypeBuilder<UserRating> builder)
     {
         builder.HasKey(entity => new { entity.MovieId, entity.UserId});
-        
-        builder.Property(entity => entity.MovieId);
-        builder.Property(entity => entity.UserId);
-        builder.Property(entity => entity.Rating);
+        builder.Property(e => e.Rating);
+
+        builder.HasOne<User>(e => e.User).WithMany(e => e.RatedMovies);
+        builder.HasOne<Movie>(e => e.Movie).WithMany(e => e.Ratings);
     }
 }
