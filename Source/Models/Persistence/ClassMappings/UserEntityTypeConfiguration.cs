@@ -19,6 +19,5 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.Property(entity => entity.EmailAddress);
         
         builder.HasMany(entity => entity.FollowedMovies);
-        builder.HasMany(entity => entity.RatedMovies);
     }
 }
