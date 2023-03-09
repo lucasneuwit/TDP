@@ -2,9 +2,30 @@
 
 public record UserRating
 {
-    public Guid UserId { get; set; }
+    public User User { get; private set; } = null!;
 
-    public Guid MovieId { get; set; }
+    public Guid UserId { get; private set; }
+
+    public Movie Movie { get; private set; } = null!;
+
+    public Guid MovieId { get; private set; }
 
     public int Rating { get; set; }
+
+    public void SetRating(int rating)
+    {
+        this.Rating = rating;
+    }
+
+    public void SetUser(User user)
+    {
+        this.User = user;
+        this.UserId = user.Id;
+    }
+
+    public void SetMovie(Movie movie)
+    {
+        this.Movie = movie;
+        this.MovieId = movie.Id;
+    }
 }

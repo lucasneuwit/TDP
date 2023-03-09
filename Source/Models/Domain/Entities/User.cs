@@ -4,6 +4,10 @@ namespace TDP.Models.Domain;
 
 public class User : BaseEntity
 {
+    public User(Guid id) : base(id)
+    {
+    }
+    
     public string Username { get; private set; } = null!;
  
     public string PasswordHash { get; private set; } = null!;
@@ -18,13 +22,46 @@ public class User : BaseEntity
 
     public bool IsAdministrator { get; set; } = false;
 
-    public ISet<Movie> FollowedMovies { get; } = new SortedSet<Movie>();
+    public ICollection<Movie> FollowedMovies { get; } = new List<Movie>();
 
-    public ISet<UserRating> RatedMovies { get; } = new SortedSet<UserRating>();
+    public ICollection<UserRating> RatedMovies { get; } = new List<UserRating>();
 
+    public void SetUsername(string username)
+    {
+        this.Username = username;
+    }
+
+    public void SetPassword(string password)
+    {
+        this.PasswordHash = password;
+    }
+
+    public void SetName(string name)
+    {
+        this.Name = name;
+    }
+
+    public void SetLastname(string lastname)
+    {
+        this.LastName = lastname;
+    }
+
+    public void SetEmailAddress(string emailAddress)
+    {
+        this.EmailAddress = emailAddress;
+    }
+
+    public void SetBirthday(DateOnly birthday)
+    {
+        this.BirthDay = birthday;
+    }
+    
     public void Follow(Movie movie)
     {
-        FollowedMovies.Add(movie);
+        if (FollowedMovies.All(e => e.Id != movie.Id))
+        {
+            FollowedMovies.Add(movie);
+        }
     }
 
     public void Unfollow(Movie movie)
@@ -34,12 +71,17 @@ public class User : BaseEntity
 
     public void Rate(Movie movie, int rating)
     {
-        var userRating = new UserRating
+        var newUserRating = new UserRating();
+        newUserRating.SetRating(rating);
+        newUserRating.SetMovie(movie);
+        newUserRating.SetUser(this);
+        
+        // Remove existent rating for this movie and user if any.
+        if (RatedMovies.SingleOrDefault(e => e.MovieId == movie.Id) is { } userRating)
         {
-            MovieId = movie.Id,
-            UserId = this.Id,
-            Rating = rating
-        };
-        RatedMovies.Add(userRating);
+            RatedMovies.Remove(userRating);
+        }
+
+        RatedMovies.Add(newUserRating);
     }
 }
