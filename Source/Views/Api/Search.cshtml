@@ -1,0 +1,37 @@
+﻿@model TDP.Models.Application.DataTransfer.MovieCollection
+@{
+
+}
+
+
+
+<div class="text-center">
+    <h1 class="display-4">Movie app </h1>
+
+    @*<div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Title">
+        <input type="text" class="form-control" placeholder="Imdb id">
+        <input type="text" class="form-control" placeholder="Year released">
+        <select class="custom-select" id="inputGroupSelect04">
+            <option selected>Choose...</option>
+            <option value="1">Movies</option>
+            <option value="2">Series</option>
+            <option value="3">Episodes</option>
+        </select>
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button">Button</button>
+        </div>
+    </div>*@
+
+    @foreach (var x in Model.Movies!)
+    {
+        <div class="card-columns">
+            <div class="card">
+            <img class="card-img-top" src="@Url.Content(x.Poster)" alt="Card image cap" >
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(item => x.Title)</h5>
+                </div>
+            </div>
+        </div>
+    }
+    

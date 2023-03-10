@@ -10,5 +10,7 @@ namespace TDP.Models.Application.DataTransfer
         [JsonPropertyName("totalResults")]
         public string TotalResults { get; set; }
         public string Response { get; set; }
+
+        public string SearchString { get; set; }
     }
 }

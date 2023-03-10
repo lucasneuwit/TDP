@@ -1,8 +1,24 @@
-﻿@{
+﻿@model TDP.Models.Application.DataTransfer.MovieCollection
+@{
     ViewData["Title"] = "Home Page";
+
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <form asp-controller="Api" asp-action="Search">
+        <p>
+            Title: <input type="text" name="title" />
+            <input type="submit" value="Search" />
+        </p>
+    </form>
+
+    <form asp-controller="Api" asp-action="FindByTitle">
+        <p>
+            Title: <input type="text" name="title" />
+            <input type="submit" value="FindByTitle" />
+        </p>
+    </form>
+
+
+
+
 </div>

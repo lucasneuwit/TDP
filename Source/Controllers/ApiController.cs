@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TDP.Models.Application;
+using TDP.Models.Application.DataTransfer;
 
 namespace TDP.Controllers
 {
@@ -15,7 +16,7 @@ namespace TDP.Controllers
         {
             IRequest aRequest = new Request(title,null,type,releaseYear);
             var res = await _provider.FindAsync(aRequest);
-            return Json(res);
+            return View(res);
         }
         public async Task<IActionResult> FindById(string id, string? type, string? releaseYear)
         {
@@ -27,7 +28,7 @@ namespace TDP.Controllers
         {
             IRequest aRequest = new Request(title, null, type, releaseYear);
             var res = await _provider.SearchAsync(aRequest,pageNumber);
-            return Json(res);
+            return View(res);
         }
     }
 }

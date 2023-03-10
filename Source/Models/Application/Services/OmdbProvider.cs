@@ -34,7 +34,7 @@ public class OmdbProvider : IApiProvider
         return aMovie;
     }
 
-    public async Task<IEnumerable<Movie>> SearchAsync(IRequest request, int pageNumber)
+    public async Task<MovieCollection> SearchAsync(IRequest request, int pageNumber)
     {
         var httpClient = _clientFactory.CreateClient("OMDBApi");
         var queryParams = new Dictionary<string, string>()
@@ -50,6 +50,6 @@ public class OmdbProvider : IApiProvider
         response.EnsureSuccessStatusCode();
         Console.WriteLine(await response.Content.ReadAsStringAsync());
         MovieCollection aMovieCollection = JsonSerializer.Deserialize<MovieCollection>(await response.Content.ReadAsStringAsync());
-        return aMovieCollection.Movies;
+        return aMovieCollection;
     }
 }
