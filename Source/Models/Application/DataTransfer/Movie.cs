@@ -4,8 +4,7 @@ namespace TDP.Models.Application;
 
 public record Movie
 {
-    [JsonPropertyName("imdbID")]
-    public string? Id { get; set; }
+    public Guid Id { get; set; }
 
     public string? Title { get; set; }
     public string? Year { get; set; }
@@ -17,10 +16,10 @@ public record Movie
     public string? Type { get; set; }
 
     public string? Released { get; set; }
-    [JsonPropertyName("Poster")]
-    public string? PosterUrl { get; set; }
+
+    public string? Poster { get; set; }
 
     public string? Country { get; set; }
-    [JsonPropertyName("imdbRating")]
-    public string? ImdbRating { get; set; }
+
+    public string? imdbRating { get; set; }
 }

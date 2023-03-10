@@ -10,19 +10,20 @@ namespace TDP.Controllers
         {
             _provider = provider;
         }
-        public async Task<IActionResult> FindByTitle(String title, String? type, String? releaseYear)
+
+        public async Task<IActionResult> FindByTitle(string title, string? type, string? releaseYear)
         {
             IRequest aRequest = new Request(title,null,type,releaseYear);
             var res = await _provider.FindAsync(aRequest);
             return Json(res);
         }
-        public async Task<IActionResult> FindById(String id, String? type, String? releaseYear)
+        public async Task<IActionResult> FindById(string id, string? type, string? releaseYear)
         {
             IRequest aRequest = new Request(null, id, type, releaseYear);
             var res = await _provider.FindAsync(aRequest);
             return Json(res);
         }
-        public async Task<IActionResult> Search(String title, String? type, String? releaseYear, int pageNumber)
+        public async Task<IActionResult> Search(string title, string? type, string? releaseYear, int pageNumber)
         {
             IRequest aRequest = new Request(title, null, type, releaseYear);
             var res = await _provider.SearchAsync(aRequest,pageNumber);
