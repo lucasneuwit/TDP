@@ -16,13 +16,13 @@ namespace TDP.Controllers
         {
             IRequest aRequest = new Request(title,null,type,releaseYear);
             var res = await _provider.FindAsync(aRequest);
-            return View(res);
+            return Json(res);
         }
         public async Task<IActionResult> FindById(string id, string? type, string? releaseYear)
         {
             IRequest aRequest = new Request(null, id, type, releaseYear);
             var res = await _provider.FindAsync(aRequest);
-            return Json(res);
+            return View(res);
         }
         public async Task<IActionResult> Search(string title, string? type, string? releaseYear, int pageNumber)
         {

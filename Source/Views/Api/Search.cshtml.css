@@ -1,16 +1,12 @@
-﻿
-.card-columns {
-    include media-breakpoint-only(ml)
-
-{
-    column-count: 4;
+﻿.card-body {
+    display: flex;
+    justify-content:center;
+    align-items: flex-end;
+   
 }
+.card-img-top {
 
-@include media-breakpoint-only(lg) {
-    column-count: 5;
-}
-
-}
-.card-title {
-    font-size:100px;
+    object-fit: cover;
+    object-position: center;
+    width: auto;
 }

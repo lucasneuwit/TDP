@@ -3,7 +3,7 @@ namespace TDP.Models.Application;
 public record Series
 {
     public Guid Id { get; set; }
-    public string? imdbId { get; set; }
+    public string? imdbID { get; set; }
 
     public string? Title { get; set; }
 

@@ -7,31 +7,41 @@
 
 <div class="text-center">
     <h1 class="display-4">Movie app </h1>
+<form asp-controller="Api" asp-action="Search">
+<div class="input-group mb-3">
+        <input type="text" name="title" class="form-control" placeholder="Title">
+    <input type="text" name="releaseYear" class="form-control" placeholder="Year released">
 
-    @*<div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Title">
-        <input type="text" class="form-control" placeholder="Imdb id">
-        <input type="text" class="form-control" placeholder="Year released">
-        <select class="custom-select" id="inputGroupSelect04">
+        <select class="custom-select" name="type">
             <option selected>Choose...</option>
-            <option value="1">Movies</option>
-            <option value="2">Series</option>
-            <option value="3">Episodes</option>
+            <option value="movie">Movies</option>
+            <option value="series">Series</option>
         </select>
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button">Button</button>
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
         </div>
-    </div>*@
 
+    </div>
+     </form>
+
+    <div class="row row-cols-3 g-3">
     @foreach (var x in Model.Movies!)
     {
-        <div class="card-columns">
+            <div class="col-lg-3 col-sm-6 d-flex">
             <div class="card">
-            <img class="card-img-top" src="@Url.Content(x.Poster)" alt="Card image cap" >
+                <img src="@Url.Content(x.Poster)" class="card-img-top"/>
                 <div class="card-body">
                     <h5 class="card-title">@Html.DisplayFor(item => x.Title)</h5>
+                        <a href="@Url.Action("FindById",new {controller= "Api", id=x.imdbID})" class="btn stretched-link"></a>
+
                 </div>
             </div>
         </div>
+
+
     }
-    
+    </div>
+</div>
+
+
+
