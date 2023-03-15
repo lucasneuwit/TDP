@@ -1,15 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using TDP.Models.Application;
 using TDP.Models.Application.DataTransfer;
+using TDP.Models.Application.Services;
 
 namespace TDP.Controllers
 {
     public class ApiController : Controller
     {
         private readonly IApiProvider _provider;
-        public ApiController(IApiProvider provider) 
+        private readonly IMovieService _movieService;
+        private readonly IMapper _mapper;
+        public ApiController(IApiProvider provider, IMovieService service, IMapper mapper) 
         {
             _provider = provider;
+            _movieService = service;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> FindByTitle(string title, string? type, string? releaseYear)
@@ -30,5 +36,21 @@ namespace TDP.Controllers
             var res = await _provider.SearchAsync(aRequest,pageNumber);
             return View(res);
         }
+
+        public async Task<IActionResult> GetMovie(string title)
+        {
+            var movie = await _movieService.GetMovie(title);
+            var movieDto = _mapper.Map<Movie>(movie);
+            return Json(movieDto);
+        }
+
+        public async Task<IActionResult> GetAllMovies()
+        {
+            List<Movie> movielist;
+            var movies = await _movieService.GetAllMovies();
+            movielist = _mapper.Map<List<Movie>>(movies);
+            return Json(movielist);
+        }
+        
     }
 }
