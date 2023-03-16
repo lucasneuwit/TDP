@@ -20,14 +20,28 @@ namespace TDP.Controllers
 
         public async Task<IActionResult> FindByTitle(string title, string? type, string? releaseYear)
         {
-            IRequest aRequest = new Request(title,null,type,releaseYear);
-            var res = await _provider.FindAsync(aRequest);
-            return Json(res);
+            var res = await _movieService.GetMovie(title);
+            if (res == null)
+            {
+                IRequest aRequest = new Request(title, null, type, releaseYear);
+                var movie = await _provider.FindAsync(aRequest);
+                _movieService.SaveMovie(movie);
+                return View(movie);
+
+            }
+            else
+            {
+                var movieDto = _mapper.Map<Movie>(res);
+                return View(movieDto);
+            }
+
+            
         }
         public async Task<IActionResult> FindById(string id, string? type, string? releaseYear)
         {
             IRequest aRequest = new Request(null, id, type, releaseYear);
             var res = await _provider.FindAsync(aRequest);
+            _movieService.SaveMovie(res);
             return View(res);
         }
         public async Task<IActionResult> Search(string title, string? type, string? releaseYear, int pageNumber)
@@ -51,6 +65,8 @@ namespace TDP.Controllers
             movielist = _mapper.Map<List<Movie>>(movies);
             return Json(movielist);
         }
+
+        
         
     }
 }
