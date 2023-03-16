@@ -13,8 +13,7 @@
     <input type="text" name="releaseYear" class="form-control" placeholder="Year released">
 
         <select class="custom-select" name="type">
-            <option selected>Choose...</option>
-            <option value="movie">Movies</option>
+            <option selected value="movie">Movies</option>
             <option value="series">Series</option>
         </select>
         <div class="input-group-append">
@@ -32,7 +31,7 @@
                 <img src="@Url.Content(x.Poster)" class="card-img-top"/>
                 <div class="card-body">
                     <h5 class="card-title">@Html.DisplayFor(item => x.Title)</h5>
-                        <a href="@Url.Action("FindById",new {controller= "Api", id=x.imdbID})" class="btn stretched-link"></a>
+                        <a href="@Url.Action("FindByTitle","Api", new {title=x.Title},null)" class="btn stretched-link"></a>
 
                 </div>
             </div>

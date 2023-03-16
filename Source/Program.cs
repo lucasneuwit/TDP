@@ -49,7 +49,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Api}/{action=GetAllMovies}",
-    new { title= "avengers" });
+    pattern: "{controller=Home}/{action=Index}",
+    new { pageNumber=1  });
 
 app.Run();
