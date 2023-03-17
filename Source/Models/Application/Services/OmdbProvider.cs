@@ -29,7 +29,6 @@ public class OmdbProvider : IApiProvider
         var apirequest = new HttpRequestMessage(HttpMethod.Get, url);
         var response = await httpClient.SendAsync(apirequest);
         response.EnsureSuccessStatusCode();
-        Console.WriteLine(await response.Content.ReadAsStringAsync());
         Movie aMovie = JsonSerializer.Deserialize<Movie>(await response.Content.ReadAsStringAsync());
         return aMovie;
     }
@@ -48,8 +47,8 @@ public class OmdbProvider : IApiProvider
         var apirequest = new HttpRequestMessage(HttpMethod.Get, url);
         var response = await httpClient.SendAsync(apirequest);
         response.EnsureSuccessStatusCode();
-        Console.WriteLine(await response.Content.ReadAsStringAsync());
         MovieCollection aMovieCollection = JsonSerializer.Deserialize<MovieCollection>(await response.Content.ReadAsStringAsync());
+        aMovieCollection.SearchString = request.Title;
         return aMovieCollection;
     }
 }

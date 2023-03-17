@@ -27,15 +27,12 @@ namespace TDP.Controllers
                 var movie = await _provider.FindAsync(aRequest);
                 _movieService.SaveMovie(movie);
                 return View(movie);
-
             }
             else
             {
                 var movieDto = _mapper.Map<Movie>(res);
                 return View(movieDto);
-            }
-
-            
+            }           
         }
         public async Task<IActionResult> FindById(string id, string? type, string? releaseYear)
         {
@@ -64,9 +61,6 @@ namespace TDP.Controllers
             var movies = await _movieService.GetAllMovies();
             movielist = _mapper.Map<List<Movie>>(movies);
             return Json(movielist);
-        }
-
-        
-        
+        }        
     }
 }

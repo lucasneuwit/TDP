@@ -2,9 +2,6 @@
 @{
 
 }
-
-
-
 <div class="text-center">
     <h1 class="display-4">Movie app </h1>
 <form asp-controller="Api" asp-action="Search">
@@ -22,23 +19,30 @@
 
     </div>
      </form>
-
-    <div class="row row-cols-3 g-3">
-    @foreach (var x in Model.Movies!)
+     @if (Model.Movies==null)
     {
-            <div class="col-lg-3 col-sm-6 d-flex">
-            <div class="card">
-                <img src="@Url.Content(x.Poster)" class="card-img-top"/>
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(item => x.Title)</h5>
-                        <a href="@Url.Action("FindByTitle","Api", new {title=x.Title},null)" class="btn stretched-link"></a>
-
-                </div>
-            </div>
-        </div>
-
-
+        <h2>No results found for '@Model.SearchString'</h2>
     }
+    else
+    {
+        <div class="row row-cols-3 g-3">
+            @foreach (var x in Model.Movies!)
+            {
+                <div class="col-lg-3 col-sm-6 d-flex">
+                    <div class="card">
+                        <img src="@Url.Content(x.Poster)" class="card-img-top" />
+                        <div class="card-body">
+                            <h5 class="card-title">@Html.DisplayFor(item => x.Title)</h5>
+                            <a href="@Url.Action("FindByTitle","Api", new {title=x.Title},null)" class="btn stretched-link"></a>
+
+                        </div>
+                    </div>
+                </div>
+                }
+        </div>
+    }
+    <div>
+        <a asp-controller="Home" asp-action="Index">Back to Home</a>
     </div>
 </div>
 

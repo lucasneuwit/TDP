@@ -6,6 +6,6 @@
 
         Task <IEnumerable<Domain.Movie>> GetAllMovies(); 
 
-        void SaveMovie(Movie movie);
+       public void SaveMovie(Movie movie);
     }
 }

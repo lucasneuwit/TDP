@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using TDP.Models.Persistence;
 
@@ -23,12 +24,11 @@ namespace TDP.Models.Application.Services
         public async Task<IEnumerable<Domain.Movie>> GetAllMovies()
         {
             List<Domain.Movie> movies;
-            movies = this._context.Set<Domain.Movie>().ToList();
+            movies = await this._context.Set<Domain.Movie>().ToListAsync();
             return movies;
-
         }
 
-        void IMovieService.SaveMovie(Movie movie)
+        public void SaveMovie(Movie movie)
         {
             var dbmovie = new Domain.Movie(Guid.NewGuid());
             dbmovie.SetTitle(movie.Title);
@@ -41,12 +41,10 @@ namespace TDP.Models.Application.Services
             if (movie.imdbRating != "N/A")
             {
                 dbmovie.SetImdbRating(Convert.ToDecimal(movie.imdbRating, new CultureInfo("en-US")));
-
             }
             dbmovie.SetPosterUrl(movie.Poster);
             _context.Add(dbmovie);
             _context.SaveChanges();
-
         }
     }
 }
