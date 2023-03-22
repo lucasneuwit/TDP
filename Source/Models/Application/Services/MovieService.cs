@@ -43,6 +43,21 @@ namespace TDP.Models.Application.Services
                 dbmovie.SetImdbRating(Convert.ToDecimal(movie.imdbRating, new CultureInfo("en-US")));
             }
             dbmovie.SetPosterUrl(movie.Poster);
+            var actorsNames = movie.Actors.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var directorsNames = movie.Director.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var writersNames = movie.Writer.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            foreach (var actor in actorsNames)
+            {
+                dbmovie.AddParticipant(actor, 0);
+            }
+            foreach (var director in directorsNames)
+            {
+                dbmovie.AddParticipant(director, 1);
+            }
+            foreach (var writer in writersNames)
+            {
+                dbmovie.AddParticipant(writer, 2);
+            }
             _context.Add(dbmovie);
             _context.SaveChanges();
         }

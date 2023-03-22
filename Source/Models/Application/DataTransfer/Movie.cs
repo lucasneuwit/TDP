@@ -22,5 +22,13 @@ public record Movie
 
     public string? Country { get; set; }
 
+    public string? Genre { get; set; } 
+
     public string? imdbRating { get; set; }
+
+    public string? Director { get; set; }
+    public string? Writer { get; set; }
+
+    public string? Actors { get; set; }
+
 }
