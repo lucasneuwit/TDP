@@ -29,7 +29,7 @@ namespace TDP.Controllers
             }
             else
             {
-                var movieDto = _mapper.Map<Movie>(res);
+                var movieDto = _mapper.Map<MovieDTO>(res);
                 return View(movieDto);
             }           
         }
@@ -50,15 +50,15 @@ namespace TDP.Controllers
         public async Task<IActionResult> GetMovie(string title)
         {
             var movie = await _movieService.GetMovie(title);
-            var movieDto = _mapper.Map<Movie>(movie);
+            var movieDto = _mapper.Map<MovieDTO>(movie);
             return Json(movieDto);
         }
 
         public async Task<IActionResult> GetAllMovies()
         {
-            List<Movie> movielist;
+            List<MovieDTO> movielist;
             var movies = await _movieService.GetAllMovies();
-            movielist = _mapper.Map<List<Movie>>(movies);
+            movielist = _mapper.Map<List<MovieDTO>>(movies);
             return Json(movielist);
         }        
     }

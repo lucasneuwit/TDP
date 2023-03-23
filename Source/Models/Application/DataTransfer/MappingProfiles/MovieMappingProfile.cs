@@ -9,7 +9,7 @@ namespace TDP.Models.Application.DataTransfer.MappingProfiles
         public MovieMappingProfile()
         {
             // TODO: use single CreateMap.
-            CreateMap<Domain.Movie, Movie>().ForMember(dto => dto.Id, src => src.MapFrom(src => src.Id)).ForMember(dto => dto.Title, src => src.MapFrom(src => src.Title)).
+            CreateMap<Movie, MovieDTO>().ForMember(dto => dto.Id, src => src.MapFrom(src => src.Id)).ForMember(dto => dto.Title, src => src.MapFrom(src => src.Title)).
                 ForMember(dto => dto.Plot, src => src.MapFrom(src => src.Plot)).ForMember(dto => dto.Runtime, src => src.MapFrom(src => src.Runtime)).
                 ForMember(dto => dto.Type, src => src.MapFrom(src => src.Type)).ForMember(dto => dto.Released, src => src.MapFrom(src => src.Released)).
                 ForMember(dto => dto.Country, src => src.MapFrom(src => src.Country)).ForMember(dto => dto.imdbRating, src => src.MapFrom(src => src.ImdbRating)).

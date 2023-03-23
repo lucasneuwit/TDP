@@ -28,7 +28,7 @@ namespace TDP.Models.Application.Services
             return movies;
         }
 
-        public void SaveMovie(Movie movie)
+        public void SaveMovie(MovieDTO movie)
         {
             var dbmovie = new Domain.Movie(Guid.NewGuid());
             dbmovie.SetTitle(movie.Title);

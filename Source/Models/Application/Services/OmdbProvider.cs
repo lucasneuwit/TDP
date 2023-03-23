@@ -15,7 +15,7 @@ public class OmdbProvider : IApiProvider
         this._clientFactory = clientFactory;
     }
     
-    public async Task<Movie> FindAsync(IRequest request)
+    public async Task<MovieDTO> FindAsync(IRequest request)
     {
         var httpClient = _clientFactory.CreateClient("OMDBApi");
         var queryParams = new Dictionary<string, string>()
@@ -29,7 +29,7 @@ public class OmdbProvider : IApiProvider
         var apirequest = new HttpRequestMessage(HttpMethod.Get, url);
         var response = await httpClient.SendAsync(apirequest);
         response.EnsureSuccessStatusCode();
-        Movie aMovie = JsonSerializer.Deserialize<Movie>(await response.Content.ReadAsStringAsync());
+        MovieDTO aMovie = JsonSerializer.Deserialize<MovieDTO>(await response.Content.ReadAsStringAsync());
         return aMovie;
     }
 

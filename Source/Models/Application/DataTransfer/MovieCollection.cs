@@ -6,7 +6,7 @@ namespace TDP.Models.Application.DataTransfer
     {
         [JsonPropertyName("Search")]
         
-        public IEnumerable<Movie> Movies { get; set;}
+        public IEnumerable<MovieDTO> Movies { get; set;}
         [JsonPropertyName("totalResults")]
         public string TotalResults { get; set; }
         public string Response { get; set; }

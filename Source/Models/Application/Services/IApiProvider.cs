@@ -8,7 +8,7 @@ namespace TDP.Models.Application;
 /// </summary>
 public interface IApiProvider
 {
-    Task<Movie> FindAsync(IRequest request);
+    Task<MovieDTO> FindAsync(IRequest request);
 
     Task<MovieCollection> SearchAsync(IRequest request, int pageNumber);
 }
