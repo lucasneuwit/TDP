@@ -75,6 +75,7 @@ public class Movie : BaseEntity
         
         movieParticipant.SetName(name);
         movieParticipant.SetRole((ParticipantRole)role);
+        movieParticipant.SetMovie(this);
         this.Participants.Add(movieParticipant);
     }
 
