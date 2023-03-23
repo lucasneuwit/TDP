@@ -1,17 +1,16 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TDP.Models.Application;
-using TDP.Models.Application.DataTransfer;
 using TDP.Models.Application.Services;
 
 namespace TDP.Controllers
 {
-    public class ApiController : Controller
+    public class MovieController : Controller
     {
         private readonly IApiProvider _provider;
         private readonly IMovieService _movieService;
         private readonly IMapper _mapper;
-        public ApiController(IApiProvider provider, IMovieService service, IMapper mapper) 
+        public MovieController(IApiProvider provider, IMovieService service, IMapper mapper) 
         {
             _provider = provider;
             _movieService = service;
