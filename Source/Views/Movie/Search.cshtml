@@ -1,6 +1,6 @@
 ﻿@model TDP.Models.Application.DataTransfer.MovieCollection
 @{
-
+    int totalPages = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(Model.TotalResults) / 10));
 }
 <div class="text-center">
     <h1 class="display-4">Movie app </h1>
@@ -44,6 +44,14 @@
     <div>
         <a asp-controller="Home" asp-action="Index">Back to Home</a>
     </div>
+    <ul class="pagination">
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = i })">@i</a>
+            </li>
+        }
+    </ul>
 </div>
 
 

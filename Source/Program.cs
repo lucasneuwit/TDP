@@ -49,7 +49,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}",
-    new { pageNumber=1  });
+    pattern: "{controller=Home}/{action=Index}");
 
 app.Run();

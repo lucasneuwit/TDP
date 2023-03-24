@@ -49,6 +49,7 @@ public class OmdbProvider : IApiProvider
         response.EnsureSuccessStatusCode();
         MovieCollection aMovieCollection = JsonSerializer.Deserialize<MovieCollection>(await response.Content.ReadAsStringAsync());
         aMovieCollection.SearchString = request.Title;
+        aMovieCollection.CurrentPage = pageNumber;
         return aMovieCollection;
     }
 }
