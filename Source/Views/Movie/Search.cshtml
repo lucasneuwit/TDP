@@ -42,82 +42,42 @@
         </div>
     }
     <div>
+        @if (totalPages > 1)
+        {
+            <ul class="pagination align-content-center">
+                @if (Model.CurrentPage != 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = 1 })">&laquo</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = Model.CurrentPage - 1 })">&lsaquo;</a>
+                    </li>
+                }
+                @for (int i = Model.CurrentPage - 2; (i >= 1 && i <= Model.CurrentPage - 1); i++)
+                {
+                    <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = (i) })">@(i)</a>
+                    </li>
+                }
+                @for (int i = Model.CurrentPage; (i <= totalPages && i <= Model.CurrentPage + 2); i++)
+                {
+                    <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = i })">@i</a>
+                    </li>
+                }
+                @if (Model.CurrentPage != totalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = Model.CurrentPage + 1 })">&rsaquo;</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = totalPages })">&raquo</a>
+                    </li>
+                }
+            </ul>
         <a asp-controller="Home" asp-action="Index">Back to Home</a>
     </div>
-    @if (totalPages > 1)
-    {
-        <ul class="pagination">
-            @if (Model.CurrentPage != 1)
-            {
-                <li class="page-item">
-                    <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = Model.CurrentPage - 1 })">&laquo</a>
-                </li>
-            }
-        <li class="@(1 == Model.CurrentPage ? "page-item active" : "page-item")">
-            <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = 1 })">@(1)</a>
-        </li>
-
-        @for (int i = Model.CurrentPage; (i <= totalPages && i <= Model.CurrentPage+5); i++)
-        {
-            <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
-                <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = i })">@i</a>
-            </li>
-        }
-
-        <li class="@(totalPages == Model.CurrentPage ? "page-item active" : "page-item")">
-            <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = totalPages })">@totalPages</a>
-        </li>
-            @if (Model.CurrentPage != totalPages)
-            {
-                <li class="page-item">
-                    <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = Model.CurrentPage + 1 })">&raquo</a>
-                </li>
-            }
-    </ul>
+       
     }
 </div>
-
-
-<div className="paginationWrapper">
-
-    @if (currentPage == totalPages && totalPages > 3)
-    {
-        <button class="btn btn-outline-secondary" type="submit"><strong>@(currentPage - 2)</strong></button>
-    }
-
-
-    @if (currentPage > 2)
-    {
-        <button class="btn btn-outline-secondary" type="submit"><strong>@(currentPage - 1)</strong></button>
-    }
-
-
-    @if (currentPage != 1 && currentPage != totalPages)
-    {
-        <button class="btn btn-outline-secondary" type="submit"><strong>@(currentPage)</strong></button>
-    }
-
-    @if (currentPage < totalPages - 1)
-    {
-        <button class="btn btn-outline-secondary" type="submit"> <strong>@(currentPage + 1)</strong></button>
-    }
-
-
-    @if (currentPage == 1 && totalPages > 3)
-    {
-        <button class="btn btn-outline-secondary" type="submit"> <strong>@(currentPage + 2)</strong></button>
-
-    }
-
-
-    @if (currentPage < totalPages - 2)
-    {
-        <div className="separador"> ...</div>
-        <button class="btn btn-outline-secondary" type="submit"><strong>@(totalPages)</strong></button>
-    }
-
-</div>
-
-
-
-
