@@ -4,13 +4,13 @@
 }
 <div class="text-center">
     <h1 class="display-4">Movie app </h1>
-<form asp-controller="Movie" asp-action="Search">
+<form asp-controller="Movie" asp-action="Search" asp-route-pageNumber="1">
 <div class="input-group mb-3">
         <input type="text" name="title" class="form-control" placeholder="Title">
     <input type="text" name="releaseYear" class="form-control" placeholder="Year released">
 
         <select class="custom-select" name="type">
-            <option selected value="movie">Movies</option>
+            <option value="movie" selected>Movies</option>
             <option value="series">Series</option>
         </select>
         <div class="input-group-append">
@@ -18,7 +18,7 @@
         </div>
 
     </div>
-     </form>
+    </form>
      @if (Model.Movies==null)
     {
         <h2>No results found for '@Model.SearchString'</h2>
