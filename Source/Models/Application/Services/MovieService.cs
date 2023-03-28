@@ -33,10 +33,16 @@ namespace TDP.Models.Application.Services
             var dbmovie = new Domain.Movie(Guid.NewGuid());
             dbmovie.SetTitle(movie.Title);
             dbmovie.SetPlot(movie.Plot);
-            string runtime = Regex.Replace(movie.Runtime, "[A-Za-z ]", "");
-            
-            dbmovie.SetRuntime(long.Parse(runtime));
-            dbmovie.SetReleased(DateOnly.Parse(movie.Released));
+            if (movie.Runtime != "N/A")
+            {
+                string runtime = Regex.Replace(movie.Runtime, "[A-Za-z ]", "");
+
+                dbmovie.SetRuntime(long.Parse(runtime));
+            }
+            if (movie.Released != "N/A")
+            {
+                dbmovie.SetReleased(DateOnly.Parse(movie.Released));
+            }
             dbmovie.SetCountry(movie.Country);
             if (movie.imdbRating != "N/A")
             {
