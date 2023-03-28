@@ -30,7 +30,15 @@
             {
                 <div class="col-lg-3 col-sm-6 d-flex">
                     <div class="card">
-                        <img src="@Url.Content(x.Poster)" class="card-img-top" />
+                        @if (x.Poster =="N/A")
+                        {
+                            <img src="https://cdn-icons-png.flaticon.com/512/4263/4263893.png" class="card-img-top" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content(x.Poster)" class="card-img-top" />
+                        }
+                        
                         <div class="card-body">
                             <h5 class="card-title">@Html.DisplayFor(item => x.Title)</h5>
                             <a href="@Url.Action("FindByTitle","Movie", new {title=x.Title},null)" class="btn stretched-link"></a>
