@@ -12,5 +12,6 @@ namespace TDP.Models.Application.DataTransfer
         public string Response { get; set; }
         public int CurrentPage { get; set; }
         public string SearchString { get; set; }
+        public string Type { get; set; }
     }
 }
