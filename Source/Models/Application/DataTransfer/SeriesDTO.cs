@@ -1,13 +1,14 @@
-﻿namespace TDP.Models.Application;
+namespace TDP.Models.Application;
 
-public record Movie
+public record SeriesDTO
 {
     public Guid Id { get; set; }
+    public string? imdbID { get; set; }
 
     public string? Title { get; set; }
 
     public string? Plot { get; set; }
-
+    
     public string? Runtime { get; set; }
 
     public string? Type { get; set; }
@@ -19,4 +20,8 @@ public record Movie
     public string? Country { get; set; }
 
     public string? ImdbRating { get; set; }
+
+    public int Seasons { get; set; }
+
+    public ICollection<Episode> Episodes { get; set; }
 }

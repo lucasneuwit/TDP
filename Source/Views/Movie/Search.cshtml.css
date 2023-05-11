@@ -1,0 +1,12 @@
+﻿.card-body {
+    display: flex;
+    justify-content:center;
+    align-items: flex-end;
+   
+}
+.card-img-top {
+
+    object-fit: cover;
+    object-position: center;
+    width: auto;
+}

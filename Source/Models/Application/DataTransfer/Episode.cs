@@ -3,6 +3,7 @@ namespace TDP.Models.Application;
 public record Episode
 {
     public Guid Id { get; set; }
+    public string? imdbID { get; set; }
 
     public string? Title { get; set; }
 

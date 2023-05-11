@@ -2,7 +2,7 @@
 
 public enum ParticipantRole
 {
-    Actor,
-    Director,
-    Writer
+    Actor=0,
+    Director=1, 
+    Writer=2 
 }
