@@ -10,6 +10,7 @@ public class DataSeed
     }
 
     private Movie FirstMovie { get; set; } = null!;
+    private Movie SecondMovie { get; set; } = null!;
 
     private void Setup()
     {
@@ -21,10 +22,18 @@ public class DataSeed
         FirstMovie.SetCountry("United States");
         FirstMovie.SetImdbRating(9.3m);
         FirstMovie.SetPosterUrl(string.Empty);
+        SecondMovie = new Movie(Guid.NewGuid());
+        SecondMovie.SetTitle("Batman");
+        SecondMovie.SetPlot("Some not really important plot");
+        SecondMovie.SetRuntime(220);
+        SecondMovie.SetReleased(new DateOnly(2013, 1, 14));
+        SecondMovie.SetCountry("Somalia");
+        SecondMovie.SetImdbRating(8.3m);
+        SecondMovie.SetPosterUrl(string.Empty);
 
         MoviesToSeed = new List<Movie>()
         {
-            FirstMovie,
+            FirstMovie,SecondMovie
         };
 
     }

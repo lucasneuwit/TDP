@@ -1,8 +1,22 @@
-﻿@{
+﻿@model TDP.Models.Application.DataTransfer.MovieCollection
+@{
     ViewData["Title"] = "Home Page";
+
+
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<form asp-controller="Movie" asp-action="Search" asp-route-pageNumber="1">
+<div class="input-group mb-3">
+        <input type="text" name="title" class="form-control" placeholder="Title">
+    <input type="text" name="releaseYear" class="form-control" placeholder="Year released">
+
+        <select class="custom-select" name="type">
+            <option value="movie" selected>Movies</option>
+            <option value="series">Series</option>
+        </select>
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+
+    </div>
+</form>

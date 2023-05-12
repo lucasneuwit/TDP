@@ -1,4 +1,6 @@
 ﻿
+using TDP.Models.Application.DataTransfer;
+
 namespace TDP.Models.Application;
 
 /// <summary>
@@ -6,7 +8,7 @@ namespace TDP.Models.Application;
 /// </summary>
 public interface IApiProvider
 {
-    Task<Movie> FindAsync(IRequest request);
+    Task<MovieDTO> FindAsync(IRequest request);
 
-    Task<IEnumerable<Movie>> SearchAsync(IRequest request, int pageNumber);
+    Task<MovieCollection> SearchAsync(IRequest request, int pageNumber);
 }

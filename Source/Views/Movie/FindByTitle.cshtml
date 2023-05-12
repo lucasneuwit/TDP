@@ -1,0 +1,73 @@
+﻿@model TDP.Models.Application.MovieDTO;
+@{
+    ViewData["Title"] = "FindByTitle";
+}
+
+<h1>@Html.DisplayFor(model => model.Title)</h1>
+
+<div>
+    <h4>Details</h4>
+    <hr />
+    <dl class="row align-content-sm-center">
+        <dd class="col-sm-6">
+            <dl class="row align-content-sm-center">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Type)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Type)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Released)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Released)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Runtime)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Runtime) mins
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Actors)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Actors)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Director)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Director)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Writer)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Writer)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Plot)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Plot)
+                </dd>
+            </dl>
+        </dd>
+        <dt class="col-sm-6 align-content-sm-center">
+            <img src="@Url.Content(Model.Poster)" />
+        </dt>
+    </dl>
+   
+        
+    </div>
+<div>
+    <a asp-controller="Home" asp-action="Index">Back to Home</a>
+</div>

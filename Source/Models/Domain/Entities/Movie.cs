@@ -65,14 +65,17 @@ public class Movie : BaseEntity
         this.ImdbRating = imdbRating;
     }
 
-    public void AddParticipant(string name, string role)
+    public void AddParticipant(string name, int role)
     {
         var movieParticipant = new MovieParticipant();
         if (this.Participants.Any(e => e.Name == movieParticipant.Name && e.Role == movieParticipant.Role))
         {
             return;
         }
-
+        
+        movieParticipant.SetName(name);
+        movieParticipant.SetRole((ParticipantRole)role);
+        movieParticipant.SetMovie(this);
         this.Participants.Add(movieParticipant);
     }
 
