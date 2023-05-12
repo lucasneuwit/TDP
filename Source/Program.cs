@@ -1,38 +1,22 @@
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using TDP.Models.Domain;
-using TDP.Models.Application;
+using TDP.Extensions;
 using TDP.Models.Application.DataTransfer.MappingProfiles;
-using TDP.Models.Application.Services;
-using TDP.Models.Domain;
-using TDP.Models.Persistence;
-using TDP.Models.Persistence.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
+var url = builder.Configuration.GetValue<string>("ApiUrl");
 
 // Add services to the container.
-var url = builder.Configuration.GetValue<string>("ApiUrl");
-builder.Services.AddHttpClient("OMDBApi",httpClient => { 
-    httpClient.BaseAddress = new Uri(url); });
-builder.Services.AddTransient<IMovieService, MovieService>();
-builder.Services.AddTransient<IApiProvider, OmdbProvider>();
+builder.Services.AddOmdbProvider();
+builder.Services.AddOmdbHttpClient(url!);
+builder.Services.AddMovieService();
 builder.Services.AddControllersWithViews();
-var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
-builder.Services.AddDbContext<TdpDbContext>(opts => opts.UseSqlServer(connectionString));
-builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
-
+builder.Services.AddDbContext(connectionString!);
+builder.Services.AddRepository();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper();
 
-
-
-var mappingConfig = new MapperConfiguration(mc =>
-{
-    mc.AddProfile(new MovieMappingProfile());
-});
-
-IMapper mapper = mappingConfig.CreateMapper();
-builder.Services.AddSingleton(mapper);
 var app = builder.Build();
 
 

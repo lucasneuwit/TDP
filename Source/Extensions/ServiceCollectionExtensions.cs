@@ -1,0 +1,52 @@
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using TDP.Models.Application;
+using TDP.Models.Application.DataTransfer.MappingProfiles;
+using TDP.Models.Application.Services;
+using TDP.Models.Domain;
+using TDP.Models.Persistence;
+using TDP.Models.Persistence.Repository;
+
+namespace TDP.Extensions;
+
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddOmdbHttpClient(this IServiceCollection serviceCollection, string apiUrl)
+    {
+        serviceCollection.AddHttpClient("OMDBApi",httpClient => 
+        { 
+            httpClient.BaseAddress = new Uri(apiUrl); 
+        });
+        return serviceCollection;
+    }
+
+    public static IServiceCollection AddMovieService(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection.AddTransient<IMovieService, MovieService>();
+    }
+
+    public static IServiceCollection AddOmdbProvider(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection.AddTransient<IApiProvider, OmdbProvider>();
+    }
+
+    public static IServiceCollection AddDbContext(this IServiceCollection serviceCollection, string connectionString)
+    {
+        return serviceCollection.AddDbContext<TdpDbContext>(opts => opts.UseSqlServer(connectionString));
+    }
+
+    public static IServiceCollection AddRepository(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+    }
+
+    public static IServiceCollection AddAutoMapper(this IServiceCollection serviceCollection)
+    {
+        var mappingConfig = new MapperConfiguration(mc =>
+        {
+            mc.AddProfile(new MovieMappingProfile());
+        });
+        
+        return serviceCollection.AddSingleton(mappingConfig.CreateMapper());
+    }
+}
