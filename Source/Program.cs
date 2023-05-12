@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TDP.Models.Domain;
 using TDP.Models.Persistence;
-using TDP.Models.Persistence.Repository.Factory;
+using TDP.Models.Persistence.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,11 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 builder.Services.AddDbContext<TdpDbContext>(opts => opts.UseSqlServer(connectionString));
-builder.Services.AddTransient(typeof(IRepository<>),sp =>
-{
-    var factory = new RepositoryFactory();
-    factory.GetRepository<>()
-})
+builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+
 
 
 var app = builder.Build();

@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using TDP.Models.Domain;
+﻿using TDP.Models.Domain;
 
 namespace TDP.Models.Persistence;
 
