@@ -51,6 +51,7 @@ public class OmdbProvider : IApiProvider
         aMovieCollection.SearchString = request.Title;
         aMovieCollection.CurrentPage = pageNumber;
         aMovieCollection.Type = request.Type;
+        aMovieCollection.Released = request.ReleaseYear;
         return aMovieCollection;
     }
 }

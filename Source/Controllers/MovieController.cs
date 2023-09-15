@@ -10,7 +10,7 @@ namespace TDP.Controllers
         private readonly IApiProvider _provider;
         private readonly IMovieService _movieService;
         private readonly IMapper _mapper;
-        public MovieController(IApiProvider provider, IMovieService service, IMapper mapper) 
+        public MovieController(IApiProvider provider, IMovieService service, IMapper mapper)
         {
             _provider = provider;
             _movieService = service;
@@ -31,7 +31,7 @@ namespace TDP.Controllers
             {
                 var movieDto = _mapper.Map<MovieDTO>(res);
                 return View(movieDto);
-            }           
+            }
         }
         public async Task<IActionResult> FindById(string id, string? type, string? releaseYear)
         {
@@ -40,6 +40,8 @@ namespace TDP.Controllers
             _movieService.SaveMovie(res);
             return View(res);
         }
+        [HttpGet]
+            
         public async Task<IActionResult> Search(string title, string? type, string? releaseYear, int pageNumber)
         {
             IRequest aRequest = new Request(title, null, type, releaseYear);
