@@ -9,7 +9,7 @@ public class Movie : BaseEntity
     {
         Type = MovieTypes.MovieType;
     }
-
+    public string ImdbId { get; set; } = null!;
     public string Title { get; private set; } = null!;
 
     public string Plot { get; private set; } = null!;
@@ -33,6 +33,10 @@ public class Movie : BaseEntity
     public void SetTitle(string title)
     {
         this.Title = title;
+    }
+    public void SetImdbId(string imdbId)
+    {
+        this.ImdbId = imdbId;
     }
 
     public void SetPlot(string plot)

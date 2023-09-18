@@ -14,6 +14,7 @@ public class MovieEntityTypeConfiguration : IEntityTypeConfiguration<Movie>
 
         builder.Property(entity => entity.Id).ValueGeneratedNever();
         builder.Property(entity => entity.Title);
+        builder.Property(entity => entity.ImdbId);
         builder.Property(entity => entity.Plot);
         builder.Property(entity => entity.Runtime);
         builder.Property(entity => entity.Type);

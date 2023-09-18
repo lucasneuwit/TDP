@@ -24,6 +24,7 @@ public class DataSeed
         FirstMovie.SetCountry("United States");
         FirstMovie.SetImdbRating(9.3m);
         FirstMovie.SetPosterUrl(string.Empty);
+        FirstMovie.SetImdbId(string.Empty);
         SecondMovie = new Movie(Guid.NewGuid());
         SecondMovie.SetTitle("Batman");
         SecondMovie.SetPlot("Some not really important plot");
@@ -32,6 +33,7 @@ public class DataSeed
         SecondMovie.SetCountry("Somalia");
         SecondMovie.SetImdbRating(8.3m);
         SecondMovie.SetPosterUrl(string.Empty);
+        SecondMovie.SetImdbId(string.Empty);
 
         MoviesToSeed = new List<Movie>()
         {
