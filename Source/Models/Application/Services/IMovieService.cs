@@ -7,5 +7,8 @@
         Task <IEnumerable<Domain.Movie>> GetAllMovies(); 
 
        public void SaveMovie(MovieDTO movie);
+
+        public void AddToWatchList(MovieDTO movie);
+
     }
 }
