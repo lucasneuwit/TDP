@@ -62,6 +62,13 @@ namespace TDP.Controllers
             var movies = await _movieService.GetAllMovies();
             movielist = _mapper.Map<List<MovieDTO>>(movies);
             return Json(movielist);
-        }        
+        } 
+
+        public async Task<IActionResult> AddToWishList(Guid movieId, Guid userId)
+        {
+            await _movieService.AddToWatchListAsync(movieId,userId);
+            return View();
+        }
+
     }
 }

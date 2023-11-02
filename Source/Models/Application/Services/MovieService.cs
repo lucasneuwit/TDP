@@ -17,7 +17,7 @@ namespace TDP.Models.Application.Services
 
         public async Task<Domain.Movie> GetMovie(string title)
         {
-            var movie = _context.Set<Domain.Movie>().Where(mov => mov.Title.Equals(title)).FirstOrDefault();
+            var movie = _context.Set<Domain.Movie>().FirstOrDefault(mov => mov.Title.Equals(title));
             return movie;
         }
 
@@ -69,9 +69,13 @@ namespace TDP.Models.Application.Services
             _context.SaveChanges();
         }
 
-        public void AddToWatchList(MovieDTO movie)
+        public Task AddToWatchListAsync(Guid movieId, Guid userId)
         {
-            throw new NotImplementedException();
+            var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
+            var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
+            movie.AddFollower(user);
+            return _context.SaveChangesAsync();
+
         }
     }
 

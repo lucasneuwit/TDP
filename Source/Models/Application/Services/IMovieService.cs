@@ -8,7 +8,7 @@
 
        public void SaveMovie(MovieDTO movie);
 
-        public void AddToWatchList(MovieDTO movie);
+        public Task AddToWatchListAsync(Guid movieId, Guid userId);
 
     }
 }

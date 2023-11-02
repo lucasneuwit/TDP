@@ -30,6 +30,8 @@ public class Movie : BaseEntity
 
     public ICollection<UserRating> Ratings { get; } = new List<UserRating>();
 
+    public ICollection<User> Followers { get; } = new List<User>();
+
     public void SetTitle(string title)
     {
         this.Title = title;
@@ -81,6 +83,15 @@ public class Movie : BaseEntity
         movieParticipant.SetRole((ParticipantRole)role);
         movieParticipant.SetMovie(this);
         this.Participants.Add(movieParticipant);
+    }
+
+    public void AddFollower(User user)
+    {
+        if (Followers.All(e => e.Id != user.Id))
+        {
+            user.Follow(this);
+            Followers.Add(user);
+        }
     }
 
     public void AddUserRating(UserRating userRating)
