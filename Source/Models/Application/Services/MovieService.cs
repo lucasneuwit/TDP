@@ -33,6 +33,7 @@ namespace TDP.Models.Application.Services
             var dbmovie = new Domain.Movie(Guid.NewGuid());
             dbmovie.SetTitle(movie.Title);
             dbmovie.SetPlot(movie.Plot);
+            dbmovie.SetImdbId(movie.imdbID);
             if (movie.Runtime != "N/A")
             {
                 string runtime = Regex.Replace(movie.Runtime, "[A-Za-z ]", "");
