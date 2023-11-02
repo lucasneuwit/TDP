@@ -3,31 +3,70 @@
     ViewData["Title"] = "FindById";
 }
 
-<h1>Details</h1>
+<h1>@Html.DisplayFor(model => model.Title)</h1>
 
 <div>
-    <h4>Movie</h4>
+    <h4>Details</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
+    <dl class="row align-content-sm-center">
+        <dd class="col-sm-6">
+            <dl class="row align-content-sm-center">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Type)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Type)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Released)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Released)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Runtime)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Runtime) mins
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Actors)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Actors)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Director)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Director)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Writer)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Writer)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Plot)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Plot)
+                </dd>
+            </dl>
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
+        <dt class="col-sm-6 align-content-sm-center">
+            <img src="@Url.Content(Model.Poster)" />
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Type)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Released)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Released)
-        </dd>
     </dl>
+
+
 </div>
 <div>
     <a asp-controller="Home" asp-action="Index">Back to Home</a>
