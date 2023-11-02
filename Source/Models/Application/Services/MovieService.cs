@@ -7,7 +7,7 @@ namespace TDP.Models.Application.Services
 {
     public class MovieService : IMovieService
     {
-        
+
         private readonly TdpDbContext _context;
 
         public MovieService(TdpDbContext context)
@@ -68,5 +68,11 @@ namespace TDP.Models.Application.Services
             _context.Add(dbmovie);
             _context.SaveChanges();
         }
+
+        public void AddToWatchList(MovieDTO movie)
+        {
+            throw new NotImplementedException();
+        }
     }
+
 }

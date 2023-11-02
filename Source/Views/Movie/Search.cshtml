@@ -42,7 +42,7 @@
                         
                         <div class="card-body">
                             <h5 class="card-title">@Html.DisplayFor(item => x.Title)</h5>
-                            <a href="@Url.Action("FindByTitle","Movie", new {title=x.Title},null)" class="btn stretched-link"></a>
+                            <a href="@Url.Action("FindById","Movie", new {id=x.imdbID},null)" class="btn stretched-link"></a>
 
                         </div>
                     </div>
