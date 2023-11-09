@@ -15,9 +15,9 @@ namespace TDP.Models.Application.Services
             _context = context;
         }
 
-        public async Task<Domain.Movie> GetMovie(string title)
+        public async Task<Domain.Movie> GetMovie(string imdbId)
         {
-            var movie = _context.Set<Domain.Movie>().FirstOrDefault(mov => mov.Title.Equals(title));
+            var movie = _context.Set<Domain.Movie>().FirstOrDefault(mov => mov.ImdbId.Equals(imdbId));
             return movie;
         }
 

@@ -35,10 +35,22 @@ namespace TDP.Controllers
         }
         public async Task<IActionResult> FindById(string id, string? type, string? releaseYear)
         {
-            IRequest aRequest = new Request(null, id, type, releaseYear);
-            var res = await _provider.FindAsync(aRequest);
-            _movieService.SaveMovie(res);
-            return View(res);
+            var res = await _movieService.GetMovie(id);
+            if (res == null)
+            {
+                IRequest aRequest = new Request(null, id, type, releaseYear);
+                var movie = await _provider.FindAsync(aRequest);
+                _movieService.SaveMovie(movie);
+                var movieDb = await _movieService.GetMovie(id);
+                var movieDto = _mapper.Map<MovieDTO>(movieDb);
+                return View(movieDto);
+            }
+            else
+            {
+                var movieDto = _mapper.Map<MovieDTO>(res);
+                return View(movieDto);
+            }
+            
         }
         [HttpGet]
             
@@ -49,9 +61,9 @@ namespace TDP.Controllers
             return View(res);
         }
 
-        public async Task<IActionResult> GetMovie(string title)
+        public async Task<IActionResult> GetMovie(string imdbId)
         {
-            var movie = await _movieService.GetMovie(title);
+            var movie = await _movieService.GetMovie(imdbId);
             var movieDto = _mapper.Map<MovieDTO>(movie);
             return Json(movieDto);
         }
@@ -64,10 +76,9 @@ namespace TDP.Controllers
             return Json(movielist);
         } 
 
-        public async Task<IActionResult> AddToWishList(Guid movieId, Guid userId)
+        public async Task AddToWishList(Guid movieId, Guid userId)
         {
             await _movieService.AddToWatchListAsync(movieId,userId);
-            return View();
         }
 
     }

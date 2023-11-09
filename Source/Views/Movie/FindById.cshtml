@@ -66,11 +66,35 @@
         </dt>
     </dl>
 
-    <a href="@Url.Action("AddToWatchListAsync","Movie", new {userId="C06D24C3-2303-47FF-85C2-64DEF885D63D", movieId=Model.Id},null)" class="btn btn-outline-secondary">Add to Wishlist</a>
-    
+    <form id="addToWishListForm" method="post" asp-controller="Movie" asp-action="AddToWishList">
+        <input type="hidden" name="movieId" value="@Model.Id" />
+        <input type="hidden" name="userId" value="C06D24C3-2303-47FF-85C2-64DEF885D63D" />
+        <button type="button" id="addToWishListButton">Add to Wish List</button>
+    </form>
 
 
 </div>
+
+
 <div>
     <a asp-controller="Home" asp-action="Index">Back to Home</a>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#addToWishListButton").click(function () {
+            $.ajax({
+                url: "/Movie/AddToWishList", // Set the URL to your controller action
+                type: "POST",
+                data: $("#addToWishListForm").serialize(), // Serialize the form data
+                success: function (data) {
+                    // Handle the server's response here (if needed)
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors here
+                }
+            });
+        });
+    });
+</script>
