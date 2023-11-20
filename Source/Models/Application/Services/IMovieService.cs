@@ -10,5 +10,7 @@
 
         public Task AddToWatchListAsync(Guid movieId, Guid userId);
 
+        public bool AddedToWishList(Guid movieId, Guid userId);
+
     }
 }

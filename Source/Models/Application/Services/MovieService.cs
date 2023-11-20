@@ -77,6 +77,12 @@ namespace TDP.Models.Application.Services
             return _context.SaveChangesAsync();
 
         }
+        public bool AddedToWishList(Guid movieId, Guid userId)
+        {
+            var movie = _context.Set<Domain.Movie>().Include(m => m.Followers).First(mov => mov.Id.Equals(movieId));
+            return movie.Followers.Any(follower => follower.Id == userId);
+        }
+
     }
 
 }

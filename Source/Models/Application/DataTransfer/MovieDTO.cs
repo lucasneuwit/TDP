@@ -29,4 +29,6 @@ public record MovieDTO
 
     public string? Actors { get; set; }
 
+    public bool? IsAddedToWatchList { get; set; }
+
 }

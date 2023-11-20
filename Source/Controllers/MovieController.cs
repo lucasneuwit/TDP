@@ -43,6 +43,7 @@ namespace TDP.Controllers
                 _movieService.SaveMovie(movie);
                 var movieDb = await _movieService.GetMovie(id);
                 var movieDto = _mapper.Map<MovieDTO>(movieDb);
+                movieDto.IsAddedToWatchList = false;
                 return View(movieDto);
             }
             else
@@ -76,9 +77,19 @@ namespace TDP.Controllers
             return Json(movielist);
         } 
 
-        public async Task AddToWishList(Guid movieId, Guid userId)
+        public async Task AddToWishList(Guid movieId, Guid userId, bool isInWatchList)
         {
-            await _movieService.AddToWatchListAsync(movieId,userId);
+            if (!isInWatchList)
+            { 
+                await _movieService.AddToWatchListAsync(movieId, userId);
+            }
+            else NotFound();
+        }
+
+        public async Task<Boolean> AddedToWishList(Guid movieId, Guid userId)
+        {
+            bool isInWatchList = _movieService.AddedToWishList(movieId, userId);
+            return isInWatchList;
         }
 
     }
