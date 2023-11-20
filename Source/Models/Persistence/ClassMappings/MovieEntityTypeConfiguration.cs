@@ -31,5 +31,10 @@ public class MovieEntityTypeConfiguration : IEntityTypeConfiguration<Movie>
             child.Property(entity => entity.Name);
             child.Property(entity => entity.Role);
         });
+        builder.HasMany(entity => entity.Followers);
+        builder.Navigation(entity => entity.Followers).AutoInclude();
+
+        
+
     }
 }
