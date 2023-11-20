@@ -12,5 +12,7 @@
 
         public bool AddedToWishList(Guid movieId, Guid userId);
 
+        public Task RemoveFromWatchListAsync(Guid movieId, Guid userId);
+
     }
 }

@@ -83,6 +83,14 @@ namespace TDP.Models.Application.Services
             return movie.Followers.Any(follower => follower.Id == userId);
         }
 
+        public Task RemoveFromWatchListAsync(Guid movieId, Guid userId)
+        { 
+            var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
+            var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
+            movie.RemoveFollower(user);
+            return _context.SaveChangesAsync();
+        }
+
     }
 
 }

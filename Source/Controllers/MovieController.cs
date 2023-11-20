@@ -92,5 +92,10 @@ namespace TDP.Controllers
             return isInWatchList;
         }
 
+        public async Task RemoveFromWatchlist(Guid movieId, Guid userId)
+        {
+            await _movieService.RemoveFromWatchListAsync(movieId, userId);
+        }
+
     }
 }

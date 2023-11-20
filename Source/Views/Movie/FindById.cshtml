@@ -69,8 +69,16 @@
     <form id="addToWishListForm" method="post" asp-controller="Movie" asp-action="AddToWishList">
         <input type="hidden" name="movieId" value="@Model.Id" />
         <input type="hidden" name="userId" value="C06D24C3-2303-47FF-85C2-64DEF885D63D" />
-        <button type="button" id="addToWishListButton">Add to Wish List</button>
+        <button type="button" id="addToWishListButton">Add to Watch List</button>
     </form>
+    <form id="removeFromWatchListForm" method="post" asp-controller="Movie" asp-action="RemoveFromWatchlist">
+        <input type="hidden" name="movieId" value="@Model.Id" />
+        <input type="hidden" name="userId" value="C06D24C3-2303-47FF-85C2-64DEF885D63D" />
+        <button type="button" id="removeFromWatchListButton">Remove from your watchlist</button>
+    </form>
+
+
+    <h6 id="watchlistText">This movie is already added to your watchlist!</h6>
 
 
 </div>
@@ -83,18 +91,78 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        $("#addToWishListButton").click(function () {
+        // Function to check if the movie is added to the wishlist
+        function checkIfAddedToWishlist() {
             $.ajax({
-                url: "/Movie/AddToWishList", // Set the URL to your controller action
+                url: "/Movie/AddedToWishList",
                 type: "POST",
-                data: $("#addToWishListForm").serialize(), // Serialize the form data
+                data: {
+                    movieId: "@Model.Id",
+                    userId: "C06D24C3-2303-47FF-85C2-64DEF885D63D"
+                },
                 success: function (data) {
-                    // Handle the server's response here (if needed)
+                    // Set the result to the inWishlist variable
+                    inWishlist = data;
+
+                    // Check the condition and update the form visibility
+                    updateFormVisibility();
                 },
                 error: function (xhr, status, error) {
-                    // Handle any errors here
+                    console.error(error);
+                }
+            });
+        }
+
+        // Function to update the form visibility based on inWishlist
+        function updateFormVisibility() {
+            if (inWishlist) {
+                // Movie is in the wishlist
+                $("#addToWishListForm").hide();
+                $("#watchlistText").show();
+                $("#removeFromWatchListForm").show();
+                
+            } else {
+                // Movie is not in the wishlist
+                $("#addToWishListForm").show();
+                $("#watchlistText").hide();
+                $("#removeFromWatchListForm").hide();
+            }
+        }
+
+        // Initial check when the page loads
+        checkIfAddedToWishlist();
+
+        // Set up the click event
+        $("#addToWishListButton").click(function () {
+            $.ajax({
+                url: "/Movie/AddToWishList",
+                type: "POST",
+                data: $("#addToWishListForm").serialize(),
+                success: function (data) {
+                    // Update the wishlist status after adding
+                    checkIfAddedToWishlist();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
                 }
             });
         });
+
+        $("#removeFromWatchListButton").click(function () {
+            $.ajax({
+                url: "/Movie/RemoveFromWatchlist",
+                type: "POST",
+                data: $("#removeFromWatchListForm").serialize(),
+                success: function (data) {
+                    // Update the wishlist status after adding
+                    checkIfAddedToWishlist();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        
     });
 </script>

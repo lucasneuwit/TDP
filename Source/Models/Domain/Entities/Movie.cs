@@ -94,6 +94,12 @@ public class Movie : BaseEntity
         }
     }
 
+    public void RemoveFollower(User user)
+    {
+        user.Unfollow(this);
+        Followers.Remove(user);
+    }
+
     public void AddUserRating(UserRating userRating)
     {
         if (this.Ratings.SingleOrDefault(e => e.UserId == userRating.UserId) is { } currentRating)
