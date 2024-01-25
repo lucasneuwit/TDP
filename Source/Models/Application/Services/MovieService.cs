@@ -91,6 +91,18 @@ namespace TDP.Models.Application.Services
             return _context.SaveChangesAsync();
         }
 
+        Task IMovieService.AddMovieRating(Guid movieId, Guid userId, int rating, string? comment)
+        {
+            var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
+            var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
+            user.Rate(movie,rating, comment);
+            return _context.SaveChangesAsync();
+        }
+
+        Task IMovieService.RemoveMovieRating(Guid movieId, Guid userId, int rating, string? comment)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

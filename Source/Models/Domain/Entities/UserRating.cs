@@ -12,6 +12,8 @@ public record UserRating
 
     public int Rating { get; set; }
 
+    public string? Comment { get; set; } 
+
     public void SetRating(int rating)
     {
         this.Rating = rating;
@@ -27,5 +29,10 @@ public record UserRating
     {
         this.Movie = movie;
         this.MovieId = movie.Id;
+    }
+
+    public void SetComment (string comment) 
+    {
+        this.Comment = comment;
     }
 }

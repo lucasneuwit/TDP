@@ -14,5 +14,8 @@
 
         public Task RemoveFromWatchListAsync(Guid movieId, Guid userId);
 
+        public Task AddMovieRating(Guid movieId, Guid userId, int rating, string? comment);
+
+        public Task RemoveMovieRating(Guid movieId, Guid userId, int rating, string? comment);
     }
 }

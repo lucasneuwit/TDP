@@ -97,5 +97,15 @@ namespace TDP.Controllers
             await _movieService.RemoveFromWatchListAsync(movieId, userId);
         }
 
+        public async Task RateMovie(Guid movieId, Guid userId, int rating, string comment)
+        {
+            await _movieService.AddMovieRating(movieId, userId, rating, comment);
+        }
+
+        public async Task RemoveMovieRating(Guid movieId, Guid userId, int rating, string comment)
+        {
+            await _movieService.RemoveMovieRating(movieId, userId, rating, comment);
+        }
+
     }
 }
