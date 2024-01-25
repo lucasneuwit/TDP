@@ -81,6 +81,31 @@
     <h6 id="watchlistText">This movie is already added to your watchlist!</h6>
 
 
+    <!-- Rating-->
+    <form id="rateMovie" method="post" asp-controller="Movie" asp-action="RateMovie">
+        <input type="hidden" name="movieId" value="@Model.Id" />
+        <input type="hidden" name="userId" value="C06D24C3-2303-47FF-85C2-64DEF885D63D" />
+
+        <!-- Input for Rating -->
+        <label for="rating">Rating:</label>
+        <input type="number" name="rating" min="1" max="5" required />
+
+        <!-- Input for Comment (optional) -->
+        <label for="comment">Comment:</label>
+        <textarea name="comment"></textarea>
+
+        <button type="button" id="rateMovieButton">Rate Movie</button>
+    </form>
+
+    <form id="removeMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
+        <input type="hidden" name="movieId" value="@Model.Id" />
+        <input type="hidden" name="userId" value="C06D24C3-2303-47FF-85C2-64DEF885D63D" />
+
+        <button type="button" id="removeMovieRatingButton">Remove Rating</button>
+    </form>
+
+
+
 </div>
 
 
@@ -141,6 +166,20 @@
                 success: function (data) {
                     // Update the wishlist status after adding
                     checkIfAddedToWishlist();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        $("#rateMovieButton").click(function () {
+            $.ajax({
+                url: "/Movie/RateMovie",
+                type: "POST",
+                data: $("#rateMovie").serialize(),
+                success: function (data) {
+                    // Handle success (if needed)
                 },
                 error: function (xhr, status, error) {
                     console.error(error);
