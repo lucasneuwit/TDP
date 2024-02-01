@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TDP.Models.Persistence;
 
@@ -11,9 +12,11 @@ using TDP.Models.Persistence;
 namespace TDP.Migrations
 {
     [DbContext(typeof(TdpDbContext))]
-    partial class TdpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240131232543_CommentAdded")]
+    partial class CommentAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,7 +92,7 @@ namespace TDP.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6342aa21-db4a-44d4-a1c9-80dc22a22582"),
+                            Id = new Guid("bb57a556-6fd3-4fa7-bb39-62f1d358aa6f"),
                             Country = "United States",
                             ImdbId = "",
                             ImdbRating = 9.3m,
@@ -102,7 +105,7 @@ namespace TDP.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7e90b67c-364f-440d-96fd-f344c83c4a5a"),
+                            Id = new Guid("730ccebd-b313-4d57-bb24-02a6d3e19b91"),
                             Country = "Somalia",
                             ImdbId = "",
                             ImdbRating = 8.3m,
@@ -156,7 +159,7 @@ namespace TDP.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("94cf6d33-3128-4cb2-b656-44381a59fe54"),
+                            Id = new Guid("9c9ead08-0b3d-4186-b146-ca8b1f398eb4"),
                             BirthDay = new DateTime(1945, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmailAddress = "elYusty@bokita.com",
                             IsAdministrator = false,
@@ -176,7 +179,6 @@ namespace TDP.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Rating")

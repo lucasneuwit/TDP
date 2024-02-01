@@ -34,7 +34,8 @@ public class MovieEntityTypeConfiguration : IEntityTypeConfiguration<Movie>
         builder.HasMany(entity => entity.Followers);
         builder.Navigation(entity => entity.Followers).AutoInclude();
 
-        
+        builder.HasMany(entity => entity.Ratings);
+        builder.Navigation(entity => entity.Ratings).AutoInclude();
 
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TDP.Models.Persistence;
 
@@ -11,9 +12,11 @@ using TDP.Models.Persistence;
 namespace TDP.Migrations
 {
     [DbContext(typeof(TdpDbContext))]
-    partial class TdpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240201002748_ratingAddedCfg")]
+    partial class ratingAddedCfg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,7 +92,7 @@ namespace TDP.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6342aa21-db4a-44d4-a1c9-80dc22a22582"),
+                            Id = new Guid("c0ed2ee6-6a24-422a-acac-8e6ed2729b43"),
                             Country = "United States",
                             ImdbId = "",
                             ImdbRating = 9.3m,
@@ -102,7 +105,7 @@ namespace TDP.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7e90b67c-364f-440d-96fd-f344c83c4a5a"),
+                            Id = new Guid("1dec56df-36c2-47f4-8439-8d0799eebe78"),
                             Country = "Somalia",
                             ImdbId = "",
                             ImdbRating = 8.3m,
@@ -156,7 +159,7 @@ namespace TDP.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("94cf6d33-3128-4cb2-b656-44381a59fe54"),
+                            Id = new Guid("e30c01b0-03ad-43cc-80d2-ab00587dc3b6"),
                             BirthDay = new DateTime(1945, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmailAddress = "elYusty@bokita.com",
                             IsAdministrator = false,

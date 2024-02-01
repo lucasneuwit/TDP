@@ -68,12 +68,12 @@
 
     <form id="addToWishListForm" method="post" asp-controller="Movie" asp-action="AddToWishList">
         <input type="hidden" name="movieId" value="@Model.Id" />
-        <input type="hidden" name="userId" value="C06D24C3-2303-47FF-85C2-64DEF885D63D" />
+        <input type="hidden" name="userId" value="94CF6D33-3128-4CB2-B656-44381A59FE54" />
         <button type="button" id="addToWishListButton">Add to Watch List</button>
     </form>
     <form id="removeFromWatchListForm" method="post" asp-controller="Movie" asp-action="RemoveFromWatchlist">
         <input type="hidden" name="movieId" value="@Model.Id" />
-        <input type="hidden" name="userId" value="C06D24C3-2303-47FF-85C2-64DEF885D63D" />
+        <input type="hidden" name="userId" value="94CF6D33-3128-4CB2-B656-44381A59FE54" />
         <button type="button" id="removeFromWatchListButton">Remove from your watchlist</button>
     </form>
 
@@ -84,7 +84,7 @@
     <!-- Rating-->
     <form id="rateMovie" method="post" asp-controller="Movie" asp-action="RateMovie">
         <input type="hidden" name="movieId" value="@Model.Id" />
-        <input type="hidden" name="userId" value="C06D24C3-2303-47FF-85C2-64DEF885D63D" />
+        <input type="hidden" name="userId" value="94CF6D33-3128-4CB2-B656-44381A59FE54" />
 
         <!-- Input for Rating -->
         <label for="rating">Rating:</label>
@@ -99,7 +99,7 @@
 
     <form id="removeMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
         <input type="hidden" name="movieId" value="@Model.Id" />
-        <input type="hidden" name="userId" value="C06D24C3-2303-47FF-85C2-64DEF885D63D" />
+        <input type="hidden" name="userId" value="94CF6D33-3128-4CB2-B656-44381A59FE54" />
 
         <button type="button" id="removeMovieRatingButton">Remove Rating</button>
     </form>
@@ -123,7 +123,7 @@
                 type: "POST",
                 data: {
                     movieId: "@Model.Id",
-                    userId: "C06D24C3-2303-47FF-85C2-64DEF885D63D"
+                    userId: "94CF6D33-3128-4CB2-B656-44381A59FE54"
                 },
                 success: function (data) {
                     // Set the result to the inWishlist variable

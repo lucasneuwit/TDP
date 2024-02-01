@@ -73,6 +73,7 @@ namespace TDP.Models.Application.Services
         {
             var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
             var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
+            
             movie.AddFollower(user);
             return _context.SaveChangesAsync();
 
@@ -84,9 +85,9 @@ namespace TDP.Models.Application.Services
         }
 
         public Task RemoveFromWatchListAsync(Guid movieId, Guid userId)
-        { 
-            var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
+        {
             var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
+            var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
             movie.RemoveFollower(user);
             return _context.SaveChangesAsync();
         }

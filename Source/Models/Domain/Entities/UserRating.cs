@@ -12,7 +12,7 @@ public record UserRating
 
     public int Rating { get; set; }
 
-    public string? Comment { get; set; } 
+    public string Comment { get; set; } = null!;
 
     public void SetRating(int rating)
     {
@@ -31,7 +31,7 @@ public record UserRating
         this.MovieId = movie.Id;
     }
 
-    public void SetComment (string comment) 
+   public void SetComment (string comment) 
     {
         this.Comment = comment;
     }

@@ -69,7 +69,7 @@ public class User : BaseEntity
         FollowedMovies.Remove(movie);
     }
 
-    public void Rate(Movie movie, int rating, string comment)
+    public void Rate(Movie movie, int rating, string? comment)
     {
         var newUserRating = new UserRating();
         newUserRating.SetRating(rating);
@@ -84,6 +84,7 @@ public class User : BaseEntity
         }
 
         RatedMovies.Add(newUserRating);
+        movie.AddUserRating(newUserRating);
     }
 
     public void DeleteRating(Movie movie)
