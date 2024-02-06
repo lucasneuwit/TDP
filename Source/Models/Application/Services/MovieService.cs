@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using TDP.Models.Domain;
 using TDP.Models.Persistence;
 
 namespace TDP.Models.Application.Services
@@ -102,7 +103,30 @@ namespace TDP.Models.Application.Services
 
         Task IMovieService.RemoveMovieRating(Guid movieId, Guid userId, int rating, string? comment)
         {
-            throw new NotImplementedException();
+            var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
+            var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
+            user.DeleteRating(movie);
+            return _context.SaveChangesAsync();
+        }
+
+        UserRating IMovieService.GetMovieRating(Guid movieId, Guid userId)
+        {
+            var userRating = _context.Set<Domain.User>()
+        .Where(u => u.Id == userId)
+        .SelectMany(u => u.RatedMovies)
+        .FirstOrDefault(r => r.MovieId == movieId);
+
+            if (userRating != null)
+            {
+
+                return new UserRating
+                {
+                    Rating = userRating.Rating,
+                    Comment = userRating.Comment
+                };
+            }
+
+            return null;
         }
     }
 

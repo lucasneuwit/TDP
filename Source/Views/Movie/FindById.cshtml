@@ -68,12 +68,12 @@
 
     <form id="addToWishListForm" method="post" asp-controller="Movie" asp-action="AddToWishList">
         <input type="hidden" name="movieId" value="@Model.Id" />
-        <input type="hidden" name="userId" value="94CF6D33-3128-4CB2-B656-44381A59FE54" />
+        <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
         <button type="button" id="addToWishListButton">Add to Watch List</button>
     </form>
     <form id="removeFromWatchListForm" method="post" asp-controller="Movie" asp-action="RemoveFromWatchlist">
         <input type="hidden" name="movieId" value="@Model.Id" />
-        <input type="hidden" name="userId" value="94CF6D33-3128-4CB2-B656-44381A59FE54" />
+        <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
         <button type="button" id="removeFromWatchListButton">Remove from your watchlist</button>
     </form>
 
@@ -84,7 +84,7 @@
     <!-- Rating-->
     <form id="rateMovie" method="post" asp-controller="Movie" asp-action="RateMovie">
         <input type="hidden" name="movieId" value="@Model.Id" />
-        <input type="hidden" name="userId" value="94CF6D33-3128-4CB2-B656-44381A59FE54" />
+        <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
 
         <!-- Input for Rating -->
         <label for="rating">Rating:</label>
@@ -99,7 +99,7 @@
 
     <form id="removeMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
         <input type="hidden" name="movieId" value="@Model.Id" />
-        <input type="hidden" name="userId" value="94CF6D33-3128-4CB2-B656-44381A59FE54" />
+        <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
 
         <button type="button" id="removeMovieRatingButton">Remove Rating</button>
     </form>
@@ -116,6 +116,29 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
+        var inWishlist = false;
+        var hasRated = false;
+
+        // Function to update the form visibility based on inWishlist
+        function updateFormVisibility() {
+            if (inWishlist) {
+                $("#addToWishListForm").hide();
+                $("#watchlistText").show();
+                $("#removeFromWatchListForm").show();
+            } else {
+                $("#addToWishListForm").show();
+                $("#watchlistText").hide();
+                $("#removeFromWatchListForm").hide();
+            }
+
+            if (hasRated) {
+                $("#rateMovie").hide();
+                $("#removeMovieRating").show();
+            } else {
+                $("#rateMovie").show();
+                $("#removeMovieRating").hide();
+            }
+        }
         // Function to check if the movie is added to the wishlist
         function checkIfAddedToWishlist() {
             $.ajax({
@@ -123,7 +146,7 @@
                 type: "POST",
                 data: {
                     movieId: "@Model.Id",
-                    userId: "94CF6D33-3128-4CB2-B656-44381A59FE54"
+                    userId: "DD58F514-9637-482F-B3BD-2B4C2868F389"
                 },
                 success: function (data) {
                     // Set the result to the inWishlist variable
@@ -138,24 +161,32 @@
             });
         }
 
-        // Function to update the form visibility based on inWishlist
-        function updateFormVisibility() {
-            if (inWishlist) {
-                // Movie is in the wishlist
-                $("#addToWishListForm").hide();
-                $("#watchlistText").show();
-                $("#removeFromWatchListForm").show();
-                
-            } else {
-                // Movie is not in the wishlist
-                $("#addToWishListForm").show();
-                $("#watchlistText").hide();
-                $("#removeFromWatchListForm").hide();
-            }
+        function checkIfMovieRated() {
+            $.ajax({
+                url: "/Movie/GetUserRating",
+                type: "POST",
+                data: {
+                    movieId: "@Model.Id",
+                    userId: "DD58F514-9637-482F-B3BD-2B4C2868F389"
+                },
+                success: function (data) {
+                    // Set the result to the inWishlist variable
+                    hasRated = data;
+
+                    // Check the condition and update the form visibility
+                    updateFormVisibility();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
         }
+
+       
 
         // Initial check when the page loads
         checkIfAddedToWishlist();
+        checkIfMovieRated();
 
         // Set up the click event
         $("#addToWishListButton").click(function () {
@@ -179,7 +210,21 @@
                 type: "POST",
                 data: $("#rateMovie").serialize(),
                 success: function (data) {
-                    // Handle success (if needed)
+                    checkIfMovieRated();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        $("#removeMovieRatingButton").click(function () {
+            $.ajax({
+                url: "/Movie/RemoveMovieRating",
+                type: "POST",
+                data: $("#removeMovieRating").serialize(),
+                success: function (data) {
+                    checkIfMovieRated();
                 },
                 error: function (xhr, status, error) {
                     console.error(error);

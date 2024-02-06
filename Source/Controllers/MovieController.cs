@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TDP.Models.Application;
 using TDP.Models.Application.Services;
+using TDP.Models.Domain;
 
 namespace TDP.Controllers
 {
@@ -105,6 +106,12 @@ namespace TDP.Controllers
         public async Task RemoveMovieRating(Guid movieId, Guid userId, int rating, string comment)
         {
             await _movieService.RemoveMovieRating(movieId, userId, rating, comment);
+        }
+
+        public async Task<UserRating> GetUserRating(Guid movieId, Guid userId)
+        {
+            UserRating rating = _movieService.GetMovieRating(movieId, userId);
+            return rating;
         }
 
     }

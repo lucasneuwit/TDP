@@ -1,4 +1,6 @@
-﻿namespace TDP.Models.Application.Services
+﻿using TDP.Models.Domain;
+
+namespace TDP.Models.Application.Services
 {
     public interface IMovieService
     {
@@ -17,5 +19,7 @@
         public Task AddMovieRating(Guid movieId, Guid userId, int rating, string? comment);
 
         public Task RemoveMovieRating(Guid movieId, Guid userId, int rating, string? comment);
+
+        public UserRating GetMovieRating(Guid movieId,Guid userId);
     }
 }

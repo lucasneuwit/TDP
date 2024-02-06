@@ -31,4 +31,6 @@ public record MovieDTO
 
     public bool? IsAddedToWatchList { get; set; }
 
+    public bool? IsRatedByUser { get; set; }
+
 }
