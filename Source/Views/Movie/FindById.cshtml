@@ -8,8 +8,9 @@
 <div>
     <h4>Details</h4>
     <hr />
-    <dl class="row align-content-sm-center">
-        <dd class="col-sm-6">
+    <div class="row align-content-sm-center">
+        <!-- Left column for details -->
+        <div class="col-sm-6">
             <dl class="row align-content-sm-center">
                 <dt class="col-sm-3">
                     @Html.DisplayNameFor(model => model.Type)
@@ -59,57 +60,82 @@
                 <dd class="col-sm-9">
                     @Html.DisplayFor(model => model.Plot)
                 </dd>
+                <!-- Box for displaying rating and comment -->
+                <dd class="col-sm-9">
+                <h4>Your rating</h4>
+                <div id="movieRatingBox" style="display: none;">
+                        <dl>
+                            <dt style="padding:0.5rem;">Rating: <span id="movieRating" style="font-weight: normal;"></span></dt>
+
+                            <dt style="padding:0.5rem;">Comment: <span id="movieComment" style="font-weight: normal;"></span></dt>
+                            <!-- Additional <dt>/<dd> pairs or content can follow here if needed -->
+                        </dl>
+                </div>
+                    <!-- Rating form -->
+                    <form  id="rateMovie" method="post" asp-controller="Movie" asp-action="RateMovie">
+                        <input type="hidden" name="movieId" value="@Model.Id" />
+                        <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
+
+                        <!-- Input for Rating -->
+                <dt style="padding:0.5rem;">Rating: <input type="number" name="rating" min="1" max="5" required /> </dt>
+                        
+
+                        <!-- Input for Comment (optional) -->
+                <dt style="padding:0.5rem;">Comment: <textarea name="comment"></textarea> </dt>
+
+                        <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="rateMovieButton">Rate</button>
+                    </form>
+
+                    <!-- Remove movie rating form -->
+                    <form id="editMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
+                        <input type="hidden" name="movieId" value="@Model.Id" />
+                        <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
+
+                    <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="editMovieRating">Edit Rating</button>
+                    </form>
+                    <form  id="removeMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
+                        <input type="hidden" name="movieId" value="@Model.Id" />
+                        <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
+
+                        <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="removeMovieRatingButton">Remove Rating</button>
+                    </form>
+                </dd>
+
             </dl>
-        </dd>
-        <dt class="col-sm-6 align-content-sm-center">
+        </div>
+
+        <!-- Right column for rating box, image, watchlist forms, and text -->
+        <div class="col-sm-6 align-content-sm-center" style="text-align:center;">
+
+            <!-- Rating and image section -->
             <img src="@Url.Content(Model.Poster)" />
-        </dt>
-    </dl>
 
-    <form id="addToWishListForm" method="post" asp-controller="Movie" asp-action="AddToWishList">
-        <input type="hidden" name="movieId" value="@Model.Id" />
-        <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
-        <button type="button" id="addToWishListButton">Add to Watch List</button>
-    </form>
-    <form id="removeFromWatchListForm" method="post" asp-controller="Movie" asp-action="RemoveFromWatchlist">
-        <input type="hidden" name="movieId" value="@Model.Id" />
-        <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
-        <button type="button" id="removeFromWatchListButton">Remove from your watchlist</button>
-    </form>
+            
+            <div style="min-height:100px;">
+            <!-- Add to watchlist form -->
+            <form style="padding:1em" id="addToWishListForm" method="post" asp-controller="Movie" asp-action="AddToWishList">
+                <input type="hidden" name="movieId" value="@Model.Id" />
+                <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
+                <button class="btn btn-outline-secondary" type="button" id="addToWishListButton">Add to Watch List</button>
+            </form>
 
+            <!-- Remove from watchlist form -->
+            <form style="padding:1em" id="removeFromWatchListForm" method="post" asp-controller="Movie" asp-action="RemoveFromWatchlist">
+                <input type="hidden" name="movieId" value="@Model.Id" />
+                <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
+                <button class="btn btn-outline-secondary" type="button" id="removeFromWatchListButton">Remove from your watchlist</button>
+            </form>
 
-    <h6 id="watchlistText">This movie is already added to your watchlist!</h6>
-
-
-    <!-- Rating-->
-    <form id="rateMovie" method="post" asp-controller="Movie" asp-action="RateMovie">
-        <input type="hidden" name="movieId" value="@Model.Id" />
-        <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
-
-        <!-- Input for Rating -->
-        <label for="rating">Rating:</label>
-        <input type="number" name="rating" min="1" max="5" required />
-
-        <!-- Input for Comment (optional) -->
-        <label for="comment">Comment:</label>
-        <textarea name="comment"></textarea>
-
-        <button type="button" id="rateMovieButton">Rate Movie</button>
-    </form>
-
-    <form id="removeMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
-        <input type="hidden" name="movieId" value="@Model.Id" />
-        <input type="hidden" name="userId" value="DD58F514-9637-482F-B3BD-2B4C2868F389" />
-
-        <button type="button" id="removeMovieRatingButton">Remove Rating</button>
-    </form>
-
-
-
+            <h6 id="watchlistText">This movie is already added to your watchlist!</h6>
+    </div>
+        </div>
+    </div>
 </div>
 
 
-<div>
+
+<div style="margin-top: 20px;">
+    <!-- Add some margin-top to create space between the two sections -->
     <a asp-controller="Home" asp-action="Index">Back to Home</a>
 </div>
 
@@ -134,9 +160,11 @@
             if (hasRated) {
                 $("#rateMovie").hide();
                 $("#removeMovieRating").show();
+                $("#editMovieRating").show();
             } else {
                 $("#rateMovie").show();
                 $("#removeMovieRating").hide();
+                $("#editMovieRating").hide();
             }
         }
         // Function to check if the movie is added to the wishlist
@@ -175,6 +203,23 @@
 
                     // Check the condition and update the form visibility
                     updateFormVisibility();
+
+                    // Fill the inputs if data is available
+                    if (data) {
+                        // Fill Rating input
+                        $("input[name='rating']").val(data.rating);
+
+                        // Fill Comment textarea
+                        $("textarea[name='comment']").val(data.comment);
+
+                        // Show the movieRatingBox and update its content
+                        $("#movieRatingBox").show();
+                        $("#movieRating").text(data.rating);
+                        $("#movieComment").text(data.comment);
+                    } else {
+                        // Hide the movieRatingBox if there is no data
+                        $("#movieRatingBox").hide();
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.error(error);
@@ -219,6 +264,7 @@
         });
 
         $("#removeMovieRatingButton").click(function () {
+            hasRated = false;
             $.ajax({
                 url: "/Movie/RemoveMovieRating",
                 type: "POST",
