@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TDP.Models.Application;
+using TDP.Models.Application.DataTransfer;
 using TDP.Models.Application.Services;
 using TDP.Models.Domain;
 
@@ -96,6 +97,12 @@ namespace TDP.Controllers
         public async Task RemoveFromWatchlist(Guid movieId, Guid userId)
         {
             await _movieService.RemoveFromWatchListAsync(movieId, userId);
+        }
+
+        public async Task<IActionResult> GetAllFromWatchList(Guid userId)
+        {
+            var res = await _movieService.GetAllFromWatchList(userId);
+            return View(res);
         }
 
         public async Task RateMovie(Guid movieId, Guid userId, int rating, string comment)

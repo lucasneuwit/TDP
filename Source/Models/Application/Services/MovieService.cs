@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using TDP.Models.Application.DataTransfer;
 using TDP.Models.Domain;
 using TDP.Models.Persistence;
 
@@ -91,6 +93,14 @@ namespace TDP.Models.Application.Services
             var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
             movie.RemoveFollower(user);
             return _context.SaveChangesAsync();
+        }
+
+        public async Task<MovieCollection> GetAllFromWatchList(Guid userId)
+        {
+            var user = _context.Set<Domain.User>().Include(m => m.FollowedMovies).First(usr => usr.Id.Equals(userId));
+            MovieCollection aMovieCollection = new MovieCollection();
+            aMovieCollection.Movies = (IEnumerable<MovieDTO>)user.FollowedMovies;
+            return aMovieCollection;
         }
 
         Task IMovieService.AddMovieRating(Guid movieId, Guid userId, int rating, string? comment)

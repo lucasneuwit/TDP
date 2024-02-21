@@ -1,4 +1,5 @@
-﻿using TDP.Models.Domain;
+﻿using TDP.Models.Application.DataTransfer;
+using TDP.Models.Domain;
 
 namespace TDP.Models.Application.Services
 {
@@ -15,6 +16,8 @@ namespace TDP.Models.Application.Services
         public bool AddedToWishList(Guid movieId, Guid userId);
 
         public Task RemoveFromWatchListAsync(Guid movieId, Guid userId);
+
+        public Task<MovieCollection> GetAllFromWatchList(Guid userId);
 
         public Task AddMovieRating(Guid movieId, Guid userId, int rating, string? comment);
 
