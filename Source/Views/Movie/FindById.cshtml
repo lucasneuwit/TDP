@@ -108,7 +108,15 @@
         <div class="col-sm-6 align-content-sm-center" style="text-align:center;">
 
             <!-- Rating and image section -->
-            <img src="@Url.Content(Model.Poster)" />
+            
+            @if (@Url.Content(Model.Poster) == "N/A")
+            {
+                <img src="https://cdn-icons-png.flaticon.com/512/4263/4263893.png" />
+            }
+            else
+            {
+                <img src="@Url.Content(Model.Poster)" />
+            }
 
             
             <div style="min-height:100px;">

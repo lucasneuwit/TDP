@@ -99,7 +99,7 @@ namespace TDP.Controllers
             await _movieService.RemoveFromWatchListAsync(movieId, userId);
         }
 
-        public async Task<IActionResult> GetAllFromWatchList(Guid userId)
+        public async Task<IActionResult> Watchlist(Guid userId)
         {
             var res = await _movieService.GetAllFromWatchList(userId);
             return View(res);

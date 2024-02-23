@@ -1,4 +1,5 @@
-﻿using Azure;
+﻿using AutoMapper;
+using Azure;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -12,10 +13,12 @@ namespace TDP.Models.Application.Services
     {
 
         private readonly TdpDbContext _context;
+        private readonly IMapper _mapper;
 
-        public MovieService(TdpDbContext context)
+        public MovieService(TdpDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<Domain.Movie> GetMovie(string imdbId)
@@ -99,7 +102,14 @@ namespace TDP.Models.Application.Services
         {
             var user = _context.Set<Domain.User>().Include(m => m.FollowedMovies).First(usr => usr.Id.Equals(userId));
             MovieCollection aMovieCollection = new MovieCollection();
-            aMovieCollection.Movies = (IEnumerable<MovieDTO>)user.FollowedMovies;
+            List<MovieDTO> movieDtos = new List<MovieDTO>();
+            foreach (var mov in user.FollowedMovies)
+            {
+                var movDto = _mapper.Map<MovieDTO>(mov);
+                movieDtos.Add(movDto);
+            }
+            aMovieCollection.Movies = movieDtos;
+            aMovieCollection.TotalResults = movieDtos.Count.ToString();
             return aMovieCollection;
         }
 
