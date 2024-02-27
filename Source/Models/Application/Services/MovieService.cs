@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -147,6 +146,53 @@ namespace TDP.Models.Application.Services
             }
 
             return null;
+        }
+
+        void IMovieService.SaveSerie(SeriesDTO serie)
+        {
+            var dbmovie = new Domain.Series(Guid.NewGuid());
+            dbmovie.SetTitle(serie.Title);
+            dbmovie.SetPlot(serie.Plot);
+            dbmovie.SetImdbId(serie.imdbID);
+            
+            if (serie.totalSeasons != "N/A") 
+            {
+                dbmovie.SetSeasons(int.Parse(serie.totalSeasons));
+            }
+
+            if (serie.Runtime != "N/A")
+            {
+                string runtime = Regex.Replace(serie.Runtime, "[A-Za-z ]", "");
+
+                dbmovie.SetRuntime(long.Parse(runtime));
+            }
+            if (serie.Released != "N/A")
+            {
+                dbmovie.SetReleased(DateOnly.Parse(serie.Released));
+            }
+            dbmovie.SetCountry(serie.Country);
+            if (serie.imdbRating != "N/A")
+            {
+                dbmovie.SetImdbRating(Convert.ToDecimal(serie.imdbRating, new CultureInfo("en-US")));
+            }
+            dbmovie.SetPosterUrl(serie.Poster);
+            var actorsNames = serie.Actors.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var directorsNames = serie.Director.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var writersNames = serie.Writer.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            foreach (var actor in actorsNames)
+            {
+                dbmovie.AddParticipant(actor, 0);
+            }
+            foreach (var director in directorsNames)
+            {
+                dbmovie.AddParticipant(director, 1);
+            }
+            foreach (var writer in writersNames)
+            {
+                dbmovie.AddParticipant(writer, 2);
+            }
+            _context.Add(dbmovie);
+            _context.SaveChanges();
         }
     }
 

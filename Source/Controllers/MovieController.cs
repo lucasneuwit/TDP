@@ -42,7 +42,13 @@ namespace TDP.Controllers
             {
                 IRequest aRequest = new Request(null, id, type, releaseYear);
                 var movie = await _provider.FindAsync(aRequest);
-                _movieService.SaveMovie(movie);
+                if (movie is SeriesDTO)
+                {
+                    
+                    _movieService.SaveSerie((SeriesDTO)movie);
+                }
+                else { _movieService.SaveMovie(movie); }
+                    
                 var movieDb = await _movieService.GetMovie(id);
                 var movieDto = _mapper.Map<MovieDTO>(movieDb);
                 movieDto.IsAddedToWatchList = false;
@@ -50,8 +56,17 @@ namespace TDP.Controllers
             }
             else
             {
-                var movieDto = _mapper.Map<MovieDTO>(res);
-                return View(movieDto);
+                
+                if (res is Series) 
+                {
+                    var movieDto = _mapper.Map<SeriesDTO>(res);
+                    return View(movieDto);
+                }
+                else { var movieDto = _mapper.Map<MovieDTO>(res);
+                    return View(movieDto);
+                }
+                
+            
             }
             
         }

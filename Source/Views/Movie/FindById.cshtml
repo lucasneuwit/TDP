@@ -1,4 +1,4 @@
-﻿@model TDP.Models.Application.MovieDTO;
+﻿@model TDP.Models.Application.SeriesDTO;
 @{
     ViewData["Title"] = "FindById";
 }
@@ -60,6 +60,16 @@
                 <dd class="col-sm-9">
                     @Html.DisplayFor(model => model.Plot)
                 </dd>
+                @if (Model.totalSeasons != null)
+                {
+                    <div class="w-100"></div>
+                    <dt class="col-sm-3">
+                        Seasons
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.totalSeasons)
+                    </dd>
+                }
 
                     <!-- Box for displaying rating and comment -->
                     <dd class="col-sm-9">

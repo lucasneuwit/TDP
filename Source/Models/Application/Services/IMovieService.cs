@@ -7,9 +7,10 @@ namespace TDP.Models.Application.Services
     {
         Task<Domain.Movie> GetMovie(string title);
 
-        Task <IEnumerable<Domain.Movie>> GetAllMovies(); 
+        Task <IEnumerable<Domain.Movie>> GetAllMovies();
 
-       public void SaveMovie(MovieDTO movie);
+        public void SaveSerie(SeriesDTO serie);
+        public void SaveMovie(MovieDTO movie);
 
         public Task AddToWatchListAsync(Guid movieId, Guid userId);
 
