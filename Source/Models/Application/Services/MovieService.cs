@@ -78,7 +78,7 @@ namespace TDP.Models.Application.Services
         {
             var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
             var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
-            
+
             movie.AddFollower(user);
             return _context.SaveChangesAsync();
 
@@ -116,7 +116,7 @@ namespace TDP.Models.Application.Services
         {
             var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
             var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
-            user.Rate(movie,rating, comment);
+            user.Rate(movie, rating, comment);
             return _context.SaveChangesAsync();
         }
 
@@ -154,8 +154,8 @@ namespace TDP.Models.Application.Services
             dbmovie.SetTitle(serie.Title);
             dbmovie.SetPlot(serie.Plot);
             dbmovie.SetImdbId(serie.imdbID);
-            
-            if (serie.totalSeasons != "N/A") 
+
+            if (serie.totalSeasons != "N/A")
             {
                 dbmovie.SetSeasons(int.Parse(serie.totalSeasons));
             }

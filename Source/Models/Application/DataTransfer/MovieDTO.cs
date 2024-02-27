@@ -20,7 +20,7 @@ public record MovieDTO
 
     public string? Country { get; set; }
 
-    public string? Genre { get; set; } 
+    public string? Genre { get; set; }
 
     public string? imdbRating { get; set; }
 
