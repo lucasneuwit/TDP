@@ -69,10 +69,11 @@ public class User : BaseEntity
         FollowedMovies.Remove(movie);
     }
 
-    public void Rate(Movie movie, int rating)
+    public void Rate(Movie movie, int rating, string? comment)
     {
         var newUserRating = new UserRating();
         newUserRating.SetRating(rating);
+        newUserRating.SetComment(comment);
         newUserRating.SetMovie(movie);
         newUserRating.SetUser(this);
         
@@ -83,5 +84,18 @@ public class User : BaseEntity
         }
 
         RatedMovies.Add(newUserRating);
+        movie.AddUserRating(newUserRating);
     }
+
+    public void DeleteRating(Movie movie)
+    {
+        // Find and remove the rating for the specified movie.
+        var userRating = RatedMovies.SingleOrDefault(e => e.MovieId == movie.Id);
+
+        if (userRating != null)
+        {
+            RatedMovies.Remove(userRating);
+        }
+    }
+
 }

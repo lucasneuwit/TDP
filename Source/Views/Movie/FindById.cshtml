@@ -1,34 +1,331 @@
-﻿@model TDP.Models.Application.MovieDTO;
+﻿@inject IConfiguration Configuration
+@model TDP.Models.Application.MovieDTO;
 @{
+    var defaultUser = Configuration.GetValue<string>("DefaultUser");
     ViewData["Title"] = "FindById";
 }
 
-<h1>Details</h1>
+<h1>@Html.DisplayFor(model => model.Title)</h1>
 
 <div>
-    <h4>Movie</h4>
+    <h4>Details</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Type)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Released)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Released)
-        </dd>
-    </dl>
+    <div class="row align-content-sm-center">
+        <!-- Left column for details -->
+        <div class="col-sm-6">
+            <dl class="row align-content-sm-center">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Type)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Type)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Released)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Released)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Runtime)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Runtime) mins
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Actors)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Actors)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Director)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Director)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Writer)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Writer)
+                </dd>
+                <div class="w-100"></div>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Plot)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Plot)
+                </dd>
+                @if (Model is TDP.Models.Application.SeriesDTO seriesDTO)
+                {
+                    <div class="w-100"></div>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => seriesDTO.totalSeasons)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => seriesDTO.totalSeasons)
+                    </dd>
+                }
+
+                <!-- Box for displaying rating and comment -->
+                <dd class="col-sm-9">
+                    <h4>Your rating</h4>
+                    <div id="movieRatingBox" style="display: none;">
+                        <dl>
+                            <dt style="padding:0.5rem;">Rating: <span id="movieRating" style="font-weight: normal;"></span></dt>
+
+                            <dt style="padding:0.5rem;">Comment: <span id="movieComment" style="font-weight: normal;"></span></dt>
+                            <!-- Additional <dt>/<dd> pairs or content can follow here if needed -->
+                        </dl>
+                    </div>
+                    <!-- Rating form -->
+                    <form id="rateMovie" method="post" asp-controller="Movie" asp-action="RateMovie">
+                        <input type="hidden" name="movieId" value="@Model.Id" />
+                        <input type="hidden" name="userId" value="@defaultUser" />
+
+                        <!-- Input for Rating -->
+                <dt id="inputRating" style="padding:0.5rem;">Rating: <input type="number" name="rating" min="1" max="5" required /> </dt>
+
+
+                <!-- Input for Comment (optional) -->
+                <dt id="inputComment" style="padding:0.5rem;">Comment: <textarea name="comment"></textarea> </dt>
+
+                <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="rateMovieButton">Rate</button>
+                </form>
+
+                <!-- Edit movie rating form -->
+                <form id="editMovieRating" method="post" asp-controller="Movie" asp-action="RateMovie">
+                    <input type="hidden" name="movieId" value="@Model.Id" />
+                    <input type="hidden" name="userId" value="@defaultUser" />
+
+                    <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="editMovieRatingButton">Edit Rating</button>
+                </form>
+                <!-- Remove movie rating form -->
+                <form id="removeMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
+                    <input type="hidden" name="movieId" value="@Model.Id" />
+                    <input type="hidden" name="userId" value="@defaultUser" />
+
+                    <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="removeMovieRatingButton">Remove Rating</button>
+                </form>
+                </dd>
+
+            </dl>
+        </div>
+
+        <!-- Right column for rating box, image, watchlist forms, and text -->
+        <div class="col-sm-6 align-content-sm-center" style="text-align:center;">
+
+            <!-- Rating and image section -->
+            @if (@Url.Content(Model.Poster) == "N/A")
+            {
+                <img class="fixed-size-image" src="https://cdn-icons-png.flaticon.com/512/4263/4263893.png" />
+            }
+            else
+            {
+                <img class="fixed-size-image" src="@Url.Content(Model.Poster)" />
+            }
+
+
+            <div style="min-height:100px;">
+                <!-- Add to watchlist form -->
+                <form style="padding:1em" id="addToWishListForm" method="post" asp-controller="Movie" asp-action="AddToWishList">
+                    <input type="hidden" name="movieId" value="@Model.Id" />
+                    <input type="hidden" name="userId" value="@defaultUser" />
+                    <button class="btn btn-outline-secondary" type="button" id="addToWishListButton">Add to Watch List</button>
+                </form>
+
+                <!-- Remove from watchlist form -->
+                <form style="padding:1em" id="removeFromWatchListForm" method="post" asp-controller="Movie" asp-action="RemoveFromWatchlist">
+                    <input type="hidden" name="movieId" value="@Model.Id" />
+                    <input type="hidden" name="userId" value="@defaultUser" />
+                    <button class="btn btn-outline-secondary" type="button" id="removeFromWatchListButton">Remove from your watchlist</button>
+                </form>
+
+                <h6 id="watchlistText">This movie is already added to your watchlist!</h6>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
+
+
+
+<div style="margin-top: 20px;">
+    <!-- Add some margin-top to create space between the two sections -->
     <a asp-controller="Home" asp-action="Index">Back to Home</a>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var inWishlist = false;
+        var hasRated = false;
+
+        // Function to update the form visibility based on inWishlist
+        function updateFormVisibility() {
+            if (inWishlist) {
+                $("#addToWishListForm").hide();
+                $("#watchlistText").show();
+                $("#removeFromWatchListForm").show();
+            } else {
+                $("#addToWishListForm").show();
+                $("#watchlistText").hide();
+                $("#removeFromWatchListForm").hide();
+            }
+
+            if (hasRated) {
+                $("#rateMovie").hide();
+                $("#removeMovieRating").show();
+                $("#editMovieRating").show();
+            } else {
+                $("#rateMovie").show();
+                $("#removeMovieRating").hide();
+                $("#editMovieRating").hide();
+            }
+        }
+
+        // Function to check if the movie is added to the wishlist
+        function checkIfAddedToWishlist() {
+            $.ajax({
+                url: "/Movie/AddedToWishList",
+                type: "POST",
+                data: {
+                    movieId: "@Model.Id",
+                    userId: "@defaultUser"
+                },
+                success: function (data) {
+                    // Set the result to the inWishlist variable
+                    inWishlist = data;
+
+                    // Check the condition and update the form visibility
+                    updateFormVisibility();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function checkIfMovieRated() {
+            $.ajax({
+                url: "/Movie/GetUserRating",
+                type: "POST",
+                data: {
+                    movieId: "@Model.Id",
+                    userId: "@defaultUser"
+                },
+                success: function (data) {
+                    // Set the result to the inWishlist variable
+                    hasRated = data;
+
+                    // Check the condition and update the form visibility
+                    updateFormVisibility();
+
+                    // Fill the inputs if data is available
+                    if (data) {
+                        // Fill Rating input
+                        $("input[name='rating']").val(data.rating);
+
+                        // Fill Comment textarea
+                        $("textarea[name='comment']").val(data.comment);
+
+                        // Show the movieRatingBox and update its content
+                        $("#movieRatingBox").show();
+                        $("#movieRating").text(data.rating);
+                        $("#movieComment").text(data.comment);
+                    } else {
+                        // Hide the movieRatingBox if there is no data
+                        $("#movieRatingBox").hide();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        // Initial check when the page loads
+        checkIfMovieRated();
+        checkIfAddedToWishlist();
+
+        // Set up the click event for Rate Movie
+        $("#rateMovieButton").click(function () {
+            $.ajax({
+                url: "/Movie/RateMovie",
+                type: "POST",
+                data: $("#rateMovie").serialize(),
+                success: function (data) {
+                    checkIfMovieRated();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        // Set up the click event for Edit Movie Rating
+        $("#editMovieRatingButton").click(function () {
+            $("#rateMovie").show();
+            $("#removeMovieRating").hide();
+            $("#editMovieRating").hide();
+            $("#movieRatingBox").hide();
+
+        });
+
+        // Set up the click event for Remove Movie Rating
+        $("#removeMovieRatingButton").click(function () {
+            hasRated = false;
+            $("input[name='rating']").val('');
+            $("textarea[name='comment']").val('');
+            $.ajax({
+                url: "/Movie/RemoveMovieRating",
+                type: "POST",
+                data: $("#removeMovieRating").serialize(),
+                success: function (data) {
+                    checkIfMovieRated();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        // Set up the click event for Add to Watchlist
+        $("#addToWishListButton").click(function () {
+            $.ajax({
+                url: "/Movie/AddToWishList",
+                type: "POST",
+                data: $("#addToWishListForm").serialize(),
+                success: function (data) {
+                    // Update the wishlist status after adding
+                    checkIfAddedToWishlist();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        // Set up the click event for Remove from Watchlist
+        $("#removeFromWatchListButton").click(function () {
+            $.ajax({
+                url: "/Movie/RemoveFromWatchlist",
+                type: "POST",
+                data: $("#removeFromWatchListForm").serialize(),
+                success: function (data) {
+                    // Update the wishlist status after removing
+                    checkIfAddedToWishlist();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+
+</script>

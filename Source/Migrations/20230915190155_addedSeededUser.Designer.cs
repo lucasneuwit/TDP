@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TDP.Models.Persistence;
 
@@ -11,9 +12,11 @@ using TDP.Models.Persistence;
 namespace TDP.Migrations
 {
     [DbContext(typeof(TdpDbContext))]
-    partial class TdpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230915190155_addedSeededUser")]
+    partial class addedSeededUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace TDP.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("MovieUser", b =>
-                {
-                    b.Property<Guid>("FollowedMoviesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FollowersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FollowedMoviesId", "FollowersId");
-
-                    b.HasIndex("FollowersId");
-
-                    b.ToTable("MovieUser");
-                });
 
             modelBuilder.Entity("TDP.Models.Domain.Movie", b =>
                 {
@@ -47,10 +35,6 @@ namespace TDP.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImdbId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -80,7 +64,12 @@ namespace TDP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Movie");
 
@@ -89,9 +78,8 @@ namespace TDP.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6342aa21-db4a-44d4-a1c9-80dc22a22582"),
+                            Id = new Guid("02457466-821e-4376-985b-2f01bb827662"),
                             Country = "United States",
-                            ImdbId = "",
                             ImdbRating = 9.3m,
                             Plot = "Some not really important plot",
                             PosterUrl = "",
@@ -102,9 +90,8 @@ namespace TDP.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7e90b67c-364f-440d-96fd-f344c83c4a5a"),
+                            Id = new Guid("5cdf2f89-c1ba-4c52-b6ab-0b4842889203"),
                             Country = "Somalia",
-                            ImdbId = "",
                             ImdbRating = 8.3m,
                             Plot = "Some not really important plot",
                             PosterUrl = "",
@@ -156,7 +143,7 @@ namespace TDP.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("94cf6d33-3128-4cb2-b656-44381a59fe54"),
+                            Id = new Guid("51f3d4e5-eb9f-4af9-98ee-0cc02edf84c3"),
                             BirthDay = new DateTime(1945, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmailAddress = "elYusty@bokita.com",
                             IsAdministrator = false,
@@ -174,10 +161,6 @@ namespace TDP.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
@@ -217,23 +200,12 @@ namespace TDP.Migrations
                     b.HasDiscriminator().HasValue("Series");
                 });
 
-            modelBuilder.Entity("MovieUser", b =>
-                {
-                    b.HasOne("TDP.Models.Domain.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("FollowedMoviesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TDP.Models.Domain.User", null)
-                        .WithMany()
-                        .HasForeignKey("FollowersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("TDP.Models.Domain.Movie", b =>
                 {
+                    b.HasOne("TDP.Models.Domain.User", null)
+                        .WithMany("FollowedMovies")
+                        .HasForeignKey("UserId");
+
                     b.OwnsMany("TDP.Models.Domain.MovieParticipant", "Participants", b1 =>
                         {
                             b1.Property<Guid>("MovieId")
@@ -295,6 +267,8 @@ namespace TDP.Migrations
 
             modelBuilder.Entity("TDP.Models.Domain.User", b =>
                 {
+                    b.Navigation("FollowedMovies");
+
                     b.Navigation("RatedMovies");
                 });
 

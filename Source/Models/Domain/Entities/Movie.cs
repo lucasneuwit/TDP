@@ -9,7 +9,7 @@ public class Movie : BaseEntity
     {
         Type = MovieTypes.MovieType;
     }
-
+    public string ImdbId { get; set; } = null!;
     public string Title { get; private set; } = null!;
 
     public string Plot { get; private set; } = null!;
@@ -30,9 +30,15 @@ public class Movie : BaseEntity
 
     public ICollection<UserRating> Ratings { get; } = new List<UserRating>();
 
+    public ICollection<User> Followers { get; } = new List<User>();
+
     public void SetTitle(string title)
     {
         this.Title = title;
+    }
+    public void SetImdbId(string imdbId)
+    {
+        this.ImdbId = imdbId;
     }
 
     public void SetPlot(string plot)
@@ -77,6 +83,21 @@ public class Movie : BaseEntity
         movieParticipant.SetRole((ParticipantRole)role);
         movieParticipant.SetMovie(this);
         this.Participants.Add(movieParticipant);
+    }
+
+    public void AddFollower(User user)
+    {
+        if (Followers.All(e => e.Id != user.Id))
+        {
+            user.Follow(this);
+            Followers.Add(user);
+        }
+    }
+
+    public void RemoveFollower(User user)
+    {
+        user.Unfollow(this);
+        Followers.Remove(user);
     }
 
     public void AddUserRating(UserRating userRating)

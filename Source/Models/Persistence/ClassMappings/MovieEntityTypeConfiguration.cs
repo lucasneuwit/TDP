@@ -14,6 +14,7 @@ public class MovieEntityTypeConfiguration : IEntityTypeConfiguration<Movie>
 
         builder.Property(entity => entity.Id).ValueGeneratedNever();
         builder.Property(entity => entity.Title);
+        builder.Property(entity => entity.ImdbId);
         builder.Property(entity => entity.Plot);
         builder.Property(entity => entity.Runtime);
         builder.Property(entity => entity.Type);
@@ -30,5 +31,11 @@ public class MovieEntityTypeConfiguration : IEntityTypeConfiguration<Movie>
             child.Property(entity => entity.Name);
             child.Property(entity => entity.Role);
         });
+        builder.HasMany(entity => entity.Followers);
+        builder.Navigation(entity => entity.Followers).AutoInclude();
+
+        builder.HasMany(entity => entity.Ratings);
+        builder.Navigation(entity => entity.Ratings).AutoInclude();
+
     }
 }

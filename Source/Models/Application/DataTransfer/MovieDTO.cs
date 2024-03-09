@@ -20,7 +20,7 @@ public record MovieDTO
 
     public string? Country { get; set; }
 
-    public string? Genre { get; set; } 
+    public string? Genre { get; set; }
 
     public string? imdbRating { get; set; }
 
@@ -28,5 +28,9 @@ public record MovieDTO
     public string? Writer { get; set; }
 
     public string? Actors { get; set; }
+
+    public bool? IsAddedToWatchList { get; set; }
+
+    public bool? IsRatedByUser { get; set; }
 
 }

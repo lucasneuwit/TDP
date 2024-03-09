@@ -4,17 +4,18 @@
 }
 <div class="text-center">
     <h1 class="display-4">Movie app </h1>
-<form asp-controller="Movie" asp-action="Search" asp-route-pageNumber="1">
+    <form asp-controller="Movie" asp-action="Search" method="get">
 <div class="input-group mb-3">
-        <input type="text" name="title" class="form-control" placeholder="Title">
-    <input type="text" name="releaseYear" class="form-control" placeholder="Year released">
+            <input type="text" id="title" name="title" class="form-control" placeholder="Title">
+            <input type="text" id="releaseYear" name="releaseYear" class="form-control" placeholder="Year released">
 
-        <select class="custom-select" name="type">
+        <select class="custom-select" name="type" id="type">
             <option value="movie" selected>Movies</option>
             <option value="series">Series</option>
         </select>
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="submit">Search</button>
+                <input type="hidden" id="pageNumber" name="pageNumber" value="1" />
         </div>
 
     </div>
@@ -41,7 +42,7 @@
                         
                         <div class="card-body">
                             <h5 class="card-title">@Html.DisplayFor(item => x.Title)</h5>
-                            <a href="@Url.Action("FindByTitle","Movie", new {title=x.Title},null)" class="btn stretched-link"></a>
+                            <a href="@Url.Action("FindById","Movie", new {id=x.imdbID,type=x.Type},null)" class="btn stretched-link"></a>
 
                         </div>
                     </div>
@@ -56,10 +57,10 @@
                 @if (Model.CurrentPage != 1)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = 1, type = Model.Type })">&laquo</a>
+                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString,releaseYear = Model.Released, type = Model.Type,pageNumber = 1 })">&laquo</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = Model.CurrentPage - 1, type = Model.Type })">&lsaquo;</a>
+                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,releaseYear = Model.Released, type = Model.Type, pageNumber = Model.CurrentPage - 1, })">&lsaquo;</a>
                     </li>
                 }
                 @for (int i = Model.CurrentPage - 2; (i >= 0 && i <= Model.CurrentPage - 1); i++)
@@ -71,23 +72,23 @@
                     else
                     {
                     <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
-                            <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = (i), type = Model.Type })">@(i)</a>
+                            <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString,releaseYear = Model.Released ,type = Model.Type,pageNumber = (i)  })">@(i)</a>
                     </li>
                     }
                 }
                 @for (int i = Model.CurrentPage; (i <= totalPages && i <= Model.CurrentPage + 2); i++)
                 {
                     <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
-                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = i, type = Model.Type })">@i</a>
+                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString,releaseYear = Model.Released, type = Model.Type,pageNumber = i, })">@i</a>
                     </li>
                 }
                 @if (Model.CurrentPage != totalPages)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = Model.CurrentPage + 1, type = Model.Type })">&rsaquo;</a>
+                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString,releaseYear = Model.Released , type = Model.Type, pageNumber = Model.CurrentPage + 1 })">&rsaquo;</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString ,pageNumber = totalPages, type = Model.Type })">&raquo</a>
+                        <a class="page-link" href="@Url.Action("Search", new { title =Model.SearchString,releaseYear = Model.Released , type = Model.Type, pageNumber = totalPages })">&raquo</a>
                     </li>
                 }
             </ul>

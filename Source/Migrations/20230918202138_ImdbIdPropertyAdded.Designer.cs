@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TDP.Models.Persistence;
 
@@ -11,9 +12,11 @@ using TDP.Models.Persistence;
 namespace TDP.Migrations
 {
     [DbContext(typeof(TdpDbContext))]
-    partial class TdpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230918202138_ImdbIdPropertyAdded")]
+    partial class ImdbIdPropertyAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace TDP.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("MovieUser", b =>
-                {
-                    b.Property<Guid>("FollowedMoviesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FollowersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FollowedMoviesId", "FollowersId");
-
-                    b.HasIndex("FollowersId");
-
-                    b.ToTable("MovieUser");
-                });
 
             modelBuilder.Entity("TDP.Models.Domain.Movie", b =>
                 {
@@ -80,7 +68,12 @@ namespace TDP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Movie");
 
@@ -89,7 +82,7 @@ namespace TDP.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6342aa21-db4a-44d4-a1c9-80dc22a22582"),
+                            Id = new Guid("d660c3d0-b00c-4f52-b869-1b112ef5a1d6"),
                             Country = "United States",
                             ImdbId = "",
                             ImdbRating = 9.3m,
@@ -102,7 +95,7 @@ namespace TDP.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7e90b67c-364f-440d-96fd-f344c83c4a5a"),
+                            Id = new Guid("d73c6774-893c-4246-8d60-d80471d46997"),
                             Country = "Somalia",
                             ImdbId = "",
                             ImdbRating = 8.3m,
@@ -156,7 +149,7 @@ namespace TDP.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("94cf6d33-3128-4cb2-b656-44381a59fe54"),
+                            Id = new Guid("9c1182c4-59ed-4603-88a8-5d22861af689"),
                             BirthDay = new DateTime(1945, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmailAddress = "elYusty@bokita.com",
                             IsAdministrator = false,
@@ -174,10 +167,6 @@ namespace TDP.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
@@ -217,23 +206,12 @@ namespace TDP.Migrations
                     b.HasDiscriminator().HasValue("Series");
                 });
 
-            modelBuilder.Entity("MovieUser", b =>
-                {
-                    b.HasOne("TDP.Models.Domain.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("FollowedMoviesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TDP.Models.Domain.User", null)
-                        .WithMany()
-                        .HasForeignKey("FollowersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("TDP.Models.Domain.Movie", b =>
                 {
+                    b.HasOne("TDP.Models.Domain.User", null)
+                        .WithMany("FollowedMovies")
+                        .HasForeignKey("UserId");
+
                     b.OwnsMany("TDP.Models.Domain.MovieParticipant", "Participants", b1 =>
                         {
                             b1.Property<Guid>("MovieId")
@@ -295,6 +273,8 @@ namespace TDP.Migrations
 
             modelBuilder.Entity("TDP.Models.Domain.User", b =>
                 {
+                    b.Navigation("FollowedMovies");
+
                     b.Navigation("RatedMovies");
                 });
 
