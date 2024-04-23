@@ -8,6 +8,10 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        builder.HasDiscriminator<string>("user_type")
+            .HasValue<User>("User")
+            .HasValue<Administrator>("Administrator");
+        
         builder.HasIndex(entity => entity.Username).IsUnique();
         builder.HasKey(entity => entity.Id);
 

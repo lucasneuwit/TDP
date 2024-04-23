@@ -1,6 +1,7 @@
 using AutoMapper;
 using TDP.Extensions;
 using TDP.Models.Application.DataTransfer.MappingProfiles;
+using TDP.Models.Application.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,11 +12,23 @@ var url = builder.Configuration.GetValue<string>("ApiUrl");
 builder.Services.AddOmdbProvider();
 builder.Services.AddOmdbHttpClient(url!);
 builder.Services.AddMovieService();
+builder.Services.AddUserService();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext(connectionString!);
+builder.Services.AddUnitOfWork();
 builder.Services.AddRepository();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper();
+
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -33,12 +46,11 @@ if (!app.Environment.IsDevelopment())
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
+app.UseMiddleware<UnitOfWorkMiddleware>();
 
-app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

@@ -11,14 +11,14 @@ public class Series : Movie
     
     public int Seasons { get; private set; }
 
-    //public ICollection<Episode> Episodes { get; } = new List<Episode>();
+    public ICollection<Episode> Episodes { get; } = new List<Episode>();
 
     public void SetSeasons(int seasons)
     {
         this.Seasons = seasons;
     }
 
-   /* public void AddEpisode(Episode episode)
+    public void AddEpisode(Episode episode)
     {
         if (this.Episodes.Any(e => e.Id == episode.Id))
         {
@@ -27,5 +27,5 @@ public class Series : Movie
         
         this.Episodes.Add(episode);
         episode.SetSeries(this);
-    }*/
+    }
 }

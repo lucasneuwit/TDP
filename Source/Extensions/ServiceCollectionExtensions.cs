@@ -6,6 +6,7 @@ using TDP.Models.Application.Services;
 using TDP.Models.Domain;
 using TDP.Models.Persistence;
 using TDP.Models.Persistence.Repository;
+using TDP.Models.Persistence.UnitOfWork;
 
 namespace TDP.Extensions;
 
@@ -25,6 +26,11 @@ public static class ServiceCollectionExtensions
         return serviceCollection.AddTransient<IMovieService, MovieService>();
     }
 
+    public static IServiceCollection AddUserService(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection.AddTransient<IUserService, UserService>();
+    }
+
     public static IServiceCollection AddOmdbProvider(this IServiceCollection serviceCollection)
     {
         return serviceCollection.AddTransient<IApiProvider, OmdbProvider>();
@@ -38,6 +44,11 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddRepository(this IServiceCollection serviceCollection)
     {
         return serviceCollection.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+    }
+
+    public static IServiceCollection AddUnitOfWork(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection.AddScoped<IUnitOfWorkManager, UnitOfWorkManager>();
     }
 
     public static IServiceCollection AddAutoMapper(this IServiceCollection serviceCollection)
