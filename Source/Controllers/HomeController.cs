@@ -6,20 +6,24 @@ namespace TDP.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController()
     {
-        _logger = logger;
     }
 
     public IActionResult Index()
     {
+        if (!HttpContext.Session.TryGetValue("userId", out var userId))
+        {
+            ViewBag.Userid = userId!;
+            return RedirectToAction("Index", "User");
+        }
+
         return View();
     }
 
     public IActionResult Watchlist()
     {
+        // ReSharper disable once Mvc.ViewNotResolved
         return View();
     }
 

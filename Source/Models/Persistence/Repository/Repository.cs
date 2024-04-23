@@ -31,10 +31,22 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEnti
         return await dbSet.FindAsync(id);
     }
 
-    public Task<IEnumerable<TEntity>> AllAsync(ISpecification<TEntity> specification)
+    public Task<IEnumerable<TEntity>> AllAsync(ISpecification<TEntity>? specification)
     {
         var dbSet = this.GetDbSet();
         return Task.FromResult(dbSet.AsEnumerable());
+    }
+
+    public Task<bool> AnyAsync(ISpecification<TEntity> specification)
+    {
+        var dbSet = this.GetDbSet();
+        return specification.Apply(dbSet).AnyAsync();
+    }
+
+    public Task<TEntity?> FirstOrDefaultAsync(ISpecification<TEntity> specification)
+    {
+        var dbSet = this.GetDbSet();
+        return specification.Apply(dbSet).FirstOrDefaultAsync();
     }
 
     private DbSet<TEntity> GetDbSet()

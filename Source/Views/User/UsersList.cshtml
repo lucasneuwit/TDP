@@ -1,0 +1,44 @@
+﻿@model IEnumerable<TDP.Models.Domain.User>
+
+@{
+    Layout = "_Layout";
+}
+
+<h2 class="text-info pt-2 pb-3">Manage members</h2>
+
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>@nameof(TDP.Models.Domain.User.Username)</th>
+            <th>@nameof(TDP.Models.Domain.User.Name)</th>
+            <th>@nameof(TDP.Models.Domain.User.LastName)</th>
+            <th>@nameof(TDP.Models.Domain.User.EmailAddress)</th>
+            <th>Role</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Username</td>
+                <td>@user.Name</td>
+                <td>@user.LastName</td>
+                <td>@user.EmailAddress</td>
+                <td>@(user.IsAdministrator ? "Administrator" : "Member")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <div class="form-group">  
+        <div class="row">  
+            <div>  
+            </div>  
+            <div>
+                <form asp-controller="User" asp-action="RegisterUser" method="get">
+                    <button type="submit" class="btn btn-success form-control" style="width: 200px;">Add member</button>
+                </form>
+            </div>
+        </div>  
+    </div>  
+</div>

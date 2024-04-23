@@ -1,0 +1,45 @@
+﻿@model TDP.Controllers.LoginViewModel
+<h2>Sign In</h2>
+
+<div class="row backgroundWhite border">  
+  
+    <div class="col-md-8">  
+        <form asp-controller="User" asp-action="Login" method="post">  
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">  
+                <div class="row">  
+                    <div class="col-4">  
+                        <label asp-for="@Model.Username"></label>  
+                    </div>  
+                    <div class="col-8">  
+                        <input asp-for="@Model.Username" class="form-control" />  
+                    </div>  
+                    <span asp-validation-for="@Model.Username" class="text-danger"></span>  
+                </div>  
+            </div>  
+            <div class="form-group">  
+                <div class="row">  
+                    <div class="col-4">  
+                        <label asp-for="@Model.Password"></label>  
+                    </div>  
+                    <div class="col-8">  
+                        <input asp-for="@Model.Password" class="form-control" type="password"/>
+                    </div>  
+                    <span asp-validation-for="@Model.Password" class="text-danger"></span>  
+                </div>  
+            </div>  
+            <div class="form-group">  
+                <div class="row">  
+                    <div class="col-4">  
+                          
+                    </div>  
+                    <div class="col-8">  
+                        <button type="submit" class="btn btn-success form-control">Sign In</button>  
+                    </div>  
+                      
+                </div>  
+            </div>  
+        </form>  
+    </div>  
+  
+</div>  

@@ -4,12 +4,7 @@ namespace TDP.Models.Domain.Specification;
 
 public abstract class FilterSpecification<T> : ISpecification<T>
 {
-    private readonly Expression<Func<T, bool>> expression;
-
-    protected FilterSpecification(Expression<Func<T, bool>> expression)
-    {
-        this.expression = expression;
-    }
+    public Expression<Func<T, bool>> expression { get; init; } = arg => true ;
 
     public bool IsSatisfied(T obj)
     {
