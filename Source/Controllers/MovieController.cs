@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using TDP.Models;
 using TDP.Models.Application;
 using TDP.Models.Application.Services;
+using TDP.Models.Application.Services.Movie;
 using TDP.Models.Domain;
 
 namespace TDP.Controllers
@@ -33,38 +36,50 @@ namespace TDP.Controllers
         }
         public async Task<IActionResult> FindById(string id, string? type, string? releaseYear)
         {
+            
             var movieDto = new MovieDTO();
-            var res = await _movieService.GetMovie(id);
-            if (res == null)
+            try 
             {
-                IRequest aRequest = new Request(null, id, type, releaseYear);
-                var movie = await _provider.FindAsync(aRequest);
-                if (movie is SeriesDTO)
+                var res = await _movieService.GetMovie(id);
+                if (res == null)
                 {
-                    _movieService.SaveSerie((SeriesDTO)movie);
-                    var movieDb = await _movieService.GetMovie(id);
-                    movieDto = _mapper.Map<SeriesDTO>(movieDb);
-                    movieDto.IsAddedToWatchList = false;
-                }
-                else { 
-                    _movieService.SaveMovie(movie);
-                    var movieDb = await _movieService.GetMovie(id);
-                    movieDto = _mapper.Map<MovieDTO>(movieDb);
-                    movieDto.IsAddedToWatchList = false;
-                }
-            }
-            else
-            {
-                if (res is Series)
-                {
-                    movieDto = _mapper.Map<SeriesDTO>(res);
+                    IRequest aRequest = new Request(null, id, type, releaseYear);
+                    var movie = await _provider.FindAsync(aRequest);
+                    if (movie is SeriesDTO)
+                    {
+                        _movieService.SaveSerie((SeriesDTO)movie);
+                        var movieDb = await _movieService.GetMovie(id);
+                        movieDto = _mapper.Map<SeriesDTO>(movieDb);
+                        movieDto.IsAddedToWatchList = false;
+                    }
+                    else
+                    {
+                        _movieService.SaveMovie(movie);
+                        var movieDb = await _movieService.GetMovie(id);
+                        movieDto = _mapper.Map<MovieDTO>(movieDb);
+                        movieDto.IsAddedToWatchList = false;
+                    }
                 }
                 else
                 {
-                    movieDto = _mapper.Map<MovieDTO>(res);
+                    if (res is Series)
+                    {
+                        movieDto = _mapper.Map<SeriesDTO>(res);
+                    }
+                    else
+                    {
+                        movieDto = _mapper.Map<MovieDTO>(res);
+                    }
                 }
+                return View("MovieDetail", movieDto);
+
             }
-            return View("MovieDetail", movieDto);
+            catch (MovieNotFoundException ex)
+            {
+                return View("Error", new ErrorViewModel());
+            }
+            
+
         }
         [HttpGet]
         public async Task<IActionResult> Search(string title, string? type, string? releaseYear, int pageNumber)

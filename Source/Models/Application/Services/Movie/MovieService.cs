@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using TDP.Models.Application.DataTransfer;
+using TDP.Models.Application.Services.Movie;
 using TDP.Models.Domain;
 using TDP.Models.Persistence;
+using TDP.Models.Persistence.Extensions;
+using TDP.Models.Persistence.UnitOfWork;
 
 namespace TDP.Models.Application.Services
 {
@@ -13,17 +17,30 @@ namespace TDP.Models.Application.Services
 
         private readonly TdpDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWorkManager uowManager;
+        private readonly IRepository<Domain.Movie> repository;
 
-        public MovieService(TdpDbContext context, IMapper mapper)
+        public MovieService(IRepository<Domain.Movie> repository, IUnitOfWorkManager uowManager,TdpDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
+            this.repository = repository;
+            this.uowManager = uowManager;
         }
 
+        // TODO: agregar excepcion cuando viene vacio
         public async Task<Domain.Movie> GetMovie(string imdbId)
         {
-            var movie = _context.Set<Domain.Movie>().FirstOrDefault(mov => mov.ImdbId.Equals(imdbId));
-            return movie;
+            var movie = await this.repository.FindByImdbId(imdbId);
+            if (!(movie is not null))
+            {
+                return movie;
+            }
+            else
+            {
+                throw new MovieNotFoundException($"Movie with IMDb ID '{imdbId}' was not found.");
+            }
+
         }
 
         public async Task<IEnumerable<Domain.Movie>> GetAllMovies()
