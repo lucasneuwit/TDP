@@ -76,7 +76,7 @@ namespace TDP.Controllers
             }
             catch (MovieNotFoundException ex)
             {
-                return View("Error", new ErrorViewModel());
+                return View("MovieError",new MovieErrorViewModel { ErrorMessage = ex.Message });
             }
             
 
