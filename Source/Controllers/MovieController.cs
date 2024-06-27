@@ -37,9 +37,9 @@ namespace TDP.Controllers
         public async Task<IActionResult> FindById(string id, string? type, string? releaseYear)
         {
             
-            var movieDto = new MovieDTO();
             try 
             {
+                var movieDto = new MovieDTO();
                 var res = await _movieService.GetMovie(id);
                 if (res == null)
                 {
@@ -48,16 +48,19 @@ namespace TDP.Controllers
                     if (movie is SeriesDTO)
                     {
                         _movieService.SaveSerie((SeriesDTO)movie);
-                        var movieDb = await _movieService.GetMovie(id);
+                        /*var movieDb = await _movieService.GetMovie(id);
                         movieDto = _mapper.Map<SeriesDTO>(movieDb);
-                        movieDto.IsAddedToWatchList = false;
+                        movieDto.IsAddedToWatchList = false;*/
+                        movieDto = _movieService.FormatMovie(movie);
                     }
                     else
                     {
-                        _movieService.SaveMovie(movie);
-                        var movieDb = await _movieService.GetMovie(id);
+                        await _movieService.SaveMovie(movie);
+                        //await Task.Delay(3000);
+                        /*var movieDb = await _movieService.GetMovie(id);
                         movieDto = _mapper.Map<MovieDTO>(movieDb);
-                        movieDto.IsAddedToWatchList = false;
+                        movieDto.IsAddedToWatchList = false;*/
+                        movieDto = _movieService.FormatMovie(movie);
                     }
                 }
                 else

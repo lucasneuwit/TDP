@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using TDP.Models.Application.DataTransfer;
 using TDP.Models.Application.Services.Movie;
 using TDP.Models.Domain;
+using TDP.Models.Domain.Enums;
 using TDP.Models.Persistence;
 using TDP.Models.Persistence.Extensions;
 using TDP.Models.Persistence.UnitOfWork;
@@ -32,25 +33,25 @@ namespace TDP.Models.Application.Services
         public async Task<Domain.Movie> GetMovie(string imdbId)
         {
             var movie = await this.repository.FindByImdbId(imdbId);
-            if (!(movie is not null))
-            {
-                return movie;
-            }
-            else
-            {
-                throw new MovieNotFoundException($"Movie with IMDb ID '{imdbId}' was not found.");
-            }
+            return movie;
 
         }
 
         public async Task<IEnumerable<Domain.Movie>> GetAllMovies()
         {
-            List<Domain.Movie> movies;
-            movies = await this._context.Set<Domain.Movie>().ToListAsync();
-            return movies;
+
+            var movies = await this.repository.AllAsync();
+            if (movies is not null)
+            {
+                return movies;
+            }
+            else
+            {
+                throw new MovieNotFoundException($"List of movies not found.");
+            }
         }
 
-        public void SaveMovie(MovieDTO movie)
+        public async Task SaveMovie(MovieDTO movie)
         {
             var dbmovie = new Domain.Movie(Guid.NewGuid());
             dbmovie.SetTitle(movie.Title);
@@ -87,8 +88,29 @@ namespace TDP.Models.Application.Services
             {
                 dbmovie.AddParticipant(writer, 2);
             }
-            _context.Add(dbmovie);
+            await this.repository.CreateAsync(dbmovie);
+            //_context.Add(dbmovie);
             _context.SaveChanges();
+        }
+
+        public MovieDTO FormatMovie(MovieDTO movie)
+        {
+            if (movie.Runtime != "N/A")
+            {
+                string runtime = Regex.Replace(movie.Runtime, "[A-Za-z ]", "");
+                movie.SetRuntime(runtime);
+            }
+            if (movie.Released != "N/A")
+            {
+                movie.SetReleased(DateOnly.Parse(movie.Released).ToString());
+            }
+            if (movie.imdbRating != "N/A")
+            {
+                movie.SetImdbRating(movie.imdbRating);
+            }
+            movie.Type = MovieTypes.MovieType;
+            movie.SetIsAddedToWatchList(false);
+            return movie;
         }
 
         public Task AddToWatchListAsync(Guid movieId, Guid userId)
