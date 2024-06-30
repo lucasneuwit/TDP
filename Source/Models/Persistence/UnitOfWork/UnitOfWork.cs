@@ -26,7 +26,7 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
     {
-        await this.transaction.CommitAsync(cancellationToken);
+        await this.transaction?.CommitAsync(cancellationToken);
     }
 
     public async Task<int> CompleteAsync(CancellationToken cancellationToken = default)

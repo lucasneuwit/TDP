@@ -7,13 +7,13 @@ namespace TDP.Models.Application.Services;
 
 public class UserService : IUserService
 {
-    private readonly IUnitOfWorkManager uowManager;
     private readonly IRepository<User> repository;
+    private readonly ILogger<IUserService> logger;
         
-    public UserService(IRepository<User> repository, IUnitOfWorkManager uowManager)
+    public UserService(IRepository<User> repository, IUnitOfWorkManager uowManager, ILogger<IUserService> logger)
     {
         this.repository = repository;
-        this.uowManager = uowManager;
+        this.logger = logger;
     }
 
     public Task<User> GetUser(string username)
@@ -23,6 +23,7 @@ public class UserService : IUserService
 
     public Task RegisterUserAsync(RegisterUser registerUser)
     {
+        this.logger.LogInformation("Attempting to register new user with username: {username}", registerUser.Username);
         var user = new User(Guid.NewGuid());
         UpdateUser(user, registerUser);
 
