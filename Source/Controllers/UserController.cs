@@ -5,14 +5,9 @@ using TDP.Models.Application.Services;
 
 namespace TDP.Controllers;
 
-public class UserController : Controller
+public class UserController(IUserService userService) : Controller
 {
-    private readonly IUserService userService;
-
-    public UserController(IUserService userService)
-    {
-        this.userService = userService;
-    }
+    private readonly IUserService userService = userService;
 
     // GET
 
@@ -26,7 +21,7 @@ public class UserController : Controller
         return RedirectToAction("Login");
     }
 
-    public async Task<IActionResult> Login()
+    public IActionResult Login()
     {
         return View();
     }

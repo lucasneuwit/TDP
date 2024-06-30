@@ -5,3 +5,4 @@
 /.vs
 /Source/TDP.csproj.user
 /Source/appsettings.json
+/Source/log*
