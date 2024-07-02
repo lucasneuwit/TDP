@@ -25,4 +25,17 @@ public static class UserRepositoryExtensions
             this.expression = x => x.Username == username;
         }
     }
+    public static Task<User?> FindByUserIdAsync(this IRepository<User> repository, Guid userId)
+    {
+        var specification = new UserByIdFilterSpecification(userId);
+        return repository.FirstOrDefaultAsync(specification);
+    }
+
+    public class UserByIdFilterSpecification : FilterSpecification<User>
+    {
+        public UserByIdFilterSpecification(Guid userId)
+        {
+            this.expression = x => x.Id.Equals(userId);
+        }
+    }
 }

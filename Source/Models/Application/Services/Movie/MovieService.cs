@@ -19,20 +19,21 @@ namespace TDP.Models.Application.Services
         private readonly TdpDbContext _context;
         private readonly IMapper _mapper;
         private readonly IUnitOfWorkManager uowManager;
-        private readonly IRepository<Domain.Movie> repository;
+        private readonly IRepository<Domain.Movie> movieRepository;
+        private readonly IRepository<User> userRepository;
 
         public MovieService(IRepository<Domain.Movie> repository, IUnitOfWorkManager uowManager,TdpDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            this.repository = repository;
+            this.movieRepository = repository;
             this.uowManager = uowManager;
         }
 
         // TODO: agregar excepcion cuando viene vacio
         public async Task<Domain.Movie> GetMovie(string imdbId)
         {
-            var movie = await this.repository.FindByImdbId(imdbId);
+            var movie = await this.movieRepository.FindByImdbId(imdbId);
                 return movie;
 
         }
@@ -40,7 +41,7 @@ namespace TDP.Models.Application.Services
         public async Task<IEnumerable<Domain.Movie>> GetAllMovies()
         {
 
-            var movies = await this.repository.AllAsync();
+            var movies = await this.movieRepository.AllAsync();
             if (movies is not null)
             {
                 return movies;
@@ -88,7 +89,7 @@ namespace TDP.Models.Application.Services
             {
                 dbmovie.AddParticipant(writer, 2);
             }
-            await this.repository.CreateAsync(dbmovie);
+            await this.movieRepository.CreateAsync(dbmovie);
             //_context.Add(dbmovie);
             _context.SaveChanges();
         }
@@ -113,13 +114,16 @@ namespace TDP.Models.Application.Services
             return movie;
         }
 
-        public Task AddToWatchListAsync(string imdbId, Guid userId)
+        public void AddToWatchListAsync(string imdbId, string username)
         {
-            var movie = _context.Set<Domain.Movie>().First(mov => mov.ImdbId.Equals(imdbId));
-            var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
 
+            var movie = this.movieRepository.FindByImdbId(imdbId).Result;
+            //var movie = _context.Set<Domain.Movie>().First(mov => mov.ImdbId.Equals(imdbId));
+            //var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
+            var user = userRepository.FindByUsernameAsync(username).Result;
+            
             movie.AddFollower(user);
-            return _context.SaveChangesAsync();
+            //return _context.SaveChangesAsync();
 
         }
         public bool AddedToWishList(string imdbId, Guid userId)
