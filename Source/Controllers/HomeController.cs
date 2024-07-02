@@ -1,23 +1,29 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using TDP.Models;
+using TDP.Models.Application.Services;
+using TDP.Utils;
 
 namespace TDP.Controllers;
 
 public class HomeController : Controller
 {
-    public HomeController()
+    private readonly IUserService userService;
+    
+    public HomeController(IUserService userService)
     {
+        this.ViewData["profilePicture"] = AppConstants.DefaultProfilePicture;
+        this.userService = userService;
     }
 
     public IActionResult Index()
     {
-        if (!HttpContext.Session.TryGetValue("userId", out var userId))
+        if (!HttpContext.Session.TryGetValue("user-id", out var userId))
         {
             ViewBag.Userid = userId!;
             return RedirectToAction("Index", "User");
         }
-
+        
         return View();
     }
 

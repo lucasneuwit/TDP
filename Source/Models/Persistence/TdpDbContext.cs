@@ -30,6 +30,5 @@ public class TdpDbContext : DbContext
     {
         var dataToSeed = new DataSeed();
         builder.Entity<Movie>().HasData(dataToSeed.MoviesToSeed);
-        builder.Entity<User>().HasData(dataToSeed.UsersToSeed);
     }
 }

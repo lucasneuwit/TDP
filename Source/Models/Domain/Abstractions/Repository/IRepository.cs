@@ -8,6 +8,10 @@ public interface IRepository<TEntity> where TEntity: class
 
     Task<TEntity?> FindByIdAsync(Guid id);
 
+    Task<TEntity> FindByIdOrThrowAsync(Guid id);
+
+    Task DeleteAsync(Guid id);
+
     Task<IEnumerable<TEntity>> AllAsync(ISpecification<TEntity>? specification = null);
 
     Task<bool> AnyAsync(ISpecification<TEntity> specification);
