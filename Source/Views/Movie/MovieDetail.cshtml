@@ -135,7 +135,7 @@
             <div style="min-height:100px;">
                 <!-- Add to watchlist form -->
                 <form style="padding:1em" id="addToWishListForm" method="post" asp-controller="Movie" asp-action="AddToWishList">
-                    <input type="hidden" name="movieId" value="@Model.Id" />
+                    <input type="hidden" name="imdbId" value="@Model.imdbID" />
                     <input type="hidden" name="userId" value="@defaultUser" />
                     <button class="btn btn-outline-secondary" type="button" id="addToWishListButton">Add to Watch List</button>
                 </form>
@@ -158,6 +158,7 @@
 <div style="margin-top: 20px;">
     <!-- Add some margin-top to create space between the two sections -->
     <a asp-controller="Home" asp-action="Index">Back to Home</a>
+    <h1>@Model.imdbID</h1>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -195,7 +196,7 @@
                 url: "/Movie/AddedToWishList",
                 type: "POST",
                 data: {
-                    movieId: "@Model.Id",
+                    movieId: "@Model.imdbID",
                     userId: "@defaultUser"
                 },
                 success: function (data) {

@@ -48,18 +48,11 @@ namespace TDP.Controllers
                     if (movie is SeriesDTO)
                     {
                         _movieService.SaveSerie((SeriesDTO)movie);
-                        /*var movieDb = await _movieService.GetMovie(id);
-                        movieDto = _mapper.Map<SeriesDTO>(movieDb);
-                        movieDto.IsAddedToWatchList = false;*/
                         movieDto = _movieService.FormatMovie(movie);
                     }
                     else
                     {
                         await _movieService.SaveMovie(movie);
-                        //await Task.Delay(3000);
-                        /*var movieDb = await _movieService.GetMovie(id);
-                        movieDto = _mapper.Map<MovieDTO>(movieDb);
-                        movieDto.IsAddedToWatchList = false;*/
                         movieDto = _movieService.FormatMovie(movie);
                     }
                 }
@@ -87,34 +80,58 @@ namespace TDP.Controllers
         [HttpGet]
         public async Task<IActionResult> Search(string title, string? type, string? releaseYear, int pageNumber)
         {
-            IRequest aRequest = new Request(title, null, type, releaseYear);
-            var res = await _provider.SearchAsync(aRequest, pageNumber);
-            return View(res);
+            try
+            {
+                IRequest aRequest = new Request(title, null, type, releaseYear);
+                var res = await _provider.SearchAsync(aRequest, pageNumber);
+                return View(res);
+            }
+            catch(HttpRequestException ex) 
+            {
+                return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
+            }
+            
         }
         public async Task<IActionResult> GetMovie(string imdbId)
         {
-            var movie = await _movieService.GetMovie(imdbId);
-            var movieDto = _mapper.Map<MovieDTO>(movie);
-            return Json(movieDto);
+            try
+            {
+                var movie = await _movieService.GetMovie(imdbId);
+                var movieDto = _mapper.Map<MovieDTO>(movie);
+                return Json(movieDto);
+
+            }
+            catch (MovieNotFoundException ex)
+            {
+                return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
+            }
+            
         }
         public async Task<IActionResult> GetAllMovies()
         {
-            List<MovieDTO> movielist;
-            var movies = await _movieService.GetAllMovies();
-            movielist = _mapper.Map<List<MovieDTO>>(movies);
-            return Json(movielist);
+            try
+            {
+                List<MovieDTO> movielist;
+                var movies = await _movieService.GetAllMovies();
+                movielist = _mapper.Map<List<MovieDTO>>(movies);
+                return Json(movielist);
+            }
+            catch (MovieNotFoundException ex)
+            {
+                return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
+            }
         }
-        public async Task AddToWishList(Guid movieId, Guid userId, bool isInWatchList)
+        public async Task AddToWishList(string imdbId, Guid userId, bool isInWatchList)
         {
             if (!isInWatchList)
             {
-                await _movieService.AddToWatchListAsync(movieId, userId);
+                await _movieService.AddToWatchListAsync(imdbId, userId);
             }
             else NotFound();
         }
-        public async Task<Boolean> AddedToWishList(Guid movieId, Guid userId)
+        public async Task<Boolean> AddedToWishList(string imdbId, Guid userId)
         {
-            bool isInWatchList = _movieService.AddedToWishList(movieId, userId);
+            bool isInWatchList = _movieService.AddedToWishList(imdbId, userId);
             return isInWatchList;
         }
         public async Task RemoveFromWatchlist(Guid movieId, Guid userId)

@@ -33,7 +33,7 @@ namespace TDP.Models.Application.Services
         public async Task<Domain.Movie> GetMovie(string imdbId)
         {
             var movie = await this.repository.FindByImdbId(imdbId);
-            return movie;
+                return movie;
 
         }
 
@@ -113,18 +113,19 @@ namespace TDP.Models.Application.Services
             return movie;
         }
 
-        public Task AddToWatchListAsync(Guid movieId, Guid userId)
+        public Task AddToWatchListAsync(string imdbId, Guid userId)
         {
-            var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
+            var movie = _context.Set<Domain.Movie>().First(mov => mov.ImdbId.Equals(imdbId));
             var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
 
             movie.AddFollower(user);
             return _context.SaveChangesAsync();
 
         }
-        public bool AddedToWishList(Guid movieId, Guid userId)
+        public bool AddedToWishList(string imdbId, Guid userId)
         {
-            var movie = _context.Set<Domain.Movie>().Include(m => m.Followers).First(mov => mov.Id.Equals(movieId));
+            //var movie = repository.FindByImdbId(imdbId);
+            var movie = _context.Set<Domain.Movie>().Include(m => m.Followers).First(mov => mov.ImdbId.Equals(imdbId));
             return movie.Followers.Any(follower => follower.Id == userId);
         }
 
