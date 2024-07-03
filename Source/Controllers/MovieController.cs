@@ -121,13 +121,20 @@ namespace TDP.Controllers
                 return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
             }
         }
-        public async Task AddToWishList(string imdbId, Guid userId, bool isInWatchList)
+        public async Task AddToWishList(string imdbId, string username, bool isInWatchList)
         {
-            if (!isInWatchList)
+
+            try
             {
-                await _movieService.AddToWatchListAsync(imdbId, userId);
+                _movieService.AddToWatchListAsync(imdbId, username);
             }
-            else NotFound();
+            catch(MovieNotFoundException ex)
+            {
+
+            }
+            
+            
+            
         }
         public async Task<Boolean> AddedToWishList(string imdbId, Guid userId)
         {

@@ -12,7 +12,7 @@ namespace TDP.Models.Application.Services
         public void SaveSerie(SeriesDTO serie);
         public Task SaveMovie(MovieDTO movie);
 
-        public Task AddToWatchListAsync(string imdbId, Guid userId);
+        public void AddToWatchListAsync(string imdbId, string username);
 
         public bool AddedToWishList(string imdbId, Guid userId);
 
