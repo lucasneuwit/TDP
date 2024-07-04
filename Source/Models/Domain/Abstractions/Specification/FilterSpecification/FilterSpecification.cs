@@ -2,7 +2,8 @@ using System.Linq.Expressions;
 
 namespace TDP.Models.Domain.Specification;
 
-public abstract class FilterSpecification<T> : ISpecification<T>
+public abstract class FilterSpecification<T> : IFilterSpecification<T>
+    where T : class
 {
     public Expression<Func<T, bool>> expression { get; init; } = arg => true ;
 
