@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -21,17 +20,20 @@ namespace TDP.Models.Application.Services
         private readonly IUnitOfWorkManager uowManager;
         private readonly IRepository<Domain.Movie> movieRepository;
         private readonly IRepository<User> userRepository;
+        private readonly ILogger<IMovieService> logger;
 
-        public MovieService(IRepository<Domain.Movie> repository, IUnitOfWorkManager uowManager,TdpDbContext context, IMapper mapper)
+        public MovieService(IRepository<Domain.Movie> movieRepository, IRepository<User> userRepository, IUnitOfWorkManager uowManager,TdpDbContext context, IMapper mapper, ILogger<IMovieService> logger)
         {
             _context = context;
             _mapper = mapper;
-            this.movieRepository = repository;
+            this.movieRepository = movieRepository;
+            this.userRepository = userRepository;
             this.uowManager = uowManager;
+            this.logger = logger;
         }
 
-        // TODO: agregar excepcion cuando viene vacio
-        public async Task<Domain.Movie> GetMovie(string imdbId)
+            // TODO: agregar excepcion cuando viene vacio
+            public async Task<Domain.Movie> GetMovie(string imdbId)
         {
             var movie = await this.movieRepository.FindByImdbId(imdbId);
                 return movie;
@@ -52,7 +54,7 @@ namespace TDP.Models.Application.Services
             }
         }
 
-        public async Task SaveMovie(MovieDTO movie)
+        public Task SaveMovie(MovieDTO movie)
         {
             var dbmovie = new Domain.Movie(Guid.NewGuid());
             dbmovie.SetTitle(movie.Title);
@@ -74,7 +76,7 @@ namespace TDP.Models.Application.Services
                 dbmovie.SetImdbRating(Convert.ToDecimal(movie.imdbRating, new CultureInfo("en-US")));
             }
             dbmovie.SetPosterUrl(movie.Poster);
-            var actorsNames = movie.Actors.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList();
+           /* var actorsNames = movie.Actors.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList();
             var directorsNames = movie.Director.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList();
             var writersNames = movie.Writer.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList();
             foreach (var actor in actorsNames)
@@ -88,10 +90,10 @@ namespace TDP.Models.Application.Services
             foreach (var writer in writersNames)
             {
                 dbmovie.AddParticipant(writer, 2);
-            }
-            await this.movieRepository.CreateAsync(dbmovie);
-            //_context.Add(dbmovie);
-            _context.SaveChanges();
+            }*/
+             return movieRepository.CreateAsync(dbmovie);
+            //return _context.SaveChangesAsync();
+
         }
 
         public MovieDTO FormatMovie(MovieDTO movie)
@@ -114,35 +116,47 @@ namespace TDP.Models.Application.Services
             return movie;
         }
 
-        public void AddToWatchListAsync(string imdbId, string username)
+        public void AddToWatchListAsync(string imdbId, Guid userId)
         {
 
             var movie = this.movieRepository.FindByImdbId(imdbId).Result;
-            //var movie = _context.Set<Domain.Movie>().First(mov => mov.ImdbId.Equals(imdbId));
-            //var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
-            var user = userRepository.FindByUsernameAsync(username).Result;
-            
+            if (movie is null) 
+            {
+                throw new MovieNotFoundException($"Movie not found.");
+            } 
+            var user = this.userRepository.FindByUserIdAsync(userId).Result;
+            if (user is null)
+            {
+                throw new MovieNotFoundException($"User not found.");
+            }
             movie.AddFollower(user);
-            //return _context.SaveChangesAsync();
-
         }
         public bool AddedToWishList(string imdbId, Guid userId)
         {
-            //var movie = repository.FindByImdbId(imdbId);
+            //INCLUDE
             var movie = _context.Set<Domain.Movie>().Include(m => m.Followers).First(mov => mov.ImdbId.Equals(imdbId));
             return movie.Followers.Any(follower => follower.Id == userId);
         }
 
-        public Task RemoveFromWatchListAsync(Guid movieId, Guid userId)
+        public void RemoveFromWatchListAsync(string imdbId, Guid userId)
         {
-            var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
-            var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
+
+            var movie = this.movieRepository.FindByImdbId(imdbId).Result;
+            if (movie is null)
+            {
+                throw new MovieNotFoundException($"Movie not found.");
+            }
+            var user = this.userRepository.FindByUserIdAsync(userId).Result;
+            if (user is null)
+            {
+                throw new MovieNotFoundException($"User not found.");
+            }
             movie.RemoveFollower(user);
-            return _context.SaveChangesAsync();
         }
 
         public async Task<MovieCollection> GetAllFromWatchList(Guid userId)
         {
+            //tiene include
             var user = _context.Set<Domain.User>().Include(m => m.FollowedMovies).First(usr => usr.Id.Equals(userId));
             MovieCollection aMovieCollection = new MovieCollection();
             List<MovieDTO> movieDtos = new List<MovieDTO>();
@@ -155,25 +169,39 @@ namespace TDP.Models.Application.Services
             aMovieCollection.TotalResults = movieDtos.Count.ToString();
             return aMovieCollection;
         }
-
-        Task IMovieService.AddMovieRating(Guid movieId, Guid userId, int rating, string? comment)
+        public void AddMovieRating(string imdbId, Guid userId, int rating, string? comment)
         {
-            var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
-            var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
+            var movie = this.movieRepository.FindByImdbId(imdbId).Result;
+            if (movie is null)
+            {
+                throw new MovieNotFoundException($"Movie not found.");
+            }
+            var user = this.userRepository.FindByUserIdAsync(userId).Result;
+            if (user is null)
+            {
+                throw new MovieNotFoundException($"User not found.");
+            }
             user.Rate(movie, rating, comment);
-            return _context.SaveChangesAsync();
         }
 
-        Task IMovieService.RemoveMovieRating(Guid movieId, Guid userId, int rating, string? comment)
+        public void RemoveMovieRating(string imdbId, Guid userId)
         {
-            var movie = _context.Set<Domain.Movie>().First(mov => mov.Id.Equals(movieId));
-            var user = _context.Set<Domain.User>().First(usr => usr.Id.Equals(userId));
+            var movie = this.movieRepository.FindByImdbId(imdbId).Result;
+            if (movie is null)
+            {
+                throw new MovieNotFoundException($"Movie not found.");
+            }
+            var user = this.userRepository.FindByUserIdAsync(userId).Result;
+            if (user is null)
+            {
+                throw new MovieNotFoundException($"User not found.");
+            }
             user.DeleteRating(movie);
-            return _context.SaveChangesAsync();
         }
 
         UserRating IMovieService.GetMovieRating(Guid movieId, Guid userId)
         {
+            //TIENE INCLUDE O SIMILAR
             var userRating = _context.Set<Domain.User>()
         .Where(u => u.Id == userId)
         .SelectMany(u => u.RatedMovies)
@@ -192,7 +220,7 @@ namespace TDP.Models.Application.Services
             return null;
         }
 
-        void IMovieService.SaveSerie(SeriesDTO serie)
+        async void IMovieService.SaveSerie(SeriesDTO serie)
         {
             var dbmovie = new Domain.Series(Guid.NewGuid());
             dbmovie.SetTitle(serie.Title);
@@ -235,8 +263,7 @@ namespace TDP.Models.Application.Services
             {
                 dbmovie.AddParticipant(writer, 2);
             }
-            _context.Add(dbmovie);
-            _context.SaveChanges();
+            await this.movieRepository.CreateAsync(dbmovie);
         }
     }
 

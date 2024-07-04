@@ -87,7 +87,7 @@
                     </div>
                     <!-- Rating form -->
                     <form id="rateMovie" method="post" asp-controller="Movie" asp-action="RateMovie">
-                        <input type="hidden" name="movieId" value="@Model.Id" />
+                        <input type="hidden" name="imdbId" value="@Model.imdbID" />
                         <input type="hidden" name="userId" value="@defaultUser" />
 
                         <!-- Input for Rating -->
@@ -102,14 +102,14 @@
 
                 <!-- Edit movie rating form -->
                 <form id="editMovieRating" method="post" asp-controller="Movie" asp-action="RateMovie">
-                    <input type="hidden" name="movieId" value="@Model.Id" />
+                    <input type="hidden" name="imdbId" value="@Model.imdbID" />
                     <input type="hidden" name="userId" value="@defaultUser" />
 
                     <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="editMovieRatingButton">Edit Rating</button>
                 </form>
                 <!-- Remove movie rating form -->
                 <form id="removeMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
-                    <input type="hidden" name="movieId" value="@Model.Id" />
+                    <input type="hidden" name="imdbId" value="@Model.imdbID" />
                     <input type="hidden" name="userId" value="@defaultUser" />
 
                     <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="removeMovieRatingButton">Remove Rating</button>
@@ -137,13 +137,13 @@
                 <!-- Add to watchlist form -->
                 <form style="padding:1em" id="addToWishListForm" method="post" asp-controller="Movie" asp-action="AddToWishList">
                     <input type="hidden" name="imdbId" value="@Model.imdbID" />
-                    <input type="hidden" name="userId" value="@defaultUsername" />
+                    <input type="hidden" name="userId" value="@defaultUser" />
                     <button class="btn btn-outline-secondary" type="button" id="addToWishListButton">Add to Watch List</button>
                 </form>
 
                 <!-- Remove from watchlist form -->
                 <form style="padding:1em" id="removeFromWatchListForm" method="post" asp-controller="Movie" asp-action="RemoveFromWatchlist">
-                    <input type="hidden" name="movieId" value="@Model.Id" />
+                    <input type="hidden" name="imdbId" value="@Model.imdbID" />
                     <input type="hidden" name="userId" value="@defaultUser" />
                     <button class="btn btn-outline-secondary" type="button" id="removeFromWatchListButton">Remove from your watchlist</button>
                 </form>
@@ -218,7 +218,7 @@
                 url: "/Movie/GetUserRating",
                 type: "POST",
                 data: {
-                    movieId: "@Model.Id",
+                    movieId: "@Model.imdbID",
                     userId: "@defaultUser"
                 },
                 success: function (data) {
@@ -282,8 +282,6 @@
         // Set up the click event for Remove Movie Rating
         $("#removeMovieRatingButton").click(function () {
             hasRated = false;
-            $("input[name='rating']").val('');
-            $("textarea[name='comment']").val('');
             $.ajax({
                 url: "/Movie/RemoveMovieRating",
                 type: "POST",
