@@ -1,19 +1,21 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Net.Mime;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TDP.Extensions;
 using TDP.Models;
 using TDP.Models.Application.Services;
+using TDP.Models.ViewModels;
 
 namespace TDP.Controllers;
 
 public class UserController(IUserService userService) : Controller
 {
-    private readonly IUserService userService = userService;
 
     // GET
-
     public async Task<IActionResult> Index()
     {
-        if (!await this.userService.GetAdministratorAsync())
+        if (!await userService.GetAdministratorAsync())
         {
             return RedirectToAction("RegisterAdmin");
         }
@@ -29,14 +31,20 @@ public class UserController(IUserService userService) : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel loginInfo)
     {
-        var loginSucceeded = await this.userService.TryLoginAsync(new LoginInfo()
+        var userId = await userService.TryLoginAsync(new LoginInfo()
         {
             Username = loginInfo.Username,
             Password = loginInfo.Password,
         });
-        if (loginSucceeded)
+        if (userId is not null)
         {
-            HttpContext.Session.SetString("userId", "some-id");
+            HttpContext.Session.SetString("user-id", userId.ToString());
+            var currentUser = await userService.GetUserAsync(userId.ToGuid());
+            if (currentUser.ProfilePicture is not null)
+            {
+                ViewData["profilePicture"] =
+                    $"data:image/*;base64,{Convert.ToBase64String(currentUser.ProfilePicture)}";
+            }
             return RedirectToAction("Index", "Home");
         }
         
@@ -56,7 +64,7 @@ public class UserController(IUserService userService) : Controller
     [HttpPost]
     public async Task<IActionResult> RegisterUser(RegistrationViewModel registerUser)
     {
-        await this.userService.RegisterUserAsync(new RegisterUser()
+        await userService.RegisterUserAsync(new RegisterUser()
         {
             Username = registerUser.Username,
             Password = registerUser.Password,
@@ -69,9 +77,17 @@ public class UserController(IUserService userService) : Controller
     }
 
     [HttpPost]
+    public async Task<IActionResult> RemoveUser(Guid userId)
+    {
+        await userService.DeleteUserAsync(userId);
+
+        return RedirectToAction("GetUsers");
+    }
+
+    [HttpPost]
     public async Task<IActionResult> RegisterAdministrator(RegistrationViewModel registerAdmin)
     {
-        await this.userService.RegisterAdministratorAsync(new RegisterUser
+        await userService.RegisterAdministratorAsync(new RegisterUser
         {
             Username = registerAdmin.Username,
             Password = registerAdmin.Password,
@@ -93,9 +109,41 @@ public class UserController(IUserService userService) : Controller
 
     public async Task<IActionResult> GetUsers()
     {
-        var users = await this.userService.GetUsers();
+        var currentUserId = HttpContext.GetCurrentUserId();
+        var users = (await userService.GetUsers()).Select(e => new UserViewModel(e)).ToList();
 
-        return View("UsersList", users);
+        return View("UsersList", new UsersListViewModel(currentUserId, users));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Profile(UserViewModel userViewModel)
+    {
+        byte[]? profilePicture = null;
+        if (userViewModel.NewProfilePicture is not null)
+        {
+            using var stream = new MemoryStream();
+            await userViewModel.NewProfilePicture.CopyToAsync(stream);
+            profilePicture = stream.ToArray();
+        }
+        var updateUser = new UpdateUser(
+            userViewModel.Id,
+            userViewModel.Username,
+            userViewModel.FirstName,
+            userViewModel.LastName,
+            userViewModel.EmailAddress,
+            profilePicture);
+
+        await userService.UpdateUserAsync(updateUser);
+
+        return RedirectToAction("Index", "Home");
+    }
+    
+    public async Task<IActionResult> Profile()
+    {
+        var currentUserId = HttpContext.GetCurrentUserId();
+        var currentUser = await userService.GetUserAsync(currentUserId);
+
+        return View("UserProfile", new UserViewModel(currentUser));
     }
 }
 

@@ -26,6 +26,8 @@ public class User : BaseEntity
 
     public ICollection<UserRating> RatedMovies { get; } = new List<UserRating>();
 
+    public byte[]? ProfilePicture { get; set; }
+
     public void SetUsername(string username)
     {
         this.Username = username;
@@ -54,6 +56,12 @@ public class User : BaseEntity
     public void SetBirthday(DateOnly birthday)
     {
         this.BirthDay = birthday;
+    }
+
+    public void SetProfilePicture(byte[] profilePicture)
+    {
+        
+        this.ProfilePicture = profilePicture;
     }
     
     public void Follow(Movie movie)

@@ -31,6 +31,27 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEnti
         return await dbSet.FindAsync(id);
     }
 
+    public async Task<TEntity> FindByIdOrThrowAsync(Guid id)
+    {
+        var entity = await this.FindByIdAsync(id);
+        if (entity is null)
+        {
+            throw new EntityNotFoundException(id);
+        }
+
+        return entity;
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var dbSet = this.GetDbSet();
+        var entity = await dbSet.FindAsync(id);
+        if (entity is not null)
+        {
+            dbSet.Remove(entity);
+        }
+    }
+
     public Task<IEnumerable<TEntity>> AllAsync(ISpecification<TEntity>? specification)
     {
         var dbSet = this.GetDbSet();
@@ -52,5 +73,12 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEnti
     private DbSet<TEntity> GetDbSet()
     {
         return dbContext.Set<TEntity>();
+    }
+}
+
+public class EntityNotFoundException : Exception
+{
+    public EntityNotFoundException(Guid entityId) : base($"Entity with id: {entityId} not found")
+    {
     }
 }
