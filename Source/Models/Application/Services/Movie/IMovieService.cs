@@ -24,7 +24,7 @@ namespace TDP.Models.Application.Services
 
         public void RemoveMovieRating(string imdbId, Guid userId);
 
-        public UserRating GetMovieRating(Guid movieId,Guid userId);
+        public UserRating GetMovieRating(string imdbId,Guid userId);
         public MovieDTO FormatMovie(MovieDTO movie);
     }
 }

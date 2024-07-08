@@ -8,6 +8,7 @@ using TDP.Models.Domain;
 using TDP.Models.Domain.Enums;
 using TDP.Models.Persistence;
 using TDP.Models.Persistence.Extensions;
+using TDP.Models.Persistence.Specifications;
 using TDP.Models.Persistence.UnitOfWork;
 
 namespace TDP.Models.Application.Services
@@ -35,7 +36,7 @@ namespace TDP.Models.Application.Services
             // TODO: agregar excepcion cuando viene vacio
             public async Task<Domain.Movie> GetMovie(string imdbId)
         {
-            var movie = await this.movieRepository.FindByImdbId(imdbId);
+            var movie = await this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification());
                 return movie;
 
         }
@@ -56,6 +57,7 @@ namespace TDP.Models.Application.Services
 
         public Task SaveMovie(MovieDTO movie)
         {
+            uowManager.BeginUnitOfWork();
             var dbmovie = new Domain.Movie(Guid.NewGuid());
             dbmovie.SetTitle(movie.Title);
             dbmovie.SetPlot(movie.Plot);
@@ -91,7 +93,9 @@ namespace TDP.Models.Application.Services
             {
                 dbmovie.AddParticipant(writer, 2);
             }
-             return movieRepository.CreateAsync(dbmovie);
+            movieRepository.CreateAsync(dbmovie);
+
+            return uowManager.Complete();
             //return _context.SaveChangesAsync();
 
         }
@@ -119,7 +123,7 @@ namespace TDP.Models.Application.Services
         public void AddToWatchListAsync(string imdbId, Guid userId)
         {
 
-            var movie = this.movieRepository.FindByImdbId(imdbId).Result;
+            var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result;
             if (movie is null) 
             {
                 throw new MovieNotFoundException($"Movie not found.");
@@ -134,14 +138,14 @@ namespace TDP.Models.Application.Services
         public bool AddedToWishList(string imdbId, Guid userId)
         {
             //INCLUDE
-            var movie = _context.Set<Domain.Movie>().Include(m => m.Followers).First(mov => mov.ImdbId.Equals(imdbId));
+            var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result;
             return movie.Followers.Any(follower => follower.Id == userId);
         }
 
         public void RemoveFromWatchListAsync(string imdbId, Guid userId)
         {
 
-            var movie = this.movieRepository.FindByImdbId(imdbId).Result;
+            var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result;
             if (movie is null)
             {
                 throw new MovieNotFoundException($"Movie not found.");
@@ -157,7 +161,7 @@ namespace TDP.Models.Application.Services
         public async Task<MovieCollection> GetAllFromWatchList(Guid userId)
         {
             //tiene include
-            var user = _context.Set<Domain.User>().Include(m => m.FollowedMovies).First(usr => usr.Id.Equals(userId));
+            var user = await this.userRepository.FindByIdOrThrowAsync(userId, new UserIncludeSpecification());
             MovieCollection aMovieCollection = new MovieCollection();
             List<MovieDTO> movieDtos = new List<MovieDTO>();
             foreach (var mov in user.FollowedMovies)
@@ -171,7 +175,7 @@ namespace TDP.Models.Application.Services
         }
         public void AddMovieRating(string imdbId, Guid userId, int rating, string? comment)
         {
-            var movie = this.movieRepository.FindByImdbId(imdbId).Result;
+            var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result;
             if (movie is null)
             {
                 throw new MovieNotFoundException($"Movie not found.");
@@ -186,7 +190,7 @@ namespace TDP.Models.Application.Services
 
         public void RemoveMovieRating(string imdbId, Guid userId)
         {
-            var movie = this.movieRepository.FindByImdbId(imdbId).Result;
+            var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result;
             if (movie is null)
             {
                 throw new MovieNotFoundException($"Movie not found.");
@@ -199,21 +203,19 @@ namespace TDP.Models.Application.Services
             user.DeleteRating(movie);
         }
 
-        UserRating IMovieService.GetMovieRating(Guid movieId, Guid userId)
+        UserRating IMovieService.GetMovieRating(string imdbId, Guid userId)
         {
             //TIENE INCLUDE O SIMILAR
-            var userRating = _context.Set<Domain.User>()
-        .Where(u => u.Id == userId)
-        .SelectMany(u => u.RatedMovies)
-        .FirstOrDefault(r => r.MovieId == movieId);
+
+            var userRating = this.userRepository.FindByIdOrThrowAsync(userId, new UserIncludeSpecification()).Result.FollowedMovies.FirstOrDefault(r => r.ImdbId == imdbId); ;
 
             if (userRating != null)
             {
 
                 return new UserRating
                 {
-                    Rating = userRating.Rating,
-                    Comment = userRating.Comment
+                    /*Rating = userRating.Rating,
+                    Comment = userRating.Comment*/
                 };
             }
 
