@@ -20,6 +20,9 @@ namespace TDP.Controllers
             _movieService = service;
             _mapper = mapper;
         }
+
+
+        // OK
         public async Task<IActionResult> FindByTitle(string title, string? type, string? releaseYear)
         {
             var res = await _movieService.GetMovie(title);
@@ -44,16 +47,18 @@ namespace TDP.Controllers
                 if (res == null)
                 {
                     IRequest aRequest = new Request(null, id, type, releaseYear);
-                    var movie = await _provider.FindAsync(aRequest);
+                    var movie = _provider.FindAsync(aRequest).Result;
                     if (movie is SeriesDTO)
                     {
-                        _movieService.SaveSerie((SeriesDTO)movie);
                         movieDto = _movieService.FormatMovie(movie);
+                        _movieService.SaveSerie((SeriesDTO)movie);
+                        
                     }
                     else
                     {
-                        await _movieService.SaveMovie(movie);
+                        
                         movieDto = _movieService.FormatMovie(movie);
+                        await _movieService.SaveMovie(movie);
                     }
                 }
                 else
@@ -78,6 +83,7 @@ namespace TDP.Controllers
 
         }
         [HttpGet]
+        //OK
         public async Task<IActionResult> Search(string title, string? type, string? releaseYear, int pageNumber)
         {
             try
@@ -107,6 +113,7 @@ namespace TDP.Controllers
             }
             
         }
+        //OK
         public async Task<IActionResult> GetAllMovies()
         {
             try
@@ -121,43 +128,72 @@ namespace TDP.Controllers
                 return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
             }
         }
-        public async Task AddToWishList(string imdbId, string username, bool isInWatchList)
+        //OK
+        public async Task<IActionResult> AddToWishList(string imdbId, Guid userId, bool isInWatchList)
         {
 
             try
             {
-                _movieService.AddToWatchListAsync(imdbId, username);
+                _movieService.AddToWatchListAsync(imdbId, userId);
+                return Json(userId);
             }
             catch(MovieNotFoundException ex)
             {
-
-            }
-            
-            
-            
+                return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
+            }      
         }
         public async Task<Boolean> AddedToWishList(string imdbId, Guid userId)
         {
             bool isInWatchList = _movieService.AddedToWishList(imdbId, userId);
             return isInWatchList;
         }
-        public async Task RemoveFromWatchlist(Guid movieId, Guid userId)
+        //OK
+        public async Task<IActionResult> RemoveFromWatchlist(string imdbId, Guid userId)
         {
-            await _movieService.RemoveFromWatchListAsync(movieId, userId);
+            try
+            {
+                _movieService.RemoveFromWatchListAsync(imdbId, userId);
+                return Json(userId);
+            }
+            catch (MovieNotFoundException ex)
+            {
+                return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
+            }
         }
         public async Task<IActionResult> Watchlist(Guid userId)
         {
             var res = await _movieService.GetAllFromWatchList(userId);
             return View(res);
         }
-        public async Task RateMovie(Guid movieId, Guid userId, int rating, string comment)
+        //OK
+        public async Task<IActionResult> RateMovie(string imdbId, Guid userId, int rating, string comment)
         {
-            await _movieService.AddMovieRating(movieId, userId, rating, comment);
+            try
+            {
+                _movieService.AddMovieRating(imdbId, userId, rating, comment);
+                return Json(userId);
+            }
+            catch (MovieNotFoundException ex)
+            {
+                return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
+            }
+            
         }
-        public async Task RemoveMovieRating(Guid movieId, Guid userId, int rating, string comment)
+        //OK
+        public async Task<IActionResult> RemoveMovieRating(string imdbId, Guid userId, int rating, string comment)
         {
-            await _movieService.RemoveMovieRating(movieId, userId, rating, comment);
+            try
+            {
+                _movieService.RemoveMovieRating(imdbId, userId);
+                return Json(userId);
+            }
+            catch (MovieNotFoundException ex)
+            {
+                return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
+            }
+            
         }
+        //NECESITAMOS EL INCLUDE
         public async Task<UserRating> GetUserRating(Guid movieId, Guid userId)
         {
             UserRating rating = _movieService.GetMovieRating(movieId, userId);
