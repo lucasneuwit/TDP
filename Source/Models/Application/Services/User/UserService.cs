@@ -1,7 +1,6 @@
 ﻿using TDP.Controllers;
 using TDP.Models.Domain;
 using TDP.Models.Persistence.Extensions;
-using TDP.Models.Persistence.UnitOfWork;
 
 namespace TDP.Models.Application.Services;
 
@@ -10,20 +9,46 @@ public class UserService : IUserService
     private readonly IRepository<User> repository;
     private readonly ILogger<IUserService> logger;
         
-    public UserService(IRepository<User> repository, IUnitOfWorkManager uowManager, ILogger<IUserService> logger)
+    public UserService(IRepository<User> repository, ILogger<IUserService> logger)
     {
         this.repository = repository;
         this.logger = logger;
     }
 
-    public Task<User> GetUser(string username)
+    public Task DeleteUserAsync(Guid userId)
+    {
+        this.logger.LogInformation("Removing user data with id: {id}", userId);
+        return this.repository.DeleteAsync(userId);
+    }
+
+    public async Task UpdateUserAsync(UpdateUser updateUser)
+    {
+        var user = await this.repository.FindByIdOrThrowAsync(updateUser.Id);
+        user.SetUsername(updateUser.Username);
+        user.SetName(updateUser.FirstName);
+        user.SetLastname(updateUser.LastName);
+        user.SetEmailAddress(updateUser.EmailAddress);
+        if (updateUser.ProfilePicture is not null)
+        {
+            user.SetProfilePicture(updateUser.ProfilePicture);
+        }
+
+        await this.repository.UpdateAsync(user);
+    }
+
+    public Task<User> GetUserAsync(string username)
     {
         throw new NotImplementedException();
     }
 
+    public Task<User> GetUserAsync(Guid userId)
+    {
+        return this.repository.FindByIdOrThrowAsync(userId);
+    }
+
     public Task RegisterUserAsync(RegisterUser registerUser)
     {
-        this.logger.LogInformation("Attempting to register new user with username: {username}", registerUser.Username);
+        this.logger.LogInformation("Attempting to register new user with name: {username}", registerUser.Username);
         var user = new User(Guid.NewGuid());
         UpdateUser(user, registerUser);
 
@@ -37,21 +62,23 @@ public class UserService : IUserService
 
     public async Task RegisterAdministratorAsync(RegisterUser registerUser)
     {
+        this.logger.LogInformation("Attempting to register new user with name: {username} with administration privileges", registerUser.Username);
         var administrator = new Administrator(Guid.NewGuid());
         UpdateUser(administrator, registerUser);
 
         await repository.CreateAsync(administrator);
     }
 
-    public async Task<bool> TryLoginAsync(LoginInfo loginInfo)
+    public async Task<Guid?> TryLoginAsync(LoginInfo loginInfo)
     {
+        this.logger.LogInformation("New login for user: {username}", loginInfo.Username);
         var user = await this.repository.FindByUsernameAsync(loginInfo.Username);
-        if (user is not null)
+        if (user is not null && loginInfo.Password == user.PasswordHash)
         {
-            return loginInfo.Password == user.PasswordHash;
+            return user.Id;
         }
 
-        return false;
+        return null;
     }
 
     public Task<IEnumerable<User>> GetUsers()

@@ -5,14 +5,20 @@ namespace TDP.Models.Application.Services;
 
 public interface IUserService
 {
-    Task<Domain.User> GetUser(string username);
+    Task DeleteUserAsync(Guid userId);
+
+    Task UpdateUserAsync(UpdateUser updateUser);
+    
+    Task<Domain.User> GetUserAsync(string username);
+
+    Task<Domain.User> GetUserAsync(Guid userId);
 
     Task RegisterUserAsync(RegisterUser registerUser);
 
     Task<bool> GetAdministratorAsync();
     Task RegisterAdministratorAsync(RegisterUser registerUser);
     
-    Task<bool> TryLoginAsync(LoginInfo loginInfo);
+    Task<Guid?> TryLoginAsync(LoginInfo loginInfo);
     
     Task<IEnumerable<User>> GetUsers();
 }

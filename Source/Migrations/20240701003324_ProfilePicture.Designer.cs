@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TDP.Models.Persistence;
 
@@ -11,9 +12,11 @@ using TDP.Models.Persistence;
 namespace TDP.Migrations
 {
     [DbContext(typeof(TdpDbContext))]
-    partial class TdpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240701003324_ProfilePicture")]
+    partial class ProfilePicture
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,7 +95,7 @@ namespace TDP.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("451e89b9-f5af-40a1-b70d-1bd4b465b408"),
+                            Id = new Guid("435f6d85-776d-434c-9d51-18a2cfcf2432"),
                             Country = "United States",
                             ImdbId = "",
                             ImdbRating = 9.3m,
@@ -105,7 +108,7 @@ namespace TDP.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6e7cac96-8f43-4888-ab94-1e8eddaca289"),
+                            Id = new Guid("9e4e82eb-9426-4d0a-9cf2-ab552c4cbcfb"),
                             Country = "Somalia",
                             ImdbId = "",
                             ImdbRating = 8.3m,
@@ -167,6 +170,19 @@ namespace TDP.Migrations
                     b.HasDiscriminator<string>("user_type").HasValue("User");
 
                     b.UseTphMappingStrategy();
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("1e97e75d-af4b-431d-bd55-98e954fe4427"),
+                            BirthDay = new DateTime(1945, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EmailAddress = "elYusty@bokita.com",
+                            IsAdministrator = false,
+                            LastName = "Fabra",
+                            Name = "Yusty",
+                            PasswordHash = "boca",
+                            Username = "elyusty"
+                        });
                 });
 
             modelBuilder.Entity("TDP.Models.Domain.UserRating", b =>

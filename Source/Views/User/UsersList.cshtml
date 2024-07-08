@@ -1,7 +1,5 @@
-﻿@model IEnumerable<TDP.Models.Domain.User>
-
+﻿@model TDP.Models.ViewModels.UsersListViewModel
 @{
-    Layout = "_Layout";
 }
 
 <h2 class="text-info pt-2 pb-3">Manage members</h2>
@@ -11,21 +9,36 @@
         <thead>
         <tr>
             <th>@nameof(TDP.Models.Domain.User.Username)</th>
-            <th>@nameof(TDP.Models.Domain.User.Name)</th>
-            <th>@nameof(TDP.Models.Domain.User.LastName)</th>
-            <th>@nameof(TDP.Models.Domain.User.EmailAddress)</th>
-            <th>Role</th>
+            @if (Model.CurrentUser.IsAdmin)
+            {
+                <th>@nameof(TDP.Models.Domain.User.Name)</th>
+                <th>@nameof(TDP.Models.Domain.User.LastName)</th>
+                <th>@nameof(TDP.Models.Domain.User.EmailAddress)</th>
+                <th>Role</th>
+                <th>Actions</th>
+            }
         </tr>
         </thead>
         <tbody>
-        @foreach (var user in Model)
+        @foreach (var user in Model.Users)
         {
             <tr>
                 <td>@user.Username</td>
-                <td>@user.Name</td>
-                <td>@user.LastName</td>
-                <td>@user.EmailAddress</td>
-                <td>@(user.IsAdministrator ? "Administrator" : "Member")</td>
+                @if (Model.CurrentUser.IsAdmin)
+                {
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.EmailAddress</td>
+                    <td>@(user.IsAdmin ? "Administrator" : "Member")</td>
+                    <td>
+                        @if (user.Id != Model.CurrentUser.Id)
+                        {
+                            <form asp-controller="User" asp-action="RemoveUser" method="post" asp-route-userId="@user.Id">
+                                <button type="submit" class="btn btn-success form-control">Remove</button>
+                            </form>   
+                        }
+                    </td>
+                }
             </tr>
         }
         </tbody>
