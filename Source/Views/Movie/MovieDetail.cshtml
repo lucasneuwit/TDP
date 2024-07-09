@@ -159,7 +159,6 @@
 <div style="margin-top: 20px;">
     <!-- Add some margin-top to create space between the two sections -->
     <a asp-controller="Home" asp-action="Index">Back to Home</a>
-    <h1>@Model.imdbID</h1>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -287,6 +286,8 @@
                 type: "POST",
                 data: $("#removeMovieRating").serialize(),
                 success: function (data) {
+                    $("input[name='rating']").val("");
+                    $("textarea[name='comment']").val("");
                     checkIfMovieRated();
                 },
                 error: function (xhr, status, error) {

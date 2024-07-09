@@ -196,6 +196,7 @@ namespace TDP.Controllers
         //NECESITAMOS EL INCLUDE
         public async Task<UserRating> GetUserRating(string imdbId, Guid userId)
         {
+
             UserRating rating = _movieService.GetMovieRating(imdbId, userId);
             return rating;
         }

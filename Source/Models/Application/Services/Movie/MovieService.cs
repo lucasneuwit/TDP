@@ -207,15 +207,15 @@ namespace TDP.Models.Application.Services
         {
             //TIENE INCLUDE O SIMILAR
 
-            var userRating = this.userRepository.FindByIdOrThrowAsync(userId, new UserIncludeSpecification()).Result.FollowedMovies.FirstOrDefault(r => r.ImdbId == imdbId); ;
-
+            var userRating = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result.Ratings.FirstOrDefault(r => r.UserId == userId);
+            //
             if (userRating != null)
             {
 
                 return new UserRating
                 {
-                    /*Rating = userRating.Rating,
-                    Comment = userRating.Comment*/
+                    Rating = userRating.Rating,
+                    Comment = userRating.Comment
                 };
             }
 

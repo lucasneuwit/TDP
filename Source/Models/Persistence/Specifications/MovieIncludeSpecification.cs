@@ -7,6 +7,7 @@ namespace TDP.Models.Persistence.Specifications
         public MovieIncludeSpecification()
         {
             this.Include(e => e.Followers);
+            this.Include(e => e.Ratings);
         }
     }
 }
