@@ -144,8 +144,16 @@ namespace TDP.Controllers
         }
         public async Task<Boolean> AddedToWishList(string imdbId, Guid userId)
         {
-            bool isInWatchList = _movieService.AddedToWishList(imdbId, userId);
-            return isInWatchList;
+            try
+            {
+                bool isInWatchList = _movieService.AddedToWishList(imdbId, userId);
+                return isInWatchList;
+            }
+            catch(ArgumentNullException ex)
+            {
+                return false;
+            }
+   
         }
         //OK
         public async Task<IActionResult> RemoveFromWatchlist(string imdbId, Guid userId)
@@ -172,6 +180,7 @@ namespace TDP.Controllers
             {
                 _movieService.AddMovieRating(imdbId, userId, rating, comment);
                 return Json(userId);
+
             }
             catch (MovieNotFoundException ex)
             {
@@ -193,12 +202,18 @@ namespace TDP.Controllers
             }
             
         }
-        //NECESITAMOS EL INCLUDE
-        public async Task<UserRating> GetUserRating(string imdbId, Guid userId)
+        public async Task<IActionResult> GetUserRating(string imdbId, Guid userId)
         {
-
-            UserRating rating = _movieService.GetMovieRating(imdbId, userId);
-            return rating;
+            try
+            {
+                UserRating rating = _movieService.GetMovieRating(imdbId, userId);
+                return Json(rating);
+            }
+            catch(MovieNotFoundException ex)
+            {
+                return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
+            }
+            
         }
     }
 }

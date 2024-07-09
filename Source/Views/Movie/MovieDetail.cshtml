@@ -222,13 +222,14 @@
                 },
                 success: function (data) {
                     // Set the result to the inWishlist variable
-                    hasRated = data;
+                    hasRated = data.movieId;
+                    console.log(data);
 
                     // Check the condition and update the form visibility
                     updateFormVisibility();
 
                     // Fill the inputs if data is available
-                    if (data) {
+                    if (data.movieId) {
                         // Fill Rating input
                         $("input[name='rating']").val(data.rating);
 

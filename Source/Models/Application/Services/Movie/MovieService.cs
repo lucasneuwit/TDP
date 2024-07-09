@@ -33,7 +33,6 @@ namespace TDP.Models.Application.Services
             this.logger = logger;
         }
 
-            // TODO: agregar excepcion cuando viene vacio
             public async Task<Domain.Movie> GetMovie(string imdbId)
         {
             var movie = await this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification());
@@ -96,7 +95,6 @@ namespace TDP.Models.Application.Services
             movieRepository.CreateAsync(dbmovie);
 
             return uowManager.Complete();
-            //return _context.SaveChangesAsync();
 
         }
 
@@ -137,10 +135,11 @@ namespace TDP.Models.Application.Services
         }
         public bool AddedToWishList(string imdbId, Guid userId)
         {
-            //INCLUDE
-            var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result;
-            return movie.Followers.Any(follower => follower.Id == userId);
+            var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result.Followers.Any(follower => follower.Id == userId);
+            return movie;
         }
+            
+        
 
         public void RemoveFromWatchListAsync(string imdbId, Guid userId)
         {
@@ -205,10 +204,7 @@ namespace TDP.Models.Application.Services
 
         UserRating IMovieService.GetMovieRating(string imdbId, Guid userId)
         {
-            //TIENE INCLUDE O SIMILAR
-
             var userRating = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result.Ratings.FirstOrDefault(r => r.UserId == userId);
-            //
             if (userRating != null)
             {
 
@@ -218,8 +214,10 @@ namespace TDP.Models.Application.Services
                     Comment = userRating.Comment
                 };
             }
-
-            return null;
+            else
+            {
+                throw new MovieNotFoundException($"Rating not found.");
+            }
         }
 
         async void IMovieService.SaveSerie(SeriesDTO serie)
