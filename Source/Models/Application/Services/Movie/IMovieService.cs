@@ -14,7 +14,7 @@ namespace TDP.Models.Application.Services
 
         public void AddToWatchListAsync(string imdbId, Guid userId);
 
-        public bool AddedToWishList(string imdbId, Guid userId);
+        public bool AddedToWatchList(string imdbId, Guid userId);
 
         public void RemoveFromWatchListAsync(string imdbId, Guid userId);
 

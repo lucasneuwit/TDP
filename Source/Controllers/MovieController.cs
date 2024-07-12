@@ -129,7 +129,7 @@ namespace TDP.Controllers
             }
         }
         //OK
-        public async Task<IActionResult> AddToWishList(string imdbId, Guid userId, bool isInWatchList)
+        public async Task<IActionResult> AddToWatchlist(string imdbId, Guid userId, bool isInWatchList)
         {
 
             try
@@ -142,11 +142,11 @@ namespace TDP.Controllers
                 return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
             }      
         }
-        public async Task<Boolean> AddedToWishList(string imdbId, Guid userId)
+        public async Task<Boolean> AddedToWatchlist(string imdbId, Guid userId)
         {
             try
             {
-                bool isInWatchList = _movieService.AddedToWishList(imdbId, userId);
+                bool isInWatchList = _movieService.AddedToWatchList(imdbId, userId);
                 return isInWatchList;
             }
             catch(ArgumentNullException ex)
@@ -168,10 +168,18 @@ namespace TDP.Controllers
                 return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
             }
         }
-        public async Task<IActionResult> Watchlist(Guid userId)
+        public async Task<IActionResult> GetWatchlist(Guid userId)
         {
-            var res = await _movieService.GetAllFromWatchList(userId);
-            return View(res);
+            try
+            {
+                var res = await _movieService.GetAllFromWatchList(userId);
+                return View("Watchlist",res);
+            }
+            catch (MovieNotFoundException ex)
+            {
+                return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
+            }
+            
         }
         //OK
         public async Task<IActionResult> RateMovie(string imdbId, Guid userId, int rating, string comment)

@@ -1,8 +1,8 @@
 ﻿@inject IConfiguration Configuration
 @model TDP.Models.Application.MovieDTO;
 @{
-    var defaultUser = Configuration.GetValue<string>("DefaultUser");
-    var defaultUsername = Configuration.GetValue<string>("DefaultUsername");
+    var defaultUser = Context?.Session.GetString("user-id");
+
     ViewData["Title"] = "FindById";
 }
 
@@ -135,10 +135,10 @@
 
             <div style="min-height:100px;">
                 <!-- Add to watchlist form -->
-                <form style="padding:1em" id="addToWishListForm" method="post" asp-controller="Movie" asp-action="AddToWishList">
+                <form style="padding:1em" id="addToWatchListForm" method="post" asp-controller="Movie" asp-action="AddToWatchList">
                     <input type="hidden" name="imdbId" value="@Model.imdbID" />
                     <input type="hidden" name="userId" value="@defaultUser" />
-                    <button class="btn btn-outline-secondary" type="button" id="addToWishListButton">Add to Watch List</button>
+                    <button class="btn btn-outline-secondary" type="button" id="addToWatchListButton">Add to Watch List</button>
                 </form>
 
                 <!-- Remove from watchlist form -->
@@ -164,17 +164,17 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        var inWishlist = false;
+        var inWatchlist = false;
         var hasRated = false;
 
-        // Function to update the form visibility based on inWishlist
+        // Function to update the form visibility based on inWatchlist
         function updateFormVisibility() {
-            if (inWishlist) {
-                $("#addToWishListForm").hide();
+            if (inWatchlist) {
+                $("#addToWatchListForm").hide();
                 $("#watchlistText").show();
                 $("#removeFromWatchListForm").show();
             } else {
-                $("#addToWishListForm").show();
+                $("#addToWatchListForm").show();
                 $("#watchlistText").hide();
                 $("#removeFromWatchListForm").hide();
             }
@@ -190,18 +190,18 @@
             }
         }
 
-        // Function to check if the movie is added to the wishlist
-        function checkIfAddedToWishlist() {
+        // Function to check if the movie is added to the Watchlist
+        function checkIfAddedToWatchlist() {
             $.ajax({
-                url: "/Movie/AddedToWishList",
+                url: "/Movie/AddedToWatchList",
                 type: "POST",
                 data: {
                     imdbId: "@Model.imdbID",
                     userId: "@defaultUser"
                 },
                 success: function (data) {
-                    // Set the result to the inWishlist variable
-                    inWishlist = data;
+                    // Set the result to the inWatchlist variable
+                    inWatchlist = data;
 
                     // Check the condition and update the form visibility
                     updateFormVisibility();
@@ -221,7 +221,7 @@
                     userId: "@defaultUser"
                 },
                 success: function (data) {
-                    // Set the result to the inWishlist variable
+                    // Set the result to the inWatchlist variable
                     hasRated = data.movieId;
                     console.log(data);
 
@@ -253,7 +253,7 @@
 
         // Initial check when the page loads
         checkIfMovieRated();
-        checkIfAddedToWishlist();
+        checkIfAddedToWatchlist();
 
         // Set up the click event for Rate Movie
         $("#rateMovieButton").click(function () {
@@ -298,14 +298,14 @@
         });
 
         // Set up the click event for Add to Watchlist
-        $("#addToWishListButton").click(function () {
+        $("#addToWatchListButton").click(function () {
             $.ajax({
-                url: "/Movie/AddToWishList",
+                url: "/Movie/AddToWatchList",
                 type: "POST",
-                data: $("#addToWishListForm").serialize(),
+                data: $("#addToWatchListForm").serialize(),
                 success: function (data) {
-                    // Update the wishlist status after adding
-                    checkIfAddedToWishlist();
+                    // Update the Watchlist status after adding
+                    checkIfAddedToWatchlist();
                 },
                 error: function (xhr, status, error) {
                     console.error(error);
@@ -320,8 +320,8 @@
                 type: "POST",
                 data: $("#removeFromWatchListForm").serialize(),
                 success: function (data) {
-                    // Update the wishlist status after removing
-                    checkIfAddedToWishlist();
+                    // Update the Watchlist status after removing
+                    checkIfAddedToWatchlist();
                 },
                 error: function (xhr, status, error) {
                     console.error(error);

@@ -31,7 +31,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Movie" asp-action="Watchlist" asp-route-userId="88D20266-16A0-4E78-82A4-667B7B23A13D">Watchlist</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Movie" asp-action="GetWatchlist" asp-route-userId=@userId>Watchlist</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
@@ -60,7 +60,7 @@
 
 <footer class="border-top footer text-muted">
     <div class="container">
-            &copy; 2022 - TDP - <a asp-area="" asp-controller="Movie" asp-action="Watchlist" asp-route-userId="A3637C72-6273-457F-8EF7-9784BD17BA88">Watchlist</a>
+            &copy; 2022 - TDP - <a asp-area="" asp-controller="Movie" asp-action="GetWatchlist" asp-route-userId="A3637C72-6273-457F-8EF7-9784BD17BA88">Watchlist</a>
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

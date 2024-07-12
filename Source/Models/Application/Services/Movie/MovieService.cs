@@ -16,16 +16,14 @@ namespace TDP.Models.Application.Services
     public class MovieService : IMovieService
     {
 
-        private readonly TdpDbContext _context;
         private readonly IMapper _mapper;
         private readonly IUnitOfWorkManager uowManager;
         private readonly IRepository<Domain.Movie> movieRepository;
         private readonly IRepository<User> userRepository;
         private readonly ILogger<IMovieService> logger;
 
-        public MovieService(IRepository<Domain.Movie> movieRepository, IRepository<User> userRepository, IUnitOfWorkManager uowManager,TdpDbContext context, IMapper mapper, ILogger<IMovieService> logger)
+        public MovieService(IRepository<Domain.Movie> movieRepository, IRepository<User> userRepository, IUnitOfWorkManager uowManager, IMapper mapper, ILogger<IMovieService> logger)
         {
-            _context = context;
             _mapper = mapper;
             this.movieRepository = movieRepository;
             this.userRepository = userRepository;
@@ -37,7 +35,6 @@ namespace TDP.Models.Application.Services
         {
             var movie = await this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification());
                 return movie;
-
         }
 
         public async Task<IEnumerable<Domain.Movie>> GetAllMovies()
@@ -133,7 +130,7 @@ namespace TDP.Models.Application.Services
             }
             movie.AddFollower(user);
         }
-        public bool AddedToWishList(string imdbId, Guid userId)
+        public bool AddedToWatchList(string imdbId, Guid userId)
         {
             var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result.Followers.Any(follower => follower.Id == userId);
             return movie;
@@ -161,6 +158,10 @@ namespace TDP.Models.Application.Services
         {
             //tiene include
             var user = await this.userRepository.FindByIdOrThrowAsync(userId, new UserIncludeSpecification());
+            if (user is null)
+            {
+                throw new MovieNotFoundException($"User not found.");
+            }
             MovieCollection aMovieCollection = new MovieCollection();
             List<MovieDTO> movieDtos = new List<MovieDTO>();
             foreach (var mov in user.FollowedMovies)
