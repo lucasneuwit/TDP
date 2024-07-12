@@ -47,6 +47,7 @@ namespace TDP.Models.Application.Services
             }
             else
             {
+                logger.LogInformation("There was no movies found in the database.");
                 throw new MovieNotFoundException($"List of movies not found.");
             }
         }
@@ -90,7 +91,7 @@ namespace TDP.Models.Application.Services
                 dbmovie.AddParticipant(writer, 2);
             }
             movieRepository.CreateAsync(dbmovie);
-
+            logger.LogInformation($"Movie with id: {dbmovie.Id}, saved successfully.");
             return uowManager.Complete();
 
         }
@@ -121,11 +122,13 @@ namespace TDP.Models.Application.Services
             var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result;
             if (movie is null) 
             {
+                logger.LogInformation($"When adding to watchlist, movie with imdbId: {imdbId} not found");
                 throw new MovieNotFoundException($"Movie not found.");
             } 
             var user = this.userRepository.FindByUserIdAsync(userId).Result;
             if (user is null)
             {
+                logger.LogInformation($"When adding to watchlist, user with userId: {userId} not found");
                 throw new MovieNotFoundException($"User not found.");
             }
             movie.AddFollower(user);
@@ -144,11 +147,13 @@ namespace TDP.Models.Application.Services
             var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result;
             if (movie is null)
             {
+                logger.LogInformation($"When removing from watchlist, movie with imdbId: {imdbId} not found");
                 throw new MovieNotFoundException($"Movie not found.");
             }
             var user = this.userRepository.FindByUserIdAsync(userId).Result;
             if (user is null)
             {
+                logger.LogInformation($"When removing from watchlist, user with userId: {userId} not found");
                 throw new MovieNotFoundException($"User not found.");
             }
             movie.RemoveFollower(user);
@@ -160,6 +165,7 @@ namespace TDP.Models.Application.Services
             var user = await this.userRepository.FindByIdOrThrowAsync(userId, new UserIncludeSpecification());
             if (user is null)
             {
+                logger.LogInformation($"When getting watchlist, user with userId: {userId} not found");
                 throw new MovieNotFoundException($"User not found.");
             }
             MovieCollection aMovieCollection = new MovieCollection();
@@ -178,11 +184,13 @@ namespace TDP.Models.Application.Services
             var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result;
             if (movie is null)
             {
+                logger.LogInformation($"When adding movie rating, movie with imdbId: {imdbId} not found");
                 throw new MovieNotFoundException($"Movie not found.");
             }
             var user = this.userRepository.FindByUserIdAsync(userId).Result;
             if (user is null)
             {
+                logger.LogInformation($"When adding movie rating, user with userId: {userId} not found");
                 throw new MovieNotFoundException($"User not found.");
             }
             user.Rate(movie, rating, comment);
@@ -193,11 +201,13 @@ namespace TDP.Models.Application.Services
             var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result;
             if (movie is null)
             {
+                logger.LogInformation($"When removing movie rating, movie with imdbId: {imdbId} not found");
                 throw new MovieNotFoundException($"Movie not found.");
             }
             var user = this.userRepository.FindByUserIdAsync(userId).Result;
             if (user is null)
             {
+                logger.LogInformation($"When removing movie rating, user with userId: {userId} not found");
                 throw new MovieNotFoundException($"User not found.");
             }
             user.DeleteRating(movie);
@@ -217,6 +227,7 @@ namespace TDP.Models.Application.Services
             }
             else
             {
+                logger.LogInformation($"When getting movie rating, rating with userId: {userId} and imdbId {imdbId} not found");
                 throw new MovieNotFoundException($"Rating not found.");
             }
         }
@@ -265,6 +276,7 @@ namespace TDP.Models.Application.Services
                 dbmovie.AddParticipant(writer, 2);
             }
             await this.movieRepository.CreateAsync(dbmovie);
+            logger.LogInformation("Series with id: {id}, saved successfully.", dbmovie.Id);
         }
     }
 
