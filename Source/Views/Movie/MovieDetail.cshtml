@@ -1,7 +1,6 @@
 ﻿@inject IConfiguration Configuration
 @model TDP.Models.Application.MovieDTO;
 @{
-    var defaultUser = Context?.Session.GetString("user-id");
 
     ViewData["Title"] = "FindById";
 }
@@ -88,7 +87,6 @@
                     <!-- Rating form -->
                     <form id="rateMovie" method="post" asp-controller="Movie" asp-action="RateMovie">
                         <input type="hidden" name="imdbId" value="@Model.imdbID" />
-                        <input type="hidden" name="userId" value="@defaultUser" />
 
                         <!-- Input for Rating -->
                 <dt id="inputRating" style="padding:0.5rem;">Rating: <input type="number" name="rating" min="1" max="5" required /> </dt>
@@ -103,14 +101,12 @@
                 <!-- Edit movie rating form -->
                 <form id="editMovieRating" method="post" asp-controller="Movie" asp-action="RateMovie">
                     <input type="hidden" name="imdbId" value="@Model.imdbID" />
-                    <input type="hidden" name="userId" value="@defaultUser" />
 
                     <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="editMovieRatingButton">Edit Rating</button>
                 </form>
                 <!-- Remove movie rating form -->
                 <form id="removeMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
                     <input type="hidden" name="imdbId" value="@Model.imdbID" />
-                    <input type="hidden" name="userId" value="@defaultUser" />
 
                     <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="removeMovieRatingButton">Remove Rating</button>
                 </form>
@@ -137,14 +133,12 @@
                 <!-- Add to watchlist form -->
                 <form style="padding:1em" id="addToWatchListForm" method="post" asp-controller="Movie" asp-action="AddToWatchList">
                     <input type="hidden" name="imdbId" value="@Model.imdbID" />
-                    <input type="hidden" name="userId" value="@defaultUser" />
                     <button class="btn btn-outline-secondary" type="button" id="addToWatchListButton">Add to Watch List</button>
                 </form>
 
                 <!-- Remove from watchlist form -->
                 <form style="padding:1em" id="removeFromWatchListForm" method="post" asp-controller="Movie" asp-action="RemoveFromWatchlist">
                     <input type="hidden" name="imdbId" value="@Model.imdbID" />
-                    <input type="hidden" name="userId" value="@defaultUser" />
                     <button class="btn btn-outline-secondary" type="button" id="removeFromWatchListButton">Remove from your watchlist</button>
                 </form>
 
@@ -196,8 +190,7 @@
                 url: "/Movie/AddedToWatchList",
                 type: "POST",
                 data: {
-                    imdbId: "@Model.imdbID",
-                    userId: "@defaultUser"
+                    imdbId: "@Model.imdbID"
                 },
                 success: function (data) {
                     // Set the result to the inWatchlist variable
@@ -217,8 +210,7 @@
                 url: "/Movie/GetUserRating",
                 type: "POST",
                 data: {
-                    imdbId: "@Model.imdbID",
-                    userId: "@defaultUser"
+                    imdbId: "@Model.imdbID"
                 },
                 success: function (data) {
                     // Set the result to the inWatchlist variable

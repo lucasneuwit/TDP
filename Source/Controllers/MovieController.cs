@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using TDP.Extensions;
 using TDP.Models;
 using TDP.Models.Application;
 using TDP.Models.Application.Services;
@@ -14,6 +15,7 @@ namespace TDP.Controllers
         private readonly IApiProvider _provider;
         private readonly IMovieService _movieService;
         private readonly IMapper _mapper;
+        
         public MovieController(IApiProvider provider, IMovieService service, IMapper mapper)
         {
             _provider = provider;
@@ -129,24 +131,25 @@ namespace TDP.Controllers
             }
         }
         //OK
-        public async Task<IActionResult> AddToWatchlist(string imdbId, Guid userId, bool isInWatchList)
+        public async Task<IActionResult> AddToWatchlist(string imdbId, bool isInWatchList)
         {
-
             try
             {
-                _movieService.AddToWatchListAsync(imdbId, userId);
-                return Json(userId);
+                Guid currentUserId = HttpContext.GetCurrentUserId();
+                _movieService.AddToWatchListAsync(imdbId, currentUserId);
+                return Json(currentUserId);
             }
             catch(MovieNotFoundException ex)
             {
                 return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
             }      
         }
-        public async Task<Boolean> AddedToWatchlist(string imdbId, Guid userId)
+        public async Task<Boolean> AddedToWatchlist(string imdbId)
         {
             try
             {
-                bool isInWatchList = _movieService.AddedToWatchList(imdbId, userId);
+                Guid currentUserId = HttpContext.GetCurrentUserId();
+                bool isInWatchList = _movieService.AddedToWatchList(imdbId, currentUserId);
                 return isInWatchList;
             }
             catch(ArgumentNullException ex)
@@ -156,23 +159,25 @@ namespace TDP.Controllers
    
         }
         //OK
-        public async Task<IActionResult> RemoveFromWatchlist(string imdbId, Guid userId)
+        public async Task<IActionResult> RemoveFromWatchlist(string imdbId)
         {
             try
             {
-                _movieService.RemoveFromWatchListAsync(imdbId, userId);
-                return Json(userId);
+                Guid currentUserId = HttpContext.GetCurrentUserId();
+                _movieService.RemoveFromWatchListAsync(imdbId, currentUserId);
+                return Json(currentUserId);
             }
             catch (MovieNotFoundException ex)
             {
                 return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
             }
         }
-        public async Task<IActionResult> GetWatchlist(Guid userId)
+        public async Task<IActionResult> GetWatchlist()
         {
             try
             {
-                var res = await _movieService.GetAllFromWatchList(userId);
+                Guid currentUserId = HttpContext.GetCurrentUserId();
+                var res = await _movieService.GetAllFromWatchList(currentUserId);
                 return View("Watchlist",res);
             }
             catch (MovieNotFoundException ex)
@@ -182,12 +187,13 @@ namespace TDP.Controllers
             
         }
         //OK
-        public async Task<IActionResult> RateMovie(string imdbId, Guid userId, int rating, string comment)
+        public async Task<IActionResult> RateMovie(string imdbId, int rating, string comment)
         {
             try
             {
-                _movieService.AddMovieRating(imdbId, userId, rating, comment);
-                return Json(userId);
+                Guid currentUserId = HttpContext.GetCurrentUserId();
+                _movieService.AddMovieRating(imdbId, currentUserId, rating, comment);
+                return Json(currentUserId);
 
             }
             catch (MovieNotFoundException ex)
@@ -197,12 +203,13 @@ namespace TDP.Controllers
             
         }
         //OK
-        public async Task<IActionResult> RemoveMovieRating(string imdbId, Guid userId, int rating, string comment)
+        public async Task<IActionResult> RemoveMovieRating(string imdbId, int rating, string comment)
         {
             try
             {
-                _movieService.RemoveMovieRating(imdbId, userId);
-                return Json(userId);
+                Guid currentUserId = HttpContext.GetCurrentUserId();
+                _movieService.RemoveMovieRating(imdbId, currentUserId);
+                return Json(currentUserId);
             }
             catch (MovieNotFoundException ex)
             {
@@ -210,11 +217,12 @@ namespace TDP.Controllers
             }
             
         }
-        public async Task<IActionResult> GetUserRating(string imdbId, Guid userId)
+        public async Task<IActionResult> GetUserRating(string imdbId)
         {
             try
             {
-                UserRating rating = _movieService.GetMovieRating(imdbId, userId);
+                Guid currentUserId = HttpContext.GetCurrentUserId();
+                UserRating rating = _movieService.GetMovieRating(imdbId, currentUserId);
                 return Json(rating);
             }
             catch(MovieNotFoundException ex)
