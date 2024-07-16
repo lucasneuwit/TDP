@@ -11,6 +11,7 @@ public class TdpDbContext : DbContext
     public TdpDbContext(DbContextOptions options)
         : base(options)
     {
+        this.Database.Migrate();
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
