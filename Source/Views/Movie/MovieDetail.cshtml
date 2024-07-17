@@ -1,7 +1,7 @@
 ﻿@inject IConfiguration Configuration
 @model TDP.Models.Application.MovieDTO;
 @{
-    var defaultUser = Configuration.GetValue<string>("DefaultUser");
+
     ViewData["Title"] = "FindById";
 }
 
@@ -11,7 +11,6 @@
     <h4>Details</h4>
     <hr />
     <div class="row align-content-sm-center">
-        <!-- Left column for details -->
         <div class="col-sm-6">
             <dl class="row align-content-sm-center">
                 <dt class="col-sm-3">
@@ -66,7 +65,7 @@
                 {
                     <div class="w-100"></div>
                     <dt class="col-sm-3">
-                        @Html.DisplayNameFor(model => seriesDTO.totalSeasons)
+                        Total Seasons
                     </dt>
                     <dd class="col-sm-9">
                         @Html.DisplayFor(model => seriesDTO.totalSeasons)
@@ -75,44 +74,42 @@
 
                 <!-- Box for displaying rating and comment -->
                 <dd class="col-sm-9">
+                    
                     <h4>Your rating</h4>
                     <div id="movieRatingBox" style="display: none;">
                         <dl>
                             <dt style="padding:0.5rem;">Rating: <span id="movieRating" style="font-weight: normal;"></span></dt>
 
                             <dt style="padding:0.5rem;">Comment: <span id="movieComment" style="font-weight: normal;"></span></dt>
-                            <!-- Additional <dt>/<dd> pairs or content can follow here if needed -->
                         </dl>
                     </div>
                     <!-- Rating form -->
                     <form id="rateMovie" method="post" asp-controller="Movie" asp-action="RateMovie">
-                        <input type="hidden" name="movieId" value="@Model.Id" />
-                        <input type="hidden" name="userId" value="@defaultUser" />
+                        <input type="hidden" name="imdbId" value="@Model.imdbID" />
 
-                        <!-- Input for Rating -->
-                <dt id="inputRating" style="padding:0.5rem;">Rating: <input type="number" name="rating" min="1" max="5" required /> </dt>
+                            <!-- Input for Rating -->
+                    <dt id="inputRating" style="padding:0.5rem;">Rating: <input type="number" name="rating" min="1" max="5" required /> </dt>
 
 
-                <!-- Input for Comment (optional) -->
-                <dt id="inputComment" style="padding:0.5rem;">Comment: <textarea name="comment"></textarea> </dt>
+                    <!-- Input for Comment (optional) -->
+                    <dt id="inputComment" style="padding:0.5rem;">Comment: <textarea name="comment"></textarea> </dt>
 
-                <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="rateMovieButton">Rate</button>
-                </form>
+                    <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="rateMovieButton">Rate</button>
+                    </form>
 
-                <!-- Edit movie rating form -->
-                <form id="editMovieRating" method="post" asp-controller="Movie" asp-action="RateMovie">
-                    <input type="hidden" name="movieId" value="@Model.Id" />
-                    <input type="hidden" name="userId" value="@defaultUser" />
+                    <!-- Edit movie rating form -->
+                    <form id="editMovieRating" method="post" asp-controller="Movie" asp-action="RateMovie">
+                        <input type="hidden" name="imdbId" value="@Model.imdbID" />
 
-                    <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="editMovieRatingButton">Edit Rating</button>
-                </form>
-                <!-- Remove movie rating form -->
-                <form id="removeMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
-                    <input type="hidden" name="movieId" value="@Model.Id" />
-                    <input type="hidden" name="userId" value="@defaultUser" />
+                        <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="editMovieRatingButton">Edit Rating</button>
+                    </form>
+                    <!-- Remove movie rating form -->
+                    <form id="removeMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
+                        <input type="hidden" name="imdbId" value="@Model.imdbID" />
 
-                    <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="removeMovieRatingButton">Remove Rating</button>
-                </form>
+                        <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="removeMovieRatingButton">Remove Rating</button>
+                    </form>
+                <div id="ratingStatus" class="alert" style="display:none;"></div>
                 </dd>
 
             </dl>
@@ -134,16 +131,14 @@
 
             <div style="min-height:100px;">
                 <!-- Add to watchlist form -->
-                <form style="padding:1em" id="addToWishListForm" method="post" asp-controller="Movie" asp-action="AddToWishList">
-                    <input type="hidden" name="movieId" value="@Model.Id" />
-                    <input type="hidden" name="userId" value="@defaultUser" />
-                    <button class="btn btn-outline-secondary" type="button" id="addToWishListButton">Add to Watch List</button>
+                <form style="padding:1em" id="addToWatchListForm" method="post" asp-controller="Movie" asp-action="AddToWatchList">
+                    <input type="hidden" name="imdbId" value="@Model.imdbID" />
+                    <button class="btn btn-outline-secondary" type="button" id="addToWatchListButton">Add to Watch List</button>
                 </form>
 
                 <!-- Remove from watchlist form -->
                 <form style="padding:1em" id="removeFromWatchListForm" method="post" asp-controller="Movie" asp-action="RemoveFromWatchlist">
-                    <input type="hidden" name="movieId" value="@Model.Id" />
-                    <input type="hidden" name="userId" value="@defaultUser" />
+                    <input type="hidden" name="imdbId" value="@Model.imdbID" />
                     <button class="btn btn-outline-secondary" type="button" id="removeFromWatchListButton">Remove from your watchlist</button>
                 </form>
 
@@ -156,24 +151,23 @@
 
 
 <div style="margin-top: 20px;">
-    <!-- Add some margin-top to create space between the two sections -->
     <a asp-controller="Home" asp-action="Index">Back to Home</a>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        var inWishlist = false;
+        var inWatchlist = false;
         var hasRated = false;
 
-        // Function to update the form visibility based on inWishlist
+        // Function to update the form visibility based on inWatchlist
         function updateFormVisibility() {
-            if (inWishlist) {
-                $("#addToWishListForm").hide();
+            if (inWatchlist) {
+                $("#addToWatchListForm").hide();
                 $("#watchlistText").show();
                 $("#removeFromWatchListForm").show();
             } else {
-                $("#addToWishListForm").show();
+                $("#addToWatchListForm").show();
                 $("#watchlistText").hide();
                 $("#removeFromWatchListForm").hide();
             }
@@ -189,20 +183,16 @@
             }
         }
 
-        // Function to check if the movie is added to the wishlist
-        function checkIfAddedToWishlist() {
+        // Function to check if the movie is added to the Watchlist
+        function checkIfAddedToWatchlist() {
             $.ajax({
-                url: "/Movie/AddedToWishList",
+                url: "/Movie/AddedToWatchList",
                 type: "POST",
                 data: {
-                    movieId: "@Model.Id",
-                    userId: "@defaultUser"
+                    imdbId: "@Model.imdbID"
                 },
                 success: function (data) {
-                    // Set the result to the inWishlist variable
-                    inWishlist = data;
-
-                    // Check the condition and update the form visibility
+                    inWatchlist = data;
                     updateFormVisibility();
                 },
                 error: function (xhr, status, error) {
@@ -216,22 +206,20 @@
                 url: "/Movie/GetUserRating",
                 type: "POST",
                 data: {
-                    movieId: "@Model.Id",
-                    userId: "@defaultUser"
+                    imdbId: "@Model.imdbID"
                 },
                 success: function (data) {
-                    // Set the result to the inWishlist variable
-                    hasRated = data;
+                    hasRated = data.movieId;
 
                     // Check the condition and update the form visibility
                     updateFormVisibility();
 
-                    // Fill the inputs if data is available
-                    if (data) {
-                        // Fill Rating input
+
+                    if (data.movieId) {
+
                         $("input[name='rating']").val(data.rating);
 
-                        // Fill Comment textarea
+
                         $("textarea[name='comment']").val(data.comment);
 
                         // Show the movieRatingBox and update its content
@@ -251,7 +239,7 @@
 
         // Initial check when the page loads
         checkIfMovieRated();
-        checkIfAddedToWishlist();
+        checkIfAddedToWatchlist();
 
         // Set up the click event for Rate Movie
         $("#rateMovieButton").click(function () {
@@ -260,16 +248,28 @@
                 type: "POST",
                 data: $("#rateMovie").serialize(),
                 success: function (data) {
-                    checkIfMovieRated();
+                    console.log("exito");
+                    console.log(data);
+                    $("#ratingStatus").text(data.message).show();
+
+                    if (data.success) {
+                        console.log("chequie");
+                        checkIfMovieRated();
+                    }
                 },
                 error: function (xhr, status, error) {
-                    console.error(error);
+                    console.log("error");
+                    console.log(data);
+                    $("#ratingStatus").removeClass("alert-success").addClass("alert-danger")
+                        .text("An error occurred while rating the movie.")
+                        .show();
                 }
             });
         });
 
         // Set up the click event for Edit Movie Rating
         $("#editMovieRatingButton").click(function () {
+            $("#ratingStatus").hide();
             $("#rateMovie").show();
             $("#removeMovieRating").hide();
             $("#editMovieRating").hide();
@@ -280,13 +280,14 @@
         // Set up the click event for Remove Movie Rating
         $("#removeMovieRatingButton").click(function () {
             hasRated = false;
-            $("input[name='rating']").val('');
-            $("textarea[name='comment']").val('');
             $.ajax({
                 url: "/Movie/RemoveMovieRating",
                 type: "POST",
                 data: $("#removeMovieRating").serialize(),
                 success: function (data) {
+                    $("input[name='rating']").val("");
+                    $("textarea[name='comment']").val("");
+                    $("#ratingStatus").hide();
                     checkIfMovieRated();
                 },
                 error: function (xhr, status, error) {
@@ -296,14 +297,13 @@
         });
 
         // Set up the click event for Add to Watchlist
-        $("#addToWishListButton").click(function () {
+        $("#addToWatchListButton").click(function () {
             $.ajax({
-                url: "/Movie/AddToWishList",
+                url: "/Movie/AddToWatchList",
                 type: "POST",
-                data: $("#addToWishListForm").serialize(),
+                data: $("#addToWatchListForm").serialize(),
                 success: function (data) {
-                    // Update the wishlist status after adding
-                    checkIfAddedToWishlist();
+                    checkIfAddedToWatchlist();
                 },
                 error: function (xhr, status, error) {
                     console.error(error);
@@ -318,8 +318,7 @@
                 type: "POST",
                 data: $("#removeFromWatchListForm").serialize(),
                 success: function (data) {
-                    // Update the wishlist status after removing
-                    checkIfAddedToWishlist();
+                    checkIfAddedToWatchlist();
                 },
                 error: function (xhr, status, error) {
                     console.error(error);

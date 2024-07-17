@@ -5,9 +5,9 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-@if (Model.Movies == null)
+@if (!Model.Movies.Any())
 {
-    <h2>No results found for '@Model.SearchString'</h2>
+    <i>You don't currently have any movies in your Watchlist!</i>
 }
 else
 {
@@ -82,3 +82,5 @@ else
 
     }
 </div>
+
+

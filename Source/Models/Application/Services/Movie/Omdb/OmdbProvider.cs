@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Web.Http;
 using TDP.Models.Application.DataTransfer;
+using TDP.Models.Application.Services.Movie;
 
 public class OmdbProvider : IApiProvider
 {
@@ -14,7 +15,7 @@ public class OmdbProvider : IApiProvider
     {
         this._clientFactory = clientFactory;
     }
-    
+
     public async Task<MovieDTO> FindAsync(IRequest request)
     {
         var aMovie = new MovieDTO();
@@ -26,14 +27,21 @@ public class OmdbProvider : IApiProvider
             {"y",request.ReleaseYear },
             {"type",request.Type }
         };
-        string url = QueryHelpers.AddQueryString(httpClient.BaseAddress.ToString(),queryParams);
+        string url = QueryHelpers.AddQueryString(httpClient.BaseAddress.ToString(), queryParams);
         var apirequest = new HttpRequestMessage(HttpMethod.Get, url);
         var response = await httpClient.SendAsync(apirequest);
         response.EnsureSuccessStatusCode();
         if (request.Type == "movie") { aMovie = JsonSerializer.Deserialize<MovieDTO>(await response.Content.ReadAsStringAsync()); }
         else { aMovie = JsonSerializer.Deserialize<SeriesDTO>(await response.Content.ReadAsStringAsync()); }
-        
-        return aMovie;
+
+        if (aMovie != null)
+        {
+            return aMovie;
+        }
+        else
+        {
+            throw new MovieNotFoundException($"Movie with IMDb ID '{request.ImdbId}' was not found.");
+        }
     }
 
     public async Task<MovieCollection> SearchAsync(IRequest request, int pageNumber)
