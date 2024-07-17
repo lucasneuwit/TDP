@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TDP.Extensions;
 using TDP.Models;
-using TDP.Models.Application.Services;
+using TDP.Models.Application;
+using TDP.Models.Application.DataTransfer;
 using TDP.Models.ViewModels;
 
 namespace TDP.Controllers;
@@ -145,46 +146,4 @@ public class UserController(IUserService userService) : Controller
 
         return View("UserProfile", new UserViewModel(currentUser));
     }
-}
-
-public class RegisterUser
-{
-    public string Username { get; set; } = null!;
-
-    public string Password { get; set; } = null!;
-
-    public string FirstName { get; set; } = null!;
-
-    public string LastName { get; set; } = null!;
-
-    public string Email { get; set; } = null!;
-}
-
-public class RegistrationViewModel
-{
-    public string Username { get; set; } = null!;
-
-    public string Password { get; set; } = null!;
-
-    public string FirstName { get; set; } = null!;
-
-    public string LastName { get; set; } = null!;
-
-    public string Email { get; set; } = null!;
-
-    public string ConfirmPassword { get; set; } = null!;
-}
-
-public class LoginViewModel
-{
-    public string Username { get; set; } = null!;
-
-    public string Password { get; set; } = null!;
-}
-
-public class LoginInfo
-{
-    public string Username { get; set; } = null!;
-
-    public string Password { get; set; } = null!;
 }

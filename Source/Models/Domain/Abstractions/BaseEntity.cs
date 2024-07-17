@@ -1,4 +1,4 @@
-﻿namespace TDP.Models.Domain.Abstractions;
+﻿namespace TDP.Models.Domain;
 
 public abstract class BaseEntity : IEntity
 {

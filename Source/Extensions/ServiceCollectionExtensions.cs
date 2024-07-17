@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TDP.Models.Application;
-using TDP.Models.Application.DataTransfer.MappingProfiles;
-using TDP.Models.Application.Services;
+using TDP.Models.Application.DataTransfer;
 using TDP.Models.Domain;
 using TDP.Models.Persistence;
-using TDP.Models.Persistence.Repository;
-using TDP.Models.Persistence.UnitOfWork;
 
 namespace TDP.Extensions;
 

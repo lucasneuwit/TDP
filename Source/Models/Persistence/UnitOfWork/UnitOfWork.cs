@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 
-namespace TDP.Models.Persistence.UnitOfWork;
+namespace TDP.Models.Persistence;
 
 public class UnitOfWork : IUnitOfWork
 {

@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace TDP.Models.Domain.Specification;
+namespace TDP.Models.Domain;
 
 public abstract class FilterSpecification<T> : IFilterSpecification<T>
     where T : class

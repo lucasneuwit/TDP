@@ -1,11 +1,8 @@
-﻿namespace TDP.Models.Application.Services;
-
+﻿using System.Text.Json;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
-using System.Text.Json;
-using System.Web.Http;
 using TDP.Models.Application.DataTransfer;
-using TDP.Models.Application.Services.Movie;
+
+namespace TDP.Models.Application;
 
 public class OmdbProvider : IApiProvider
 {

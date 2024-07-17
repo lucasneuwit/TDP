@@ -1,4 +1,4 @@
-namespace TDP.Models.Application.Services;
+namespace TDP.Models.Application;
 
 public record UpdateUser(
     Guid Id,

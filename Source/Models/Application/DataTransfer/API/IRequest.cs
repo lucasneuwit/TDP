@@ -1,4 +1,4 @@
-﻿namespace TDP.Models.Application;
+﻿namespace TDP.Models.Application.DataTransfer;
 
 /// <summary>
 /// DataTransfer for making requests against Omdb API.

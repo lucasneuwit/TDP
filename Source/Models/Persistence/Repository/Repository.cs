@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TDP.Models.Domain;
-using TDP.Models.Domain.Abstractions;
-using TDP.Models.Domain.Specifications;
 
-namespace TDP.Models.Persistence.Repository;
+namespace TDP.Models.Persistence;
 
 public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
 {

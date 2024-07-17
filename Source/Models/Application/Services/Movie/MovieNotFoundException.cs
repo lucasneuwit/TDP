@@ -1,4 +1,4 @@
-﻿namespace TDP.Models.Application.Services.Movie
+﻿namespace TDP.Models.Application
 {
     public class MovieNotFoundException: Exception
     {

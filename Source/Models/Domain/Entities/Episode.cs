@@ -1,6 +1,4 @@
-﻿using TDP.Models.Domain.Enums;
-
-namespace TDP.Models.Domain;
+﻿namespace TDP.Models.Domain;
 
 public class Episode : Movie
 {

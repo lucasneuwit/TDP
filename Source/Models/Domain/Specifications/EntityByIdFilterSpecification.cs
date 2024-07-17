@@ -1,7 +1,4 @@
-using TDP.Models.Domain.Abstractions;
-using TDP.Models.Domain.Specification;
-
-namespace TDP.Models.Domain.Specifications;
+namespace TDP.Models.Domain;
 
 public class EntityByIdFilterSpecification<TEntity> : FilterSpecification<TEntity>
     where TEntity : class, IEntity

@@ -1,5 +1,6 @@
 ﻿@inject IConfiguration Configuration
-@model TDP.Models.Application.MovieDTO;
+@using TDP.Models.Application.DataTransfer
+@model TDP.Models.Application.DataTransfer.MovieDTO;
 @{
 
     ViewData["Title"] = "FindById";
@@ -61,7 +62,7 @@
                 <dd class="col-sm-9">
                     @Html.DisplayFor(model => model.Plot)
                 </dd>
-                @if (Model is TDP.Models.Application.SeriesDTO seriesDTO)
+                @if (Model is SeriesDTO seriesDTO)
                 {
                     <div class="w-100"></div>
                     <dt class="col-sm-3">
