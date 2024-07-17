@@ -1,6 +1,6 @@
 ﻿using TDP.Models.Domain;
 
-namespace TDP.Models.Persistence.Specifications
+namespace TDP.Models.Persistence
 {
     public class MovieIncludeSpecification:IncludeSpecification<Movie>
     {

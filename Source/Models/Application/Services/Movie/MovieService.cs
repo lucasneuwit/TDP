@@ -1,17 +1,11 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.RegularExpressions;
+using AutoMapper;
 using TDP.Models.Application.DataTransfer;
-using TDP.Models.Application.Services.Movie;
 using TDP.Models.Domain;
-using TDP.Models.Domain.Enums;
 using TDP.Models.Persistence;
-using TDP.Models.Persistence.Extensions;
-using TDP.Models.Persistence.Specifications;
-using TDP.Models.Persistence.UnitOfWork;
 
-namespace TDP.Models.Application.Services
+namespace TDP.Models.Application
 {
     public class MovieService : IMovieService
     {

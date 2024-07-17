@@ -3,8 +3,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using TDP.Extensions;
-using TDP.Models.Application.DataTransfer.MappingProfiles;
-using TDP.Models.Application.Middleware;
+using TDP.Models.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 

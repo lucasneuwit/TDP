@@ -1,9 +1,6 @@
 ﻿using TDP.Models.Domain;
-using TDP.Models.Domain.Abstractions;
-using TDP.Models.Domain.Specification;
-using TDP.Models.Domain.Specifications;
 
-namespace TDP.Models.Persistence.Extensions
+namespace TDP.Models.Persistence
 {
     public static class MovieRepositoryExtensions
     {

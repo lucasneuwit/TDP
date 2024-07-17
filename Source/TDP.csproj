@@ -24,4 +24,8 @@
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\User\Index.cshtml" />
+    </ItemGroup>
+
 </Project>

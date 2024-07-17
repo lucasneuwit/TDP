@@ -1,7 +1,7 @@
 ﻿using TDP.Models.Application.DataTransfer;
 using TDP.Models.Domain;
 
-namespace TDP.Models.Application.Services
+namespace TDP.Models.Application
 {
     public interface IMovieService
     {

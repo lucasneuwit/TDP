@@ -4,9 +4,9 @@ using System.Diagnostics;
 using TDP.Extensions;
 using TDP.Models;
 using TDP.Models.Application;
-using TDP.Models.Application.Services;
-using TDP.Models.Application.Services.Movie;
+using TDP.Models.Application.DataTransfer;
 using TDP.Models.Domain;
+using TDP.Models.ViewModels;
 
 namespace TDP.Controllers
 {

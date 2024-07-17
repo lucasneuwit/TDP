@@ -1,4 +1,4 @@
-﻿namespace TDP.Models.Domain.Enums;
+﻿namespace TDP.Models.Domain;
 
 public enum ParticipantRole
 {

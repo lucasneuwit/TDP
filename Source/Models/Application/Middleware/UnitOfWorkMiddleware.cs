@@ -1,6 +1,6 @@
-﻿using TDP.Models.Persistence.UnitOfWork;
+﻿using TDP.Models.Persistence;
 
-namespace TDP.Models.Application.Middleware;
+namespace TDP.Models.Application;
 
 public class UnitOfWorkMiddleware
 {

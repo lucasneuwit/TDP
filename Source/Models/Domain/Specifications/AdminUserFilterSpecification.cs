@@ -1,7 +1,4 @@
-﻿using System.Linq.Expressions;
-using TDP.Models.Domain.Specification;
-
-namespace TDP.Models.Domain.Specifications;
+﻿namespace TDP.Models.Domain;
 
 public class AdminUserFilterSpecification : FilterSpecification<User>
 {

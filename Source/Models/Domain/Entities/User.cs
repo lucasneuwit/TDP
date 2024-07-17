@@ -1,6 +1,4 @@
-﻿using TDP.Models.Domain.Abstractions;
-
-namespace TDP.Models.Domain;
+﻿namespace TDP.Models.Domain;
 
 public class User : BaseEntity
 {
