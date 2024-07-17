@@ -190,13 +190,13 @@ namespace TDP.Models.Application.Services
             if (movie is null)
             {
                 logger.LogInformation($"When adding movie rating, movie with imdbId: {imdbId} not found");
-                throw new MovieNotFoundException($"Error, movie not found.");
+                throw new MovieNotFoundException($"Could not rate the movie. Error logged.");
             }
             var user = this.userRepository.FindByUserIdAsync(userId).Result;
             if (user is null)
             {
                 logger.LogInformation($"When adding movie rating, user with userId: {userId} not found");
-                throw new MovieNotFoundException($"Error, user not found.");
+                throw new MovieNotFoundException($"Could not rate the movie. Error logged");
             }
             user.Rate(movie, rating, comment);
         }
