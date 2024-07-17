@@ -181,17 +181,22 @@ namespace TDP.Models.Application.Services
         }
         public void AddMovieRating(string imdbId, Guid userId, int rating, string? comment)
         {
+            if (rating < 0 || rating > 5)
+            {
+                logger.LogInformation($"When adding movie rating, rating must be between 0 and 5");
+                throw new MovieNotFoundException($"Rating must be between 0 and 5.");
+            }
             var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result;
             if (movie is null)
             {
                 logger.LogInformation($"When adding movie rating, movie with imdbId: {imdbId} not found");
-                throw new MovieNotFoundException($"Movie not found.");
+                throw new MovieNotFoundException($"Error, movie not found.");
             }
             var user = this.userRepository.FindByUserIdAsync(userId).Result;
             if (user is null)
             {
                 logger.LogInformation($"When adding movie rating, user with userId: {userId} not found");
-                throw new MovieNotFoundException($"User not found.");
+                throw new MovieNotFoundException($"Error, user not found.");
             }
             user.Rate(movie, rating, comment);
         }

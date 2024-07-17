@@ -193,12 +193,12 @@ namespace TDP.Controllers
             {
                 Guid currentUserId = HttpContext.GetCurrentUserId();
                 _movieService.AddMovieRating(imdbId, currentUserId, rating, comment);
-                return Json(currentUserId);
+                return Json(new { success = true, message = "Movie rated successfully." });
 
             }
             catch (MovieNotFoundException ex)
             {
-                return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
+                return Json(new { success = false, message = ex.Message });
             }
             
         }

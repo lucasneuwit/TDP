@@ -11,7 +11,6 @@
     <h4>Details</h4>
     <hr />
     <div class="row align-content-sm-center">
-        <!-- Left column for details -->
         <div class="col-sm-6">
             <dl class="row align-content-sm-center">
                 <dt class="col-sm-3">
@@ -75,41 +74,42 @@
 
                 <!-- Box for displaying rating and comment -->
                 <dd class="col-sm-9">
+                    
                     <h4>Your rating</h4>
                     <div id="movieRatingBox" style="display: none;">
                         <dl>
                             <dt style="padding:0.5rem;">Rating: <span id="movieRating" style="font-weight: normal;"></span></dt>
 
                             <dt style="padding:0.5rem;">Comment: <span id="movieComment" style="font-weight: normal;"></span></dt>
-                            <!-- Additional <dt>/<dd> pairs or content can follow here if needed -->
                         </dl>
                     </div>
                     <!-- Rating form -->
                     <form id="rateMovie" method="post" asp-controller="Movie" asp-action="RateMovie">
                         <input type="hidden" name="imdbId" value="@Model.imdbID" />
 
-                        <!-- Input for Rating -->
-                <dt id="inputRating" style="padding:0.5rem;">Rating: <input type="number" name="rating" min="1" max="5" required /> </dt>
+                            <!-- Input for Rating -->
+                    <dt id="inputRating" style="padding:0.5rem;">Rating: <input type="number" name="rating" min="1" max="5" required /> </dt>
 
 
-                <!-- Input for Comment (optional) -->
-                <dt id="inputComment" style="padding:0.5rem;">Comment: <textarea name="comment"></textarea> </dt>
+                    <!-- Input for Comment (optional) -->
+                    <dt id="inputComment" style="padding:0.5rem;">Comment: <textarea name="comment"></textarea> </dt>
 
-                <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="rateMovieButton">Rate</button>
-                </form>
+                    <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="rateMovieButton">Rate</button>
+                    </form>
 
-                <!-- Edit movie rating form -->
-                <form id="editMovieRating" method="post" asp-controller="Movie" asp-action="RateMovie">
-                    <input type="hidden" name="imdbId" value="@Model.imdbID" />
+                    <!-- Edit movie rating form -->
+                    <form id="editMovieRating" method="post" asp-controller="Movie" asp-action="RateMovie">
+                        <input type="hidden" name="imdbId" value="@Model.imdbID" />
 
-                    <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="editMovieRatingButton">Edit Rating</button>
-                </form>
-                <!-- Remove movie rating form -->
-                <form id="removeMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
-                    <input type="hidden" name="imdbId" value="@Model.imdbID" />
+                        <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="editMovieRatingButton">Edit Rating</button>
+                    </form>
+                    <!-- Remove movie rating form -->
+                    <form id="removeMovieRating" method="post" asp-controller="Movie" asp-action="RemoveMovieRating">
+                        <input type="hidden" name="imdbId" value="@Model.imdbID" />
 
-                    <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="removeMovieRatingButton">Remove Rating</button>
-                </form>
+                        <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="removeMovieRatingButton">Remove Rating</button>
+                    </form>
+                <div id="ratingStatus" class="alert" style="display:none;"></div>
                 </dd>
 
             </dl>
@@ -151,7 +151,6 @@
 
 
 <div style="margin-top: 20px;">
-    <!-- Add some margin-top to create space between the two sections -->
     <a asp-controller="Home" asp-action="Index">Back to Home</a>
 </div>
 
@@ -193,10 +192,7 @@
                     imdbId: "@Model.imdbID"
                 },
                 success: function (data) {
-                    // Set the result to the inWatchlist variable
                     inWatchlist = data;
-
-                    // Check the condition and update the form visibility
                     updateFormVisibility();
                 },
                 error: function (xhr, status, error) {
@@ -213,19 +209,17 @@
                     imdbId: "@Model.imdbID"
                 },
                 success: function (data) {
-                    // Set the result to the inWatchlist variable
                     hasRated = data.movieId;
-                    console.log(data);
 
                     // Check the condition and update the form visibility
                     updateFormVisibility();
 
-                    // Fill the inputs if data is available
+
                     if (data.movieId) {
-                        // Fill Rating input
+
                         $("input[name='rating']").val(data.rating);
 
-                        // Fill Comment textarea
+
                         $("textarea[name='comment']").val(data.comment);
 
                         // Show the movieRatingBox and update its content
@@ -254,16 +248,28 @@
                 type: "POST",
                 data: $("#rateMovie").serialize(),
                 success: function (data) {
-                    checkIfMovieRated();
+                    console.log("exito");
+                    console.log(data);
+                    $("#ratingStatus").text(data.message).show();
+
+                    if (data.success) {
+                        console.log("chequie");
+                        checkIfMovieRated();
+                    }
                 },
                 error: function (xhr, status, error) {
-                    console.error(error);
+                    console.log("error");
+                    console.log(data);
+                    $("#ratingStatus").removeClass("alert-success").addClass("alert-danger")
+                        .text("An error occurred while rating the movie.")
+                        .show();
                 }
             });
         });
 
         // Set up the click event for Edit Movie Rating
         $("#editMovieRatingButton").click(function () {
+            $("#ratingStatus").hide();
             $("#rateMovie").show();
             $("#removeMovieRating").hide();
             $("#editMovieRating").hide();
@@ -281,6 +287,7 @@
                 success: function (data) {
                     $("input[name='rating']").val("");
                     $("textarea[name='comment']").val("");
+                    $("#ratingStatus").hide();
                     checkIfMovieRated();
                 },
                 error: function (xhr, status, error) {
@@ -296,7 +303,6 @@
                 type: "POST",
                 data: $("#addToWatchListForm").serialize(),
                 success: function (data) {
-                    // Update the Watchlist status after adding
                     checkIfAddedToWatchlist();
                 },
                 error: function (xhr, status, error) {
@@ -312,7 +318,6 @@
                 type: "POST",
                 data: $("#removeFromWatchListForm").serialize(),
                 success: function (data) {
-                    // Update the Watchlist status after removing
                     checkIfAddedToWatchlist();
                 },
                 error: function (xhr, status, error) {
