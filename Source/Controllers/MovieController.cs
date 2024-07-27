@@ -23,22 +23,21 @@ namespace TDP.Controllers
             _mapper = mapper;
         }
 
-
-        // OK
-        public async Task<IActionResult> FindByTitle(string title, string? type, string? releaseYear)
-        {
-            var res = await _movieService.GetMovie(title);
-            if (res == null)
-            {
-                IRequest aRequest = new Request(title, null, type, releaseYear);
-                var movie = await _provider.FindAsync(aRequest);
-                _movieService.SaveMovie(movie);
-                return View("MovieDetail",movie);
-            }
-
-            var movieDto = _mapper.Map<MovieDTO>(res);
-            return View("MovieDetail",movieDto);
-        }
+        // Summary:
+        //     The method first makes a request to the database for a movie. If the movie is not 
+        //     found, it makes a request to the API provider. 
+        //
+        // Params:
+        //   id:
+        //     imdbId of the movie, provided by the API.
+        //   type:
+        //     whether the object is of type a movie, series or episode.   
+        //   releaseYear:
+        //     year the movie was released.
+        //
+        // Returns:
+        //     A view that uses the MovieDto to show the movie details.
+        //     In case of an error, it returns a view with an error message.    
         public async Task<IActionResult> FindById(string id, string? type, string? releaseYear)
         {
             
@@ -85,7 +84,24 @@ namespace TDP.Controllers
 
         }
         [HttpGet]
-        //OK
+
+
+        // Summary:
+        //     The method makes a request to the API for a list of movies that matches the parameters.
+        //     
+        // Params:
+        //   title:
+        //     title of the movie/episode/series to search for.
+        //   type:
+        //     whether the object is of type a movie, series or episode.
+        //   releaseYear:
+        //     year the movie was released.
+        //   pageNumber:
+        //     the number of the page to return. The API by default returns 10 movies per page.
+        //
+        // Returns:
+        //     A view that shows the list of movies that match the search parameters.
+        //     In case of an error, it returns a view with an error message.
         public async Task<IActionResult> Search(string title, string? type, string? releaseYear, int pageNumber)
         {
             try
@@ -100,38 +116,18 @@ namespace TDP.Controllers
             }
             
         }
-        public async Task<IActionResult> GetMovie(string imdbId)
-        {
-            try
-            {
-                var movie = await _movieService.GetMovie(imdbId);
-                var movieDto = _mapper.Map<MovieDTO>(movie);
-                return Json(movieDto);
-
-            }
-            catch (MovieNotFoundException ex)
-            {
-                return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
-            }
-            
-        }
-        //OK
-        public async Task<IActionResult> GetAllMovies()
-        {
-            try
-            {
-                List<MovieDTO> movielist;
-                var movies = await _movieService.GetAllMovies();
-                movielist = _mapper.Map<List<MovieDTO>>(movies);
-                return Json(movielist);
-            }
-            catch (MovieNotFoundException ex)
-            {
-                return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
-            }
-        }
-        //OK
-        public async Task<IActionResult> AddToWatchlist(string imdbId, bool isInWatchList)
+        
+        // Summary:
+        //     The method adds a movie to the watchlist of the current user.
+        //     
+        // Params:
+        //   imdbId:
+        //     imdbId of the movie.
+        //
+        // Returns:
+        //     A json that represents the result of the operation.
+        //     In case the movie or user is not found, it returns a view with an error message.
+        public async Task<IActionResult> AddToWatchlist(string imdbId)
         {
             try
             {
@@ -144,6 +140,15 @@ namespace TDP.Controllers
                 return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
             }      
         }
+        // Summary:
+        //     The method checks if a movie is in the watchlist of the current user.
+        //     
+        // Params:
+        //   imdbId:
+        //     imdbId of the movie.
+        //
+        // Returns:
+        //     A boolean that represents if the movie is in the watchlist of the current user.
         public async Task<Boolean> AddedToWatchlist(string imdbId)
         {
             try
@@ -158,7 +163,16 @@ namespace TDP.Controllers
             }
    
         }
-        //OK
+        // Summary:
+        //     The method removes a movie from the watchlist of the current user.
+        //     
+        // Params:
+        //   imdbId:
+        //     imdbId of the movie.
+        //
+        // Returns:
+        //     A json that represents the result of the operation.
+        //     In case the movie or user is not found, it returns a view with an error message.
         public async Task<IActionResult> RemoveFromWatchlist(string imdbId)
         {
             try
@@ -172,6 +186,12 @@ namespace TDP.Controllers
                 return View("MovieError", new MovieErrorViewModel { ErrorMessage = ex.Message });
             }
         }
+        // Summary:
+        //     The method makes a request to get all the movies from the watchlist of the current user.
+        //     
+        // Returns:
+        //     A view that shows the list of movies in the watchlist of the current user.
+        //     In case of an error, it returns a view with an error message.
         public async Task<IActionResult> GetWatchlist()
         {
             try
@@ -186,7 +206,20 @@ namespace TDP.Controllers
             }
             
         }
-        //OK
+        // Summary:
+        //     The method adds a rating to a movie.
+        //     
+        // Params:
+        //   imdbId:
+        //     imdbId of the movie.
+        //   rating:
+        //     rating inserted by the user.
+        //   comment:
+        //     comment inserted by the user.
+        //
+        // Returns:
+        //     A json that represents the result of the operation.
+        //     In case the movie or user is not found, it returns a view with an error message.
         public async Task<IActionResult> RateMovie(string imdbId, int rating, string comment)
         {
             try
@@ -202,8 +235,17 @@ namespace TDP.Controllers
             }
             
         }
-        //OK
-        public async Task<IActionResult> RemoveMovieRating(string imdbId, int rating, string comment)
+        // Summary:
+        //     The method removes a rating from a movie.
+        //     
+        // Params:
+        //   imdbId:
+        //     imdbId of the movie.
+        //
+        // Returns:
+        //     A json that represents the result of the operation.
+        //     In case the movie or user is not found, it returns a view with an error message.
+        public async Task<IActionResult> RemoveMovieRating(string imdbId)
         {
             try
             {
@@ -217,6 +259,15 @@ namespace TDP.Controllers
             }
             
         }
+        // Summary:
+        //     The method returns the rating of a movie inserted by the current user.
+        //     
+        // Params:
+        //   imdbId:
+        //     imdbId of the movie.
+        //
+        // Returns:
+        //     A json with the rating of the movie.
         public async Task<IActionResult> GetUserRating(string imdbId)
         {
             try

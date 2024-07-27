@@ -7,8 +7,6 @@ namespace TDP.Models.Application
     {
         Task<Domain.Movie> GetMovie(string title);
 
-        Task <IEnumerable<Domain.Movie>> GetAllMovies();
-
         public void SaveSerie(SeriesDTO serie);
         public Task SaveMovie(MovieDTO movie);
 
