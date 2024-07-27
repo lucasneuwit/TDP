@@ -23,12 +23,13 @@ public class UserService : IUserService
 
     public Task DeleteUserAsync(Guid userId)
     {
-        this.logger.LogInformation("Removing user data with id: {id}", userId);
+        this.logger.LogInformation("Removing user with id: {id}", userId);
         return this.repository.DeleteAsync(userId);
     }
 
     public async Task UpdateUserAsync(UpdateUser updateUser)
     {
+        this.logger.LogDebug("Updating profile information for user: {userId}", updateUser.Id);
         var user = await this.repository.FindByIdOrThrowAsync(updateUser.Id);
         user.SetUsername(updateUser.Username);
         user.SetName(updateUser.FirstName);
@@ -61,7 +62,7 @@ public class UserService : IUserService
         await repository.CreateAsync(user);
     }
 
-    public Task<bool> GetAdministratorAsync()
+    public Task<bool> AdministratorExistsAsync()
     {
         return this.repository.AdminExistsAsync();
     }
@@ -77,7 +78,7 @@ public class UserService : IUserService
 
     public async Task<Guid?> TryLoginAsync(LoginInfo loginInfo)
     {
-        this.logger.LogInformation("New login for user: {username}", loginInfo.Username);
+        this.logger.LogInformation("New login attempt for user: {username}", loginInfo.Username);
         var user = await this.repository.FindByUsernameAsync(loginInfo.Username);
         if (user is null)
         {

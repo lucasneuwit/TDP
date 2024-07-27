@@ -2,30 +2,23 @@
 
 namespace TDP.Models.Application;
 
-public class UnitOfWorkMiddleware
+public class UnitOfWorkMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public UnitOfWorkMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
     public async Task Invoke(HttpContext context)
     {
 
         if (context.Request.Method == HttpMethods.Post)
         {
-            var _unitOfWorkManager = context.RequestServices.GetRequiredService<IUnitOfWorkManager>();
-            _unitOfWorkManager.BeginUnitOfWork();
+            var unitOfWorkManager = context.RequestServices.GetRequiredService<IUnitOfWorkManager>();
+            unitOfWorkManager.BeginUnitOfWork();
 
-            await _next(context);
+            await next(context);
 
-            await _unitOfWorkManager.Complete();
+            await unitOfWorkManager.Complete();
         }
         else
         {
-            await _next(context);
+            await next(context);
         }
         
     }

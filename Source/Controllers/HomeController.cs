@@ -30,8 +30,7 @@ public class HomeController : Controller
 
     public IActionResult Watchlist()
     {
-        // ReSharper disable once Mvc.ViewNotResolved
-        return View();
+        return RedirectToAction("Watchlist", "Movie");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

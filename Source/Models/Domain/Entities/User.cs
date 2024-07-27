@@ -79,7 +79,11 @@ public class User : BaseEntity
     {
         var newUserRating = new UserRating();
         newUserRating.SetRating(rating);
-        newUserRating.SetComment(comment);
+        if (comment is not null)
+        {
+            newUserRating.SetComment(comment);
+
+        }
         newUserRating.SetMovie(movie);
         newUserRating.SetUser(this);
         

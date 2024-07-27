@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 
 namespace TDP.Models.Domain;
 
+/// <inheritdoc />
 public abstract class FilterSpecification<T> : IFilterSpecification<T>
     where T : class
 {

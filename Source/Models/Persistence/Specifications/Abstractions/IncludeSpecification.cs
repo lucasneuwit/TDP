@@ -4,9 +4,9 @@ using TDP.Models.Domain;
 
 namespace TDP.Models.Persistence;
 
+/// <inheritdoc />
 public abstract class IncludeSpecification<T> : IIncludeSpecification<T>
     where T : class
-
 {
     private ICollection<string> Includes { get; } = new HashSet<string>();
     

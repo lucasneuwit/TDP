@@ -19,12 +19,12 @@ public class OmdbProvider : IApiProvider
         var httpClient = _clientFactory.CreateClient("OMDBApi");
         var queryParams = new Dictionary<string, string>()
         {
-            {"t",request.Title },
-            {"i",request.ImdbId },
-            {"y",request.ReleaseYear },
-            {"type",request.Type }
+            {"t", request.Title },
+            {"i", request.ImdbId },
+            {"y", request.ReleaseYear },
+            {"type", request.Type }
         };
-        string url = QueryHelpers.AddQueryString(httpClient.BaseAddress.ToString(), queryParams);
+        string url = QueryHelpers.AddQueryString(httpClient?.BaseAddress.ToString(), queryParams);
         var apirequest = new HttpRequestMessage(HttpMethod.Get, url);
         var response = await httpClient.SendAsync(apirequest);
         response.EnsureSuccessStatusCode();

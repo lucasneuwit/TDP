@@ -1,9 +1,7 @@
-﻿namespace TDP.Models.Application
-{
-    public class MovieNotFoundException: Exception
-    {
-        public MovieNotFoundException() { }
-        public MovieNotFoundException(string message) : base(message) { }
-        public MovieNotFoundException(string message, Exception inner) : base(message, inner) { }
-    }
-}
+﻿namespace TDP.Models.Application;
+
+/// <summary>
+/// Exception thrown when a movie could not be found.
+/// </summary>
+/// <param name="message">The exception message.</param>
+public class MovieNotFoundException(string message) : Exception(message);

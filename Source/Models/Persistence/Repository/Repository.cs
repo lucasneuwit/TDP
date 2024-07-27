@@ -77,7 +77,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEnti
         return Task.FromResult(dbSet.AsEnumerable());
     }
 
-    public Task<bool> AnyAsync(ISpecification<TEntity> specification)
+    public Task<bool> AnyAsync(IFilterSpecification<TEntity> specification)
     {
         var dbSet = this.GetDbSet();
         return specification.Apply(dbSet).AnyAsync();
