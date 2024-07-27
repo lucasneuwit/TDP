@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace TDP.Models.Domain;
+namespace TDP.Models.Persistence;
 
 public class IncludeVisitor : ExpressionVisitor
 {

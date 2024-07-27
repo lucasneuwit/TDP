@@ -1,5 +1,6 @@
 ﻿@inject IConfiguration Configuration
-@model TDP.Models.Application.MovieDTO;
+@using TDP.Models.Application.DataTransfer
+@model TDP.Models.Application.DataTransfer.MovieDTO;
 @{
 
     ViewData["Title"] = "FindById";
@@ -61,7 +62,7 @@
                 <dd class="col-sm-9">
                     @Html.DisplayFor(model => model.Plot)
                 </dd>
-                @if (Model is TDP.Models.Application.SeriesDTO seriesDTO)
+                @if (Model is SeriesDTO seriesDTO)
                 {
                     <div class="w-100"></div>
                     <dt class="col-sm-3">
@@ -87,11 +88,11 @@
                     <form id="rateMovie" method="post" asp-controller="Movie" asp-action="RateMovie">
                         <input type="hidden" name="imdbId" value="@Model.imdbID" />
 
-                            <!-- Input for Rating -->
+                    <!-- Input for Rating -->
                     <dt id="inputRating" style="padding:0.5rem;">Rating: <input type="number" name="rating" min="1" max="5" required /> </dt>
 
 
-                    <!-- Input for Comment (optional) -->
+                    <!-- Input for Comment -->
                     <dt id="inputComment" style="padding:0.5rem;">Comment: <textarea name="comment"></textarea> </dt>
 
                     <button style="margin-top:1rem;" class="btn btn-outline-secondary" type="button" id="rateMovieButton">Rate</button>
@@ -160,7 +161,7 @@
         var inWatchlist = false;
         var hasRated = false;
 
-        // Function to update the form visibility based on inWatchlist
+        // Function to update the form visibility based on inWatchlist and hasRated
         function updateFormVisibility() {
             if (inWatchlist) {
                 $("#addToWatchListForm").hide();
@@ -200,7 +201,7 @@
                 }
             });
         }
-
+        // Function to check if the movie has been rated
         function checkIfMovieRated() {
             $.ajax({
                 url: "/Movie/GetUserRating",

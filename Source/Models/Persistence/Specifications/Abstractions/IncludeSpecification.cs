@@ -1,7 +1,8 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using TDP.Models.Domain;
 
-namespace TDP.Models.Domain;
+namespace TDP.Models.Persistence;
 
 public abstract class IncludeSpecification<T> : IIncludeSpecification<T>
     where T : class

@@ -1,17 +1,11 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.RegularExpressions;
+using AutoMapper;
 using TDP.Models.Application.DataTransfer;
-using TDP.Models.Application.Services.Movie;
 using TDP.Models.Domain;
-using TDP.Models.Domain.Enums;
 using TDP.Models.Persistence;
-using TDP.Models.Persistence.Extensions;
-using TDP.Models.Persistence.Specifications;
-using TDP.Models.Persistence.UnitOfWork;
 
-namespace TDP.Models.Application.Services
+namespace TDP.Models.Application
 {
     public class MovieService : IMovieService
     {
@@ -36,22 +30,16 @@ namespace TDP.Models.Application.Services
             var movie = await this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification());
                 return movie;
         }
-
-        public async Task<IEnumerable<Domain.Movie>> GetAllMovies()
-        {
-
-            var movies = await this.movieRepository.AllAsync();
-            if (movies is not null)
-            {
-                return movies;
-            }
-            else
-            {
-                logger.LogInformation("There was no movies found in the database.");
-                throw new MovieNotFoundException($"List of movies not found.");
-            }
-        }
-
+        // Summary:
+        //     The method saves a movie in the database. Because there are differences in how 
+        //     the data is stored in the DTO and the entity, the method converts the data from the DTO to the entity.
+        //     
+        // Params:
+        //   MovieDto:
+        //     Data transfer object of the movie entity.
+        //
+        // Returns:
+        //     Returns a task that means the transaction has been completed.
         public Task SaveMovie(MovieDTO movie)
         {
             uowManager.BeginUnitOfWork();
@@ -96,6 +84,15 @@ namespace TDP.Models.Application.Services
 
         }
 
+        // Summary:
+        //     The method formats the data stored in the data transfer object.
+        //     
+        // Params:
+        //   MovieDto:
+        //     Data transfer object of the movie entity.
+        //
+        // Returns:
+        //     Returns a formatted MovieDto.
         public MovieDTO FormatMovie(MovieDTO movie)
         {
             if (movie.Runtime != "N/A")
@@ -116,6 +113,19 @@ namespace TDP.Models.Application.Services
             return movie;
         }
 
+        // Summary:
+        //     The method adds a movie to the watchlist of a user.
+        //     For this it makes a request to get both the Movie and the User.
+        //     After that it adds the user as a follower to the movie object.
+        //     In case either the movie or the user is not found it throws an exception.
+        //     This exception is logged.
+        //
+        // Params:
+        //   imdbId:
+        //     imdbId of the movie.
+        //   userId:
+        //     userId of the user.
+        //
         public void AddToWatchListAsync(string imdbId, Guid userId)
         {
 
@@ -133,14 +143,40 @@ namespace TDP.Models.Application.Services
             }
             movie.AddFollower(user);
         }
+
+        // Summary:
+        //     The method checks if a movie is in the watchlist of the current user.
+        //     For this it checks the followers of the movies and compares the userId with the current user.
+        //     This exception is logged.
+        //
+        // Params:
+        //   imdbId:
+        //     imdbId of the movie.
+        //   userId:
+        //     userId of the user.
+        //
+        //  Returns:
+        //   It returns a boolean value that indicates if the movie is in the watchlist of the user.
+
         public bool AddedToWatchList(string imdbId, Guid userId)
         {
             var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result.Followers.Any(follower => follower.Id == userId);
             return movie;
         }
-            
-        
 
+
+        // Summary:
+        //     The method removes a movie from the watchlist of a user.
+        //     For this it makes a request to get both the Movie and the User.
+        //     After that it removes the user as a follower to the movie object.
+        //     In case either the movie or the user is not found it throws an exception.
+        //     This exception is logged.
+        //     
+        // Params:
+        //   imdbId:
+        //     imdbId of the movie.
+        //   userId:
+        //     userId of the user.
         public void RemoveFromWatchListAsync(string imdbId, Guid userId)
         {
 
@@ -159,9 +195,21 @@ namespace TDP.Models.Application.Services
             movie.RemoveFollower(user);
         }
 
+        // Summary:
+        //     The method gets all the movies from the watchlist of a user.
+        //     For this it makes a request to get the user.
+        //     After that it loads the followedMovies from the user into a data transfer object.
+        //     In case the user is not found it throws an exception.
+        //     This exception is logged.
+        //     
+        // Params:
+        //   userId:
+        //     userId of the user.
+        //
+        //  Returns:
+        //   It returns a collection of movies in the form of a data transfer object.
         public async Task<MovieCollection> GetAllFromWatchList(Guid userId)
         {
-            //tiene include
             var user = await this.userRepository.FindByIdOrThrowAsync(userId, new UserIncludeSpecification());
             if (user is null)
             {
@@ -179,6 +227,23 @@ namespace TDP.Models.Application.Services
             aMovieCollection.TotalResults = movieDtos.Count.ToString();
             return aMovieCollection;
         }
+
+        // Summary:
+        //     The method adds a movie rating to a movie.
+        //     For this it makes a request to get both the Movie and the User.
+        //     After that it uses the rate method from the user.
+        //     In case either the movie or the user is not found it throws an exception.
+        //     This exception is logged.
+        //     
+        // Params:
+        //   imdbId:
+        //     imdbId of the movie.
+        //   userId:
+        //     userId of the user.
+        //   rating:
+        //     rating inserted by the user.
+        //   comment:
+        //     comment inserted by the user.
         public void AddMovieRating(string imdbId, Guid userId, int rating, string? comment)
         {
             if (rating < 0 || rating > 5)
@@ -201,6 +266,18 @@ namespace TDP.Models.Application.Services
             user.Rate(movie, rating, comment);
         }
 
+        // Summary:
+        //     The method removes the movie rating made by the current user.
+        //     For this it makes a request to get both the Movie and the User.
+        //     After that it uses delete rating method from the user.
+        //     In case either the movie or the user is not found it throws an exception.
+        //     This exception is logged.
+        //     
+        // Params:
+        //   imdbId:
+        //     imdbId of the movie.
+        //   userId:
+        //     userId of the user.
         public void RemoveMovieRating(string imdbId, Guid userId)
         {
             var movie = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result;
@@ -218,6 +295,21 @@ namespace TDP.Models.Application.Services
             user.DeleteRating(movie);
         }
 
+        // Summary:
+        //     The method gets a movie rating from the user.
+        //     For this it makes a request to get the user.
+        //     After that it loads the ratings list and loads the one that matches the imdbId into an UserRating object.
+        //     In case the user is not found it throws an exception.
+        //     This exception is logged.
+        //     
+        // Params:
+        //   imdbId:
+        //     imdbId of the movie.
+        //   userId:
+        //     userId of the user.
+        //
+        //  Returns:
+        //   It returns an UserRating object that contains the rating and comment saved by the user.
         UserRating IMovieService.GetMovieRating(string imdbId, Guid userId)
         {
             var userRating = this.movieRepository.FindByImdbId(imdbId, new MovieIncludeSpecification()).Result.Ratings.FirstOrDefault(r => r.UserId == userId);
@@ -237,6 +329,16 @@ namespace TDP.Models.Application.Services
             }
         }
 
+        // Summary:
+        //     The method saves a series in the database. Because there are differences in how 
+        //     the data is stored in the DTO and the entity, the method converts the data from the DTO to the entity.
+        //     
+        // Params:
+        //   MovieDto:
+        //     Data transfer object of the series entity.
+        //
+        // Returns:
+        //     Returns a task that means the transaction has been completed.
         async void IMovieService.SaveSerie(SeriesDTO serie)
         {
             var dbmovie = new Domain.Series(Guid.NewGuid());

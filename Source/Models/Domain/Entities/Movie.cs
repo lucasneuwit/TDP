@@ -1,7 +1,4 @@
-﻿using TDP.Models.Domain.Abstractions;
-using TDP.Models.Domain.Enums;
-
-namespace TDP.Models.Domain;
+﻿namespace TDP.Models.Domain;
 
 public class Movie : BaseEntity
 {

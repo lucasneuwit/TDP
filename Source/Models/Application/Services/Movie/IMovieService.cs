@@ -1,13 +1,11 @@
 ﻿using TDP.Models.Application.DataTransfer;
 using TDP.Models.Domain;
 
-namespace TDP.Models.Application.Services
+namespace TDP.Models.Application
 {
     public interface IMovieService
     {
         Task<Domain.Movie> GetMovie(string title);
-
-        Task <IEnumerable<Domain.Movie>> GetAllMovies();
 
         public void SaveSerie(SeriesDTO serie);
         public Task SaveMovie(MovieDTO movie);

@@ -1,6 +1,4 @@
-﻿using TDP.Models.Domain.Enums;
-
-namespace TDP.Models.Application;
+﻿namespace TDP.Models.Application.DataTransfer;
 
 public record MovieDTO
 {

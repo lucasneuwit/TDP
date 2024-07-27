@@ -1,4 +1,4 @@
-namespace TDP.Models;
+namespace TDP.Models.ViewModels;
 
 public class ErrorViewModel
 {

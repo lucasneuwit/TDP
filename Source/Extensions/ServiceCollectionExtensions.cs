@@ -4,13 +4,10 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using TDP.Models.Application;
-using TDP.Models.Application.DataTransfer.MappingProfiles;
-using TDP.Models.Application.Services;
+using TDP.Models.Application.DataTransfer;
 using TDP.Models.Domain;
 using TDP.Models.Encryption;
 using TDP.Models.Persistence;
-using TDP.Models.Persistence.Repository;
-using TDP.Models.Persistence.UnitOfWork;
 
 namespace TDP.Extensions;
 

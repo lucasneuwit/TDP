@@ -1,9 +1,9 @@
-﻿using TDP.Controllers;
+﻿using TDP.Models.Application.DataTransfer;
 using TDP.Models.Domain;
 using TDP.Models.Encryption;
-using TDP.Models.Persistence.Extensions;
+using TDP.Models.Persistence;
 
-namespace TDP.Models.Application.Services;
+namespace TDP.Models.Application;
 
 public class UserService : IUserService
 {

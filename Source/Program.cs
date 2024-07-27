@@ -1,5 +1,5 @@
 using TDP.Extensions;
-using TDP.Models.Application.Middleware;
+using TDP.Models.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,4 +52,5 @@ app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");
+
 app.Run();

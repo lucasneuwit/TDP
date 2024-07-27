@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using TDP.Models;
-using TDP.Models.Application.Services;
+using TDP.Models.Application;
+using TDP.Models.ViewModels;
 using TDP.Utils;
 
 namespace TDP.Controllers;

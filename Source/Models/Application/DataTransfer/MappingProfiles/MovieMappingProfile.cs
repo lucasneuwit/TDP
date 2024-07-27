@@ -1,8 +1,7 @@
-﻿using TDP.Models.Domain;
-using AutoMapper;
-using TDP.Models.Domain.Enums;
+﻿using AutoMapper;
+using TDP.Models.Domain;
 
-namespace TDP.Models.Application.DataTransfer.MappingProfiles
+namespace TDP.Models.Application.DataTransfer
 {
     public class MovieMappingProfile : Profile
     {

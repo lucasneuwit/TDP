@@ -1,4 +1,4 @@
-﻿namespace TDP.Models.Persistence.UnitOfWork;
+﻿namespace TDP.Models.Persistence;
 
 public interface IUnitOfWork : IDisposable
 {
