@@ -106,5 +106,10 @@ public class Movie : BaseEntity
         
         this.Ratings.Add(userRating);
     }
+
+    public bool HasFollower(Guid userId)
+    {
+        return this.Followers.Any(e => e.Id == userId);
+    }
     
 }

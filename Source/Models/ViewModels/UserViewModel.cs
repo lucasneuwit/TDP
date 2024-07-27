@@ -31,7 +31,7 @@ public class UserViewModel
 
     public string EmailAddress { get; set; } = null!;
 
-    public string ProfilePicture { get; set; }
+    public string ProfilePicture { get; set; } = null!;
 
     public IFormFile? NewProfilePicture { get; set; }
 

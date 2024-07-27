@@ -1,9 +1,5 @@
-﻿using System.Net.Mime;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TDP.Extensions;
-using TDP.Models;
 using TDP.Models.Application;
 using TDP.Models.Application.DataTransfer;
 using TDP.Models.ViewModels;
@@ -12,11 +8,9 @@ namespace TDP.Controllers;
 
 public class UserController(IUserService userService) : Controller
 {
-
-    // GET
     public async Task<IActionResult> Index()
     {
-        if (!await userService.GetAdministratorAsync())
+        if (!await userService.AdministratorExistsAsync())
         {
             return RedirectToAction("RegisterAdmin");
         }
@@ -39,7 +33,7 @@ public class UserController(IUserService userService) : Controller
         });
         if (userId is not null)
         {
-            HttpContext.Session.SetString("user-id", userId.ToString());
+            HttpContext.Session.SetString("user-id", userId.ToGuid().ToString());
             var currentUser = await userService.GetUserAsync(userId.ToGuid());
             if (currentUser.ProfilePicture is not null)
             {
@@ -49,7 +43,8 @@ public class UserController(IUserService userService) : Controller
             return RedirectToAction("Index", "Home");
         }
         
-        return View("Error");
+        ViewBag.ErrorMessage = "Wrong username or password!";
+        return View("Login");
     }
 
     public IActionResult RegisterUser()
@@ -101,7 +96,7 @@ public class UserController(IUserService userService) : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> LogOut()
+    public IActionResult LogOut()
     {
         HttpContext.Session.Clear();
 

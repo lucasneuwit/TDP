@@ -7,7 +7,6 @@ namespace TDP.Models.Application.DataTransfer
     {
         public MovieMappingProfile()
         {
-            // TODO: use single CreateMap.
             CreateMap<Movie, MovieDTO>().ForMember(dto => dto.Id, src => src.MapFrom(src => src.Id)).ForMember(dto => dto.Title, src => src.MapFrom(src => src.Title)).
                 ForMember(dto => dto.Plot, src => src.MapFrom(src => src.Plot)).ForMember(dto => dto.Runtime, src => src.MapFrom(src => src.Runtime)).
                 ForMember(dto => dto.Type, src => src.MapFrom(src => src.Type)).ForMember(dto => dto.Released, src => src.MapFrom(src => src.Released)).
@@ -24,10 +23,6 @@ namespace TDP.Models.Application.DataTransfer
                 ForMember(dto => dto.Director, src => src.MapFrom(src => string.Join(", ", src.Participants.Where(p => p.Role == (ParticipantRole)1).Select(part => part.Name)))).
                 ForMember(dto => dto.Writer, src => src.MapFrom(src => string.Join(", ", src.Participants.Where(p => p.Role == (ParticipantRole)2).Select(part => part.Name)))).
                 ForMember(dto=> dto.totalSeasons, src => src.MapFrom(src => src.Seasons));
-
-
-
-
         }
     }
 }
