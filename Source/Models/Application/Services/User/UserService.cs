@@ -1,5 +1,6 @@
 ﻿using TDP.Controllers;
 using TDP.Models.Domain;
+using TDP.Models.Encryption;
 using TDP.Models.Persistence.Extensions;
 
 namespace TDP.Models.Application.Services;
@@ -8,11 +9,16 @@ public class UserService : IUserService
 {
     private readonly IRepository<User> repository;
     private readonly ILogger<IUserService> logger;
+    private readonly IEncryptor encryptor;
         
-    public UserService(IRepository<User> repository, ILogger<IUserService> logger)
+    public UserService(
+        IRepository<User> repository,
+        ILogger<IUserService> logger,
+        IEncryptor encryptor)
     {
         this.repository = repository;
         this.logger = logger;
+        this.encryptor = encryptor;
     }
 
     public Task DeleteUserAsync(Guid userId)
@@ -46,13 +52,13 @@ public class UserService : IUserService
         return this.repository.FindByIdOrThrowAsync(userId);
     }
 
-    public Task RegisterUserAsync(RegisterUser registerUser)
+    public async Task RegisterUserAsync(RegisterUser registerUser)
     {
         this.logger.LogInformation("Attempting to register new user with name: {username}", registerUser.Username);
         var user = new User(Guid.NewGuid());
-        UpdateUser(user, registerUser);
+        await SetUserData(user, registerUser);
 
-        return repository.CreateAsync(user);
+        await repository.CreateAsync(user);
     }
 
     public Task<bool> GetAdministratorAsync()
@@ -64,7 +70,7 @@ public class UserService : IUserService
     {
         this.logger.LogInformation("Attempting to register new user with name: {username} with administration privileges", registerUser.Username);
         var administrator = new Administrator(Guid.NewGuid());
-        UpdateUser(administrator, registerUser);
+        await SetUserData(administrator, registerUser);
 
         await repository.CreateAsync(administrator);
     }
@@ -73,7 +79,13 @@ public class UserService : IUserService
     {
         this.logger.LogInformation("New login for user: {username}", loginInfo.Username);
         var user = await this.repository.FindByUsernameAsync(loginInfo.Username);
-        if (user is not null && loginInfo.Password == user.PasswordHash)
+        if (user is null)
+        {
+            return null;
+        }
+        
+        var password = this.encryptor.Decrypt(user.PasswordHash);
+        if (password == loginInfo.Password)
         {
             return user.Id;
         }
@@ -86,13 +98,19 @@ public class UserService : IUserService
         return this.repository.AllAsync();
     }
 
-    private static void UpdateUser(User user, RegisterUser userData)
+    private async Task SetUserData(User user, RegisterUser userData)
     {
         user.SetName(userData.FirstName);
         user.SetLastname(userData.LastName);
         user.SetEmailAddress(userData.Email);
         user.SetUsername(userData.Username);
-        user.SetPassword(userData.Password);
+        await this.SetPassword(user, userData.Password);
         user.SetBirthday(DateOnly.FromDateTime(DateTime.Now));
+    }
+
+    private async Task SetPassword(User user, string password)
+    {
+        var hashedPassword = await this.encryptor.Encrypt(password);
+        user.SetPassword(hashedPassword);
     }
 }

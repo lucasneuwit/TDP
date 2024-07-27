@@ -1,9 +1,4 @@
-using AutoMapper;
-using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.SystemConsole.Themes;
 using TDP.Extensions;
-using TDP.Models.Application.DataTransfer.MappingProfiles;
 using TDP.Models.Application.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,16 +18,8 @@ builder.Services.AddUnitOfWork();
 builder.Services.AddRepository();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper();
-builder.Services.AddSerilog((services, config) =>
-{
-    config.WriteTo.Console(
-        LogEventLevel.Information,
-        theme: AnsiConsoleTheme.Code);
-    config.WriteTo.File(
-        "log.txt",
-        LogEventLevel.Debug,
-        rollingInterval: RollingInterval.Day);
-});
+builder.Services.AddEncryption(builder.Configuration);
+builder.Services.AddSerilog();
 
 builder.Services.AddDistributedMemoryCache();
 
@@ -65,5 +52,4 @@ app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");
-
 app.Run();

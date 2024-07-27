@@ -105,5 +105,4 @@ public class User : BaseEntity
             RatedMovies.Remove(userRating);
         }
     }
-
 }

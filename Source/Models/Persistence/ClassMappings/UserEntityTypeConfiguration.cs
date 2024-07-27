@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TDP.Models.Domain;
+using TDP.Models.Encryption;
 
 namespace TDP.Models.Persistence;
 
@@ -22,6 +23,7 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.Property(entity => entity.BirthDay);
         builder.Property(entity => entity.EmailAddress);
         builder.Property(entity => entity.ProfilePicture);
+        builder.Property(entity => entity.PasswordHash);
 
         builder.HasMany(entity => entity.FollowedMovies).WithMany(movie => movie.Followers);
         builder.HasMany(entity => entity.RatedMovies);

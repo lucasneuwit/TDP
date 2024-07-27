@@ -1,6 +1,6 @@
 ﻿namespace TDP.Models.Domain;
 
-public record UserRating
+public class UserRating
 {
     public User User { get; private set; } = null!;
 

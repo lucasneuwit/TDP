@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
 using TDP.Models.Application;
 using TDP.Models.Application.DataTransfer.MappingProfiles;
 using TDP.Models.Application.Services;
 using TDP.Models.Domain;
+using TDP.Models.Encryption;
 using TDP.Models.Persistence;
 using TDP.Models.Persistence.Repository;
 using TDP.Models.Persistence.UnitOfWork;
@@ -12,6 +16,37 @@ namespace TDP.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    /// <summary>
+    /// Registers serilog and configures it with a file sink.
+    /// </summary>
+    /// <param name="serviceCollection">The <see cref="IServiceCollection"/>.</param>
+    /// <returns>Itself, for chaining.</returns>
+    public static IServiceCollection AddSerilog(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection.AddSerilog((services, config) =>
+        {
+            config.WriteTo.Console(
+                LogEventLevel.Information,
+                theme: AnsiConsoleTheme.Code);
+            config.WriteTo.File(
+                "log.txt",
+                LogEventLevel.Debug,
+                rollingInterval: RollingInterval.Day);
+        });
+    }
+    
+    /// <summary>
+    /// Registers a <see cref="IEncryptor"/> implementation.
+    /// </summary>
+    /// <param name="serviceCollection">The <see cref="IServiceCollection"/>.</param>
+    /// <param name="configuration">The <see cref="IConfiguration"/> to be used.</param>
+    /// <returns>Itself, for chaining.</returns>
+    public static IServiceCollection AddEncryption(this IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        serviceCollection.Configure<EncryptionOptions>(configuration.GetSection(nameof(EncryptionOptions)));
+        return serviceCollection.AddSingleton<IEncryptor, AesEncryptor>();
+    }
+    
     public static IServiceCollection AddOmdbHttpClient(this IServiceCollection serviceCollection, string apiUrl)
     {
         serviceCollection.AddHttpClient("OMDBApi",httpClient => 
