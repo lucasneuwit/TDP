@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TDP.Models.Domain.AggregateSpecification&lt;T&gt;" BaseTypeListCollapsed="true">
+    <Position X="26.5" Y="3" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAABAAAACAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Abstractions\Specification\AggregateSpecification\AggregateSpecification.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="specifications" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TDP.Models.Domain.Administrator">
+    <Position X="8.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Entities\Administrator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TDP.Models.Domain.Episode">
+    <Position X="19" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAEBAAQAQAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Models\Domain\Entities\Episode.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Series" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="TDP.Models.Domain.Movie">
+    <Position X="17" Y="4" Width="1.5" />
+    <AssociationLine Name="Followers" Type="TDP.Models.Domain.User" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17" Y="7.875" />
+        <Point X="15" Y="7.875" />
+        <Point X="15" Y="7.875" />
+        <Point X="13" Y="7.875" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>ACAhAAAFABAAAEYwKgAAAAAAACIAAAEAASSEgAAAAJA=</HashCode>
+      <FileName>Models\Domain\Entities\Movie.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Ratings" />
+      <Property Name="Followers" />
+      <Property Name="Participants" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="TDP.Models.Domain.MovieParticipant">
+    <Position X="19.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAEAAAEAAAABQAAQAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Models\Domain\Entities\MovieParticipant.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Role" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="TDP.Models.Domain.Series">
+    <Position X="15.25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAACAAAIAAAAAAAAAAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Entities\Series.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Episodes" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="TDP.Models.Domain.User">
+    <Position X="11.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wACAAAAAAABAAAAAARDAAAQAAAAIADIABIAAwgAAAAk=</HashCode>
+      <FileName>Models\Domain\Entities\User.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="FollowedMovies" />
+      <Property Name="RatedMovies" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="TDP.Models.Domain.UserRating">
+    <Position X="14.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAQQEAAAAEAAAAAAAABgAAQAAAAEAAAABAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Entities\UserRating.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="User" />
+      <Property Name="Movie" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="TDP.Models.Domain.FilterSpecification&lt;T&gt;">
+    <Position X="22" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Models\Domain\Abstractions\Specification\FilterSpecification\FilterSpecification.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TDP.Models.Domain.BaseEntity">
+    <Position X="13.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Abstractions\BaseEntity.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.19" />
+  </Class>
+  <Class Name="TDP.Models.Domain.MovieTypes">
+    <Position X="19.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAACAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Enums\MovieTypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TDP.Models.Domain.AdminUserFilterSpecification">
+    <Position X="24.5" Y="6.75" Width="1.5" />
+    <InheritanceLine Type="TDP.Models.Domain.FilterSpecification&lt;T&gt;" FixedToPoint="true">
+      <Path>
+        <Point X="22.75" Y="6.997" />
+        <Point X="22.75" Y="7.375" />
+        <Point X="24.5" Y="7.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Specifications\AdminUserFilterSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TDP.Models.Domain.EntityByIdFilterSpecification&lt;TEntity&gt;">
+    <Position X="24.5" Y="8.25" Width="1.5" />
+    <InheritanceLine Type="TDP.Models.Domain.FilterSpecification&lt;T&gt;" FixedToPoint="true">
+      <Path>
+        <Point X="22.75" Y="6.997" />
+        <Point X="22.75" Y="8.812" />
+        <Point X="24.5" Y="8.812" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Specifications\EntityByIdFilterSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TDP.Models.Persistence.MovieByImbdIdFilterSpecification">
+    <Position X="24.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Specifications\MovieByImbdIdFilterSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TDP.Models.Persistence.UserByUsernameFilterSpecification">
+    <Position X="24.5" Y="9.75" Width="1.5" />
+    <InheritanceLine Type="TDP.Models.Domain.FilterSpecification&lt;T&gt;" FixedToPoint="true">
+      <Path>
+        <Point X="22.75" Y="6.997" />
+        <Point X="22.75" Y="10.25" />
+        <Point X="24.5" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Specifications\UserByUsernameFilterSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TDP.Models.Encryption.AesEncryptor" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Encryption\AesEncryptor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="TDP.Models.Domain.IRepository&lt;TEntity&gt;">
+    <Position X="19.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAABAAAABAAAAIAAAAAAAAAgAAAAAAIAAAIE=</HashCode>
+      <FileName>Models\Domain\Abstractions\Repository\IRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TDP.Models.Domain.IFilterSpecification&lt;T&gt;" Collapsed="true">
+    <Position X="24.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Models\Domain\Abstractions\Specification\FilterSpecification\IFilterSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TDP.Models.Domain.IIncludeSpecification&lt;T&gt;" Collapsed="true">
+    <Position X="22.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Abstractions\Specification\IncludeSpecification\IIncludeSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TDP.Models.Domain.ISpecification&lt;T&gt;" Collapsed="true">
+    <Position X="23.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Abstractions\Specification\ISpecification.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TDP.Models.Domain.IEntity">
+    <Position X="15.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Abstractions\IEntity.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TDP.Models.Encryption.IEncryptor">
+    <Position X="11.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Encryption\IEncryptor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="TDP.Models.Domain.ParticipantRole">
+    <Position X="19.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Models\Domain\Enums\ParticipantRole.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

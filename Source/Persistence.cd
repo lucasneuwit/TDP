@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TDP.Models.Persistence.TdpDbContext">
+    <Position X="5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Persistence\TdpDbContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TDP.Models.Persistence.Repository&lt;TEntity&gt;" BaseTypeListCollapsed="true">
+    <Position X="0.75" Y="2" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAABAAAABAQACIAAAAAAAAAgAAAAAAIAAAIE=</HashCode>
+      <FileName>Models\Persistence\Repository\Repository.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="dbContext" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TDP.Models.Persistence.UnitOfWork" BaseTypeListCollapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAACAAAAAAAQAAAAAQBAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Models\Persistence\UnitOfWork\UnitOfWork.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="dbContext" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TDP.Models.Persistence.EntityNotFoundException">
+    <Position X="0.75" Y="5.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Persistence\Repository\Repository.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TDP.Models.Persistence.IncludeSpecification&lt;T&gt;">
+    <Position X="13.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAQAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Persistence\Specifications\Abstractions\IncludeSpecification.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TDP.Models.Persistence.MovieIncludeSpecification">
+    <Position X="15" Y="3.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Persistence\Specifications\MovieIncludeSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TDP.Models.Persistence.UserIncludeSpecification">
+    <Position X="12.25" Y="3.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Persistence\Specifications\UserIncludeSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TDP.Models.Persistence.UnitOfWorkManager" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="3.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAICAQAAAAIAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Persistence\UnitOfWork\UnitOfWorkManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="dbContext" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="TDP.Models.Persistence.IUnitOfWorkManager">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Persistence\UnitOfWork\Abstractions\IUnitOfWorkManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TDP.Models.Persistence.IUnitOfWork">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAAQBAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Persistence\UnitOfWork\Abstractions\IUnitOfWork.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

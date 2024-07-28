@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TDP.Controllers.HomeController">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQCAAAAAAAAAAAAAAAAAAAEAAAAgAAA=</HashCode>
+      <FileName>Controllers\HomeController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="userService" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="TDP.Controllers.MovieController">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEQAEAAAAAgAAAABQAAAAAARAAAAEAAAAAAgAAA=</HashCode>
+      <FileName>Controllers\MovieController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_mapper" />
+      <Field Name="_movieService" />
+      <Field Name="_provider" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="TDP.Controllers.UserController">
+    <Position X="3.25" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>MAEAAAAAAAAAAACAAgAAAAAAAAAAIIAAABEQAAAAAAA=</HashCode>
+      <FileName>Controllers\UserController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="userService" />
+    </ShowAsAssociation>
+  </Class>
+  <Interface Name="TDP.Models.Application.IUserService">
+    <Position X="0.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IIAAAEAAAAAAAAAAAAgAAAAAAAABAAAAAAAAAQQAABA=</HashCode>
+      <FileName>Models\Application\Services\User\IUserService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AutoMapper.IMapper" Collapsed="true">
+    <Position X="10" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="TDP.Models.Application.IMovieService">
+    <Position X="10" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAACAAAQQSAAAAEAIACAQAAAAAAAAAA=</HashCode>
+      <FileName>Models\Application\Services\Movie\IMovieService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TDP.Models.Application.IApiProvider">
+    <Position X="7.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Application\Services\Movie\Omdb\IApiProvider.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
