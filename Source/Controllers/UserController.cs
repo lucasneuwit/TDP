@@ -8,6 +8,8 @@ namespace TDP.Controllers;
 
 public class UserController(IUserService userService) : Controller
 {
+    private readonly IUserService userService = userService;
+
     public async Task<IActionResult> Index()
     {
         if (!await userService.AdministratorExistsAsync())

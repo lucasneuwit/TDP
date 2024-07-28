@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TDP.Models.Application.DataTransfer.Request" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAEAAAAEAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Models\Application\DataTransfer\API\Request.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TDP.Models.Application.MovieNotFoundException">
+    <Position X="17.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Application\Services\Movie\MovieNotFoundException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TDP.Models.Application.MovieService" BaseTypeListCollapsed="true">
+    <Position X="0.75" Y="3.75" Width="2" />
+    <AssociationLine Name="logger" Type="Microsoft.Extensions.Logging.ILogger&lt;TCategoryName&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2.312" Y="6.969" />
+        <Point X="3.833" Y="6.969" />
+        <Point X="3.833" Y="8.312" />
+        <Point X="4.75" Y="8.312" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="mapper" Type="AutoMapper.IMapper" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.938" Y="6.969" />
+        <Point X="1.938" Y="7.344" />
+        <Point X="1.875" Y="7.344" />
+        <Point X="1.875" Y="8" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABIAAACAABQQSAAAAEAIACAQAAQAIAAAgA=</HashCode>
+      <FileName>Models\Application\Services\Movie\MovieService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="logger" />
+      <Field Name="mapper" />
+      <Field Name="movieRepository" />
+      <Field Name="uowManager" />
+      <Field Name="userRepository" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TDP.Models.Application.OmdbProvider" BaseTypeListCollapsed="true">
+    <Position X="10.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAACAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Models\Application\Services\Movie\Omdb\OmdbProvider.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_clientFactory" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TDP.Models.Application.UserService" BaseTypeListCollapsed="true">
+    <Position X="7.25" Y="3.5" Width="2.5" />
+    <AssociationLine Name="logger" Type="Microsoft.Extensions.Logging.ILogger&lt;TCategoryName&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.969" Y="6.526" />
+        <Point X="7.969" Y="8.356" />
+        <Point X="6.437" Y="8.356" />
+        <Point X="6.437" Y="8.375" />
+        <Point X="6.25" Y="8.375" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>IIAAAEAAAAACAAACAAgAAAAAAAABAgAAAAAAgQQgABA=</HashCode>
+      <FileName>Models\Application\Services\User\UserService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="encryptor" />
+      <Field Name="logger" />
+      <Field Name="repository" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="TDP.Models.Application.IApiProvider">
+    <Position X="10.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Application\Services\Movie\Omdb\IApiProvider.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TDP.Models.Application.IMovieService">
+    <Position X="0.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAACAAAQQSAAAAEAIACAQAAAAAAAAAA=</HashCode>
+      <FileName>Models\Application\Services\Movie\IMovieService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TDP.Models.Application.DataTransfer.IRequest">
+    <Position X="12.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAEAAAAEAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Models\Application\DataTransfer\API\IRequest.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TDP.Models.Application.IUserService">
+    <Position X="7.25" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>IIAAAEAAAAAAAAAAAAgAAAAAAAABAAAAAAAAAQQAABA=</HashCode>
+      <FileName>Models\Application\Services\User\IUserService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Microsoft.Extensions.Logging.ILogger&lt;TCategoryName&gt;" Collapsed="true">
+    <Position X="4.75" Y="8" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="AutoMapper.IMapper" Collapsed="true">
+    <Position X="1" Y="8" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="TDP.Models.Domain.IRepository&lt;TEntity&gt;">
+    <Position X="4.25" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAABAAAABAAAAIAAAAAAAAAgAAAAAAIAAAIE=</HashCode>
+      <FileName>Models\Domain\Abstractions\Repository\IRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TDP.Models.Persistence.IUnitOfWorkManager">
+    <Position X="4.25" Y="3.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Persistence\UnitOfWork\Abstractions\IUnitOfWorkManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TDP.Models.Encryption.IEncryptor">
+    <Position X="8.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Encryption\IEncryptor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="System.Net.Http.IHttpClientFactory">
+    <Position X="10.25" Y="4.25" Width="1.75" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
